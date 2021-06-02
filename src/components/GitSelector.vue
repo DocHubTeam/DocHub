@@ -1,39 +1,39 @@
 <template>
-    <v-autocomplete
-            v-model="path"
-            :items="items"
-            chips
-            multiple
-            hide-no-data
-            hide-selected
-            item-text="name"
-            item-value="uri"
-            :label="parsedURI.file"
-            placeholder="Выбери из списка размещение"
-            prepend-icon="mdi-source-repository"
-            return-object
-    >
-        <template v-slot:selection="data">
-            <v-chip
-                    v-bind="data.attrs"
-                    close
-                    @click:close="remove(data.item)"
-            >
-                <v-avatar left>
-                    <v-icon>{{ getIcon(data.item) }}</v-icon>
-                </v-avatar>
-                {{ data.item.name }}
-            </v-chip>
-        </template>
-        <template v-slot:item="data">
-            <v-list-item-avatar>
-                <v-icon>{{ getIcon(data.item) }}</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-                <v-list-item-title>{{data.item.list_title}}</v-list-item-title>
-            </v-list-item-content>
-        </template>
-    </v-autocomplete>
+  <VAutocomplete
+    v-model="path"
+    :items="items"
+    chips
+    multiple
+    hide-no-data
+    hide-selected
+    item-text="name"
+    item-value="uri"
+    :label="parsedURI.file"
+    placeholder="Выбери из списка размещение"
+    prepend-icon="mdi-source-repository"
+    return-object
+  >
+    <template v-slot:selection="data">
+      <VChip
+        v-bind="data.attrs"
+        close
+        @click:close="remove(data.item)"
+      >
+        <VAvatar left>
+          <VIcon>{{ getIcon(data.item) }}</VIcon>
+        </VAvatar>
+        {{ data.item.name }}
+      </VChip>
+    </template>
+    <template v-slot:item="data">
+      <VListItemAvatar>
+        <VIcon>{{ getIcon(data.item) }}</VIcon>
+      </VListItemAvatar>
+      <VListItemContent>
+        <VListItemTitle>{{ data.item.list_title }}</VListItemTitle>
+      </VListItemContent>
+    </template>
+  </VAutocomplete>
 </template>
 
 <script>
@@ -50,8 +50,57 @@
 
     export default {
         name: 'Catalog',
-        mounted () {
-            this.rebuildValueToPath();
+        props: {
+            value: String,
+            baseUri: String,
+        },
+        data () {
+            return {
+                commits: [],
+                branches: [],
+                path: [],
+            };
+        },
+        computed: {
+            projects() {
+                let result = [];
+                for(let key in this.$store.state.docs) {
+                    let doc = this.$store.state.docs[key];
+                    if(doc.transport.toLowerCase() === 'gitlab') {
+                        let project = this.resolveProjectByID(doc.project_id);
+                        if(project) {
+                            result.push({
+                                type: PATH_TYPE_PROJECT,
+                                id: project.id,
+                                name: project.name,
+                                list_title: project.name,
+                                uri: `${PATH_TYPE_PROJECT}/${project.id}`
+                            });
+                        }
+                    }
+                }
+                return result;
+            },
+
+            items() {
+                let result = [].concat(this.path);
+                switch(this.path.length) {
+                    case 0:
+                        result = result.concat(this.projects);
+                        break;
+                    case 1:
+                        result = result.concat(this.branches);
+                        break;
+                    case 2:
+                        result = result.concat(this.commits);
+                        break;
+                }
+                return result;
+            },
+
+            parsedURI() {
+                return GitHelper.parseURI(this.baseUri);
+            }
         },
         watch: {
             path(value) {
@@ -82,6 +131,9 @@
                     this.$emit('input', emit_result);
                 }
             }
+        },
+        mounted () {
+            this.rebuildValueToPath();
         },
         methods: {
             remove(item) {
@@ -215,58 +267,6 @@
                 }
                 return null;
             }
-        },
-        computed: {
-            projects() {
-                let result = [];
-                for(let key in this.$store.state.docs) {
-                    let doc = this.$store.state.docs[key];
-                    if(doc.transport.toLowerCase() === 'gitlab') {
-                        let project = this.resolveProjectByID(doc.project_id);
-                        if(project) {
-                            result.push({
-                                type: PATH_TYPE_PROJECT,
-                                id: project.id,
-                                name: project.name,
-                                list_title: project.name,
-                                uri: `${PATH_TYPE_PROJECT}/${project.id}`
-                            });
-                        }
-                    }
-                }
-                return result;
-            },
-
-            items() {
-                let result = [].concat(this.path);
-                switch(this.path.length) {
-                    case 0:
-                        result = result.concat(this.projects);
-                        break;
-                    case 1:
-                        result = result.concat(this.branches);
-                        break;
-                    case 2:
-                        result = result.concat(this.commits);
-                        break;
-                }
-                return result;
-            },
-
-            parsedURI() {
-                return GitHelper.parseURI(this.baseUri);
-            }
-        },
-        props: {
-            value: String,
-            baseUri: String,
-        },
-        data () {
-            return {
-                commits: [],
-                branches: [],
-                path: [],
-            };
         }
     };
 </script>

@@ -1,13 +1,13 @@
 <template>
-    <v-container
-            fluid
-            class="grey lighten-4 fill-height"
-    >
-        <div
-                style="width: 100%; min-height: 100vh"
-                id="swagger"
-        ></div>
-    </v-container>
+  <VContainer
+    fluid
+    class="grey lighten-4 fill-height"
+  >
+    <div
+      id="swagger"
+      style="width: 100%; min-height: 100vh"
+    />
+  </VContainer>
 </template>
 
 <script>
@@ -16,13 +16,20 @@
 
     export default {
         name: 'Swagger',
-        mounted () {
-            this.swaggerRender();
+        props: {
+            source: String
+        },
+        data () {
+            return {
+            };
         },
         watch: {
             source () {
                 this.swaggerRender();
             }
+        },
+        mounted () {
+            this.swaggerRender();
         },
         methods: {
            swaggerRender () {
@@ -37,13 +44,6 @@
                    }
                })
             }
-        },
-        props: {
-            source: String
-        },
-        data () {
-            return {
-            };
         }
     };
 </script>

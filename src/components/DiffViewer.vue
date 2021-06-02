@@ -1,58 +1,76 @@
 <template>
-    <v-container
-            fluid
-            class="lighten-4 fill-height"
-    >
-        <div style="display: none" v-html="styles"></div>
-        <template v-if="renderDiffView">
-            <v-row>
-                <v-col cols="2">
-                    <v-select
-                            v-model="outputFormat"
-                            :items="outputFormats"
-                            menu-props="auto"
-                            hide-details
-                            label="Представление "
-                            single-line
-                    ></v-select>
-                </v-col>
-                <v-col cols="8">
-                </v-col>
-            </v-row>
-            <v-row>
-                <template v-if="outputFormat === 'swagger-by-swagger'">
-                    <v-col cols="6" style="overflow-y: auto">
-                        <div
-                                class="swagger-view fill-height"
-                                id="swg-source"
-                        >Тружусь...</div>
-                    </v-col>
-                    <v-col cols="6" style="overflow-y: auto">
-                        <div
-                                class="swagger-view fill-height"
-                                id="swg-target"
-                        >Тружусь...</div>
-                    </v-col>
-                </template>
-                <v-col cols="12" v-else>
-                    <code-diff-viewer
-                            style="width: 100%"
-                            :new-string="sourceDoc"
-                            :old-string="targetDoc"
-                            :context="10"
-                            :output-format="outputFormat"
-                    />
-                </v-col>
-            </v-row>
+  <VContainer
+    fluid
+    class="lighten-4 fill-height"
+  >
+    <div
+      style="display: none"
+      v-html="styles"
+    />
+    <template v-if="renderDiffView">
+      <VRow>
+        <VCol cols="2">
+          <VSelect
+            v-model="outputFormat"
+            :items="outputFormats"
+            menu-props="auto"
+            hide-details
+            label="Представление "
+            single-line
+          />
+        </VCol>
+        <VCol cols="8" />
+      </VRow>
+      <VRow>
+        <template v-if="outputFormat === 'swagger-by-swagger'">
+          <VCol
+            cols="6"
+            style="overflow-y: auto"
+          >
+            <div
+              id="swg-source"
+              class="swagger-view fill-height"
+            >
+              Тружусь...
+            </div>
+          </VCol>
+          <VCol
+            cols="6"
+            style="overflow-y: auto"
+          >
+            <div
+              id="swg-target"
+              class="swagger-view fill-height"
+            >
+              Тружусь...
+            </div>
+          </VCol>
         </template>
-        <template v-else>
-            <v-row align="center">
-                <v-col cols="12" align="center">
-                    Тружусь....
-                </v-col>
-            </v-row>
-        </template>
-    </v-container>
+        <VCol
+          v-else
+          cols="12"
+        >
+          <CodeDiffViewer
+            style="width: 100%"
+            :new-string="sourceDoc"
+            :old-string="targetDoc"
+            :context="10"
+            :output-format="outputFormat"
+          />
+        </VCol>
+      </VRow>
+    </template>
+    <template v-else>
+      <VRow align="center">
+        <VCol
+          cols="12"
+          align="center"
+        >
+          Тружусь....
+        </VCol>
+      </VRow>
+    </template>
+  </VContainer>
 </template>
 
 <script>
@@ -66,12 +84,114 @@
         components: {
             CodeDiffViewer
         },
-        created() {
-            this.sourceURI = this.source ? atob(this.source) : null;
-            this.targetURI = this.target ? atob(this.target) : null;
+        props: {
+            source: String,
+            target: String,
+            mode: String
         },
-        mounted() {
-            this.render();
+        data () {
+            return {
+                sourceURI: null,
+                targetURI: null,
+                customTarget: null,
+                targetBranch: null,
+                sourceDoc: null,
+                targetDoc: null,
+                outputFormats: ["line-by-line", "side-by-side", "swagger-by-swagger"]
+            };
+        },
+        computed : {
+            outputFormat : {
+                set(value) {
+                    this.$store.commit('setDiffFormat', value);
+                    if(value == 'swagger-by-swagger' || this.$store.state.diff_format == 'swagger-by-swagger') {
+                        this.targetDoc =  null;
+                        this.sourceDoc =  null;
+                    }
+                    this.$nextTick(() => this.render());
+                },
+                get() {
+                    return this.$store.state.diff_format;
+                }
+            },
+            renderDiffView() {
+                return (!!this.sourceDoc && !!this.targetDoc) || this.outputFormat == 'swagger-by-swagger';
+            },
+
+            swaggerDiffs() {
+                let result = {
+                    deleted : [],
+                    added : [],
+                    changed: [],
+                    oks: []
+                };
+
+                if(!this.sourceDoc || !this.targetDoc || this.outputFormat !== 'swagger-by-swagger')
+                    return result;
+
+                this.appendDiffOfMethods(result);
+                this.appendDiffOfSchemas(result);
+
+                return result;
+            },
+
+            styles() {
+                const normalID = (id) => {
+                    return id.replace(/\\/g, "\\\\").replace(/:/g, '\\:');
+                };
+
+                let result = '<style>';
+
+                //Added
+                let added = [];
+                this.swaggerDiffs.added.map(
+                    (item) => added.push(`#swg-target [id$=` + normalID(item.id) + `].${item.class}::before`)
+                );
+                if(added.length) {
+                    result += added.join(',') + `{
+                        content: "\\F0416";
+                        color: #49cc90;
+                    }`;
+                }
+
+                //Deleted
+                let deleted = [];
+                this.swaggerDiffs.deleted.map(
+                    (item) => deleted.push(`#swg-source [id$=` + normalID(item.id) + `].${item.class}::before`)
+                );
+                if(deleted.length) {
+                    result += deleted.join(',') + `{
+                        content: "\\F01B4";
+                        color: #f93e3e;
+                    }`;
+                }
+
+                //Changed
+                let changed = [];
+                this.swaggerDiffs.changed.map(
+                    (item) => changed.push(`[id$=` + normalID(item.id) + `].${item.class}::before`)
+                );
+                if(changed.length) {
+                    result += changed.join(',') + `{
+                        content: "\\F03EB";
+                        color: #fca130;
+                    }`;
+                }
+
+                //Checked methods
+                let oks = [];
+                this.swaggerDiffs.oks.map(
+                    (item) => oks.push(` [id$=` + normalID(item.id) + `].${item.class}::before`)
+                );
+                if(oks.length) {
+                    result += oks.join(',') + `{
+                        content: "\\F0E1E";
+                        color: #61affe;
+                    }`;
+                }
+
+                return `${result}</style>`;
+            }
         },
         watch: {
             source() {
@@ -80,6 +200,13 @@
             target () {
                 this.render(['target']);
             },
+        },
+        created() {
+            this.sourceURI = this.source ? atob(this.source) : null;
+            this.targetURI = this.target ? atob(this.target) : null;
+        },
+        mounted() {
+            this.render();
         },
         methods: {
             render(mode) {
@@ -275,115 +402,6 @@
                     }
                 }
             }
-        },
-        computed : {
-            outputFormat : {
-                set(value) {
-                    this.$store.commit('setDiffFormat', value);
-                    if(value == 'swagger-by-swagger' || this.$store.state.diff_format == 'swagger-by-swagger') {
-                        this.targetDoc =  null;
-                        this.sourceDoc =  null;
-                    }
-                    this.$nextTick(() => this.render());
-                },
-                get() {
-                    return this.$store.state.diff_format;
-                }
-            },
-            renderDiffView() {
-                return (!!this.sourceDoc && !!this.targetDoc) || this.outputFormat == 'swagger-by-swagger';
-            },
-
-            swaggerDiffs() {
-                let result = {
-                    deleted : [],
-                    added : [],
-                    changed: [],
-                    oks: []
-                };
-
-                if(!this.sourceDoc || !this.targetDoc || this.outputFormat !== 'swagger-by-swagger')
-                    return result;
-
-                this.appendDiffOfMethods(result);
-                this.appendDiffOfSchemas(result);
-
-                return result;
-            },
-
-            styles() {
-                const normalID = (id) => {
-                    return id.replace(/\\/g, "\\\\").replace(/:/g, '\\:');
-                };
-
-                let result = '<style>';
-
-                //Added
-                let added = [];
-                this.swaggerDiffs.added.map(
-                    (item) => added.push(`#swg-target [id$=` + normalID(item.id) + `].${item.class}::before`)
-                );
-                if(added.length) {
-                    result += added.join(',') + `{
-                        content: "\\F0416";
-                        color: #49cc90;
-                    }`;
-                }
-
-                //Deleted
-                let deleted = [];
-                this.swaggerDiffs.deleted.map(
-                    (item) => deleted.push(`#swg-source [id$=` + normalID(item.id) + `].${item.class}::before`)
-                );
-                if(deleted.length) {
-                    result += deleted.join(',') + `{
-                        content: "\\F01B4";
-                        color: #f93e3e;
-                    }`;
-                }
-
-                //Changed
-                let changed = [];
-                this.swaggerDiffs.changed.map(
-                    (item) => changed.push(`[id$=` + normalID(item.id) + `].${item.class}::before`)
-                );
-                if(changed.length) {
-                    result += changed.join(',') + `{
-                        content: "\\F03EB";
-                        color: #fca130;
-                    }`;
-                }
-
-                //Checked methods
-                let oks = [];
-                this.swaggerDiffs.oks.map(
-                    (item) => oks.push(` [id$=` + normalID(item.id) + `].${item.class}::before`)
-                );
-                if(oks.length) {
-                    result += oks.join(',') + `{
-                        content: "\\F0E1E";
-                        color: #61affe;
-                    }`;
-                }
-
-                return `${result}</style>`;
-            }
-        },
-        props: {
-            source: String,
-            target: String,
-            mode: String
-        },
-        data () {
-            return {
-                sourceURI: null,
-                targetURI: null,
-                customTarget: null,
-                targetBranch: null,
-                sourceDoc: null,
-                targetDoc: null,
-                outputFormats: ["line-by-line", "side-by-side", "swagger-by-swagger"]
-            };
         }
     };
 </script>

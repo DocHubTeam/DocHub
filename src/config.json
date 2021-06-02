@@ -1,6 +1,6 @@
 {
   "gitlab_server": "https://gitlab.thingjs.io/",
-  "root_manifest" : {
+  "root_manifest": {
     "project_id": 13,
     "branch": "dev"
   },

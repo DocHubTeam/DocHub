@@ -17,14 +17,13 @@ export default {
 
     parseURI(uri) {
         let url = new URL(uri);
-        let result = {
+        return {
             branch: url.searchParams.get('ref'),
             project: 1 * url.pathname.split('/')[4],
             file: decodeURIComponent(
                 url.pathname.split('/repository/files/')[1].replace('/raw', '')
             )
         };
-        return result;
     },
 
     isGitLabURI(uri) {

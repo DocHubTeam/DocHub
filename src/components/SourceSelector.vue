@@ -1,29 +1,53 @@
 <template>
-    <div>
-        <v-row align="center" class="source-selector-row">
-            <v-col cols="12" class="source-selector-col">
-                <catalog-selector v-model="catalogURI"></catalog-selector>
-            </v-col>
-        </v-row>
-        <v-row align="center" class="source-selector-row">
-            <v-col cols="12" v-if="sourceType === 'GIT'" class="source-selector-col">
-                <git-selector :base-uri="catalogURI" v-model="gitURI"></git-selector>
-            </v-col>
-            <v-col cols="12" v-else-if="sourceType === 'WEB'" class="source-selector-col">
-                <v-text-field
-                        v-model="catalogURI"
-                        readonly
-                        prepend-icon="mdi-web"
-                ></v-text-field>
-            </v-col>
-            <v-col cols="12" v-else class="source-selector-col">
-                <v-text-field
-                        readonly
-                        prepend-icon="mdi-help"
-                ></v-text-field>
-            </v-col>
-        </v-row>
-    </div>
+  <div>
+    <VRow
+      align="center"
+      class="source-selector-row"
+    >
+      <VCol
+        cols="12"
+        class="source-selector-col"
+      >
+        <CatalogSelector v-model="catalogURI" />
+      </VCol>
+    </VRow>
+    <VRow
+      align="center"
+      class="source-selector-row"
+    >
+      <VCol
+        v-if="sourceType === 'GIT'"
+        cols="12"
+        class="source-selector-col"
+      >
+        <GitSelector
+          v-model="gitURI"
+          :base-uri="catalogURI"
+        />
+      </VCol>
+      <VCol
+        v-else-if="sourceType === 'WEB'"
+        cols="12"
+        class="source-selector-col"
+      >
+        <VTextField
+          v-model="catalogURI"
+          readonly
+          prepend-icon="mdi-web"
+        />
+      </VCol>
+      <VCol
+        v-else
+        cols="12"
+        class="source-selector-col"
+      >
+        <VTextField
+          readonly
+          prepend-icon="mdi-help"
+        />
+      </VCol>
+    </VRow>
+  </div>
 </template>
 
 <script>
@@ -33,12 +57,18 @@
 
     export default {
         name: 'SourceSelector',
-        created () {
-            this.catalogURI = this.value;
-        },
         components: {
             CatalogSelector,
             GitSelector
+        },
+        props: {
+            value: String
+        },
+        data () {
+            return {
+                gitURI_: null,
+                catalogURI_: null,
+            };
         },
         computed : {
             sourceType: {
@@ -76,14 +106,8 @@
                 }
             },
         },
-        props: {
-            value: String
-        },
-        data () {
-            return {
-                gitURI_: null,
-                catalogURI_: null,
-            };
+        created () {
+            this.catalogURI = this.value;
         }
     };
 </script>

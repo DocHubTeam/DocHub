@@ -1,28 +1,32 @@
 <template>
-    <v-container
-            fluid
-            class="lighten-4"
-    >
-        <v-row>
-            <v-col cols="6">
-                <source-selector v-model="sourceURI"></source-selector>
-            </v-col>
-            <v-col cols="6">
-                <source-selector v-model="targetURI"></source-selector>
-            </v-col>
-        </v-row>
-        <v-row align="center">
-            <v-col cols="12" class="text-center">
-                <v-btn
-                        large
-                        color="success"
-                        @click="goCompare"
-                        :disabled="isCompareDisable">
-                    Сравнить
-                </v-btn>
-            </v-col>
-        </v-row>
-    </v-container>
+  <VContainer
+    fluid
+    class="lighten-4"
+  >
+    <VRow>
+      <VCol cols="6">
+        <SourceSelector v-model="sourceURI" />
+      </VCol>
+      <VCol cols="6">
+        <SourceSelector v-model="targetURI" />
+      </VCol>
+    </VRow>
+    <VRow align="center">
+      <VCol
+        cols="12"
+        class="text-center"
+      >
+        <VBtn
+          large
+          color="success"
+          :disabled="isCompareDisable"
+          @click="goCompare"
+        >
+          Сравнить
+        </VBtn>
+      </VCol>
+    </VRow>
+  </VContainer>
 </template>
 
 <script>
@@ -32,6 +36,22 @@
         name: 'Swagger',
         components: {
             SourceSelector
+        },
+        props: {
+            source: String,
+            target: String
+        },
+        data () {
+            return {
+                sourceURI: null,
+                targetURI: null,
+            };
+        },
+        computed : {
+            isCompareDisable () {
+                return !this.sourceURI || !this.targetURI
+                    || (this.targetURI.toUpperCase() === 'NULL') || (this.sourceURI.toUpperCase() === 'NULL');
+            }
         },
         created() {
             this.sourceURI = this.source ? atob(this.source) : null;
@@ -48,22 +68,6 @@
                     }
                 });
             },
-        },
-        computed : {
-            isCompareDisable () {
-                return !this.sourceURI || !this.targetURI
-                    || (this.targetURI.toUpperCase() === 'NULL') || (this.sourceURI.toUpperCase() === 'NULL');
-            }
-        },
-        props: {
-            source: String,
-            target: String
-        },
-        data () {
-            return {
-                sourceURI: null,
-                targetURI: null,
-            };
         }
     };
 </script>

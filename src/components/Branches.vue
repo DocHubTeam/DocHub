@@ -1,19 +1,19 @@
 <template>
-    <v-autocomplete
-            v-model="branch"
-            :items="items"
-            :loading="isLoading"
-            :search-input.sync="search"
-            color="white"
-            hide-no-data
-            hide-selected
-            item-text="name"
-            item-value="name"
-            label="Branch"
-            placeholder="Начни вводить название branch"
-            prepend-icon="mdi-database-search"
-            return-object
-    ></v-autocomplete>
+  <VAutocomplete
+    v-model="branch"
+    :items="items"
+    :loading="isLoading"
+    :search-input.sync="search"
+    color="white"
+    hide-no-data
+    hide-selected
+    item-text="name"
+    item-value="name"
+    label="Branch"
+    placeholder="Начни вводить название branch"
+    prepend-icon="mdi-database-search"
+    return-object
+  />
 </template>
 
 <script>
@@ -22,8 +22,17 @@
 
     export default {
         name: 'Branches',
-        mounted () {
-            this.fetchBranches();
+        props: {
+            project: Number,
+            value: Object
+        },
+        data () {
+            return {
+                isLoading: false,
+                search: null,
+                items: [],
+                branch: null
+            };
         },
         watch: {
             project () {
@@ -32,6 +41,9 @@
             branch(value) {
                 this.$emit('input', value);
             }
+        },
+        mounted () {
+            this.fetchBranches();
         },
         methods: {
             fetchBranches () {
@@ -57,18 +69,6 @@
                 };
                 feetch(1);
             }
-        },
-        props: {
-            project: Number,
-            value: Object
-        },
-        data () {
-            return {
-                isLoading: false,
-                search: null,
-                items: [],
-                branch: null
-            };
         }
     };
 </script>

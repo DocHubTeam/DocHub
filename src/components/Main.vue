@@ -1,41 +1,46 @@
 <template>
-    <v-container
-            fluid
-            class="lighten-4"
-    >
-        <v-row dense>
-            <v-col
-                    cols="4"
+  <VContainer
+    fluid
+    class="lighten-4"
+  >
+    <VRow dense>
+      <VCol
+        cols="4"
+      >
+        <VCard
+          class="mx-auto"
+          shaped
+        >
+          <VCardTitle class="headline">
+            Последние изменения
+          </VCardTitle>
+          <VList>
+            <VListItem
+              v-for="(item) in lastChanges"
+              :key="item.uri.toString()"
+              link
+              @click="goLink(item)"
             >
-                <v-card
-                        class="mx-auto"
-                        shaped
-                >
-                    <v-card-title class="headline">Последние изменения</v-card-title>
-                    <v-list>
-                        <v-list-item
-                                :key="item.uri.toString()"
-                                v-for="(item) in lastChanges"
-                                link
-                                @click="goLink(item)"
-                        >
-                            <v-list-item-icon>
-                                <v-icon>{{ item.icon }}</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-content>
-                                <v-list-item-title v-text="item.title"></v-list-item-title>
-                                <v-list-item-subtitle class="text--primary" v-text="item.location"></v-list-item-subtitle>
-                                <v-list-item-subtitle v-text="item.author"></v-list-item-subtitle>
-                            </v-list-item-content>
-                            <v-list-item-action>
-                                <v-list-item-action-text v-html="item.display_moment"></v-list-item-action-text>
-                            </v-list-item-action>
-                        </v-list-item>
-                    </v-list>
-                </v-card>
-            </v-col>
-        </v-row>
-    </v-container>
+              <VListItemIcon>
+                <VIcon>{{ item.icon }}</VIcon>
+              </VListItemIcon>
+              <VListItemContent>
+                <VListItemTitle v-text="item.title" />
+                <VListItemSubtitle
+class="text--primary"
+                                   v-text="item.location"
+                />
+                <VListItemSubtitle v-text="item.author" />
+              </VListItemContent>
+              <VListItemAction>
+                <VListItemActionText v-html="item.display_moment" />
+              </VListItemAction>
+            </VListItem>
+          </VList>
+        </VCard>
+      </VCol>
+    </VRow>
+  </VContainer>
 </template>
 
 <script>
@@ -44,22 +49,9 @@
 
     export default {
         name: 'MainPage',
-        methods: {
-            goLink(item) {
-                this.$router.push({
-                    name: 'swagger',
-                    params: {
-                        source: btoa(item.uri)
-                    }
-                });
-            }
-        },
-        mounted() {
-            // eslint-disable-next-line no-debugger
-            let hash  = GitHelper.parseHashParams(this.$route.hash.substr(1));
-            if('access_token' in hash) {
-                this.$store.dispatch('onReceivedOAuthToken', hash.access_token);
-            }
+        data () {
+            return {
+            };
         },
         computed: {
             lastChanges() {
@@ -81,9 +73,22 @@
                 return result.sort((a, b) => b.moment - a.moment);
             }
         },
-        data () {
-            return {
-            };
+        mounted() {
+            // eslint-disable-next-line no-debugger
+            let hash  = GitHelper.parseHashParams(this.$route.hash.substr(1));
+            if('access_token' in hash) {
+                this.$store.dispatch('onReceivedOAuthToken', hash.access_token);
+            }
+        },
+        methods: {
+            goLink(item) {
+                this.$router.push({
+                    name: 'swagger',
+                    params: {
+                        source: btoa(item.uri)
+                    }
+                });
+            }
         }
     };
 </script>

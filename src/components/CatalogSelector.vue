@@ -1,29 +1,26 @@
 <template>
-    <v-autocomplete
-            v-model="selected"
-            :items="items"
-            hide-no-data
-            item-text="name"
-            item-value="uri"
-            label="Источник"
-            placeholder="Выбери из списка документов"
-            prepend-icon="mdi-book-open-page-variant"
-    >
-    </v-autocomplete>
+  <VAutocomplete
+    v-model="selected"
+    :items="items"
+    hide-no-data
+    item-text="name"
+    item-value="uri"
+    label="Источник"
+    placeholder="Выбери из списка документов"
+    prepend-icon="mdi-book-open-page-variant"
+  />
 </template>
 
 <script>
     export default {
         name: 'Catalog',
-        mounted () {
-            this.selectedItem = this.value;
+        props: {
+            value: String
         },
-        watch: {
-            value (value) {
-                this.selectedItem = value;
-            },
-        },
-        methods: {
+        data () {
+            return {
+                selectedItem: null,
+            };
         },
         computed: {
             items() {
@@ -47,13 +44,15 @@
                 }
             }
         },
-        props: {
-            value: String
+        watch: {
+            value (value) {
+                this.selectedItem = value;
+            },
         },
-        data () {
-            return {
-                selectedItem: null,
-            };
+        mounted () {
+            this.selectedItem = this.value;
+        },
+        methods: {
         }
     };
 </script>
