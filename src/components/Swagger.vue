@@ -29,6 +29,7 @@
                SwaggerUI({
                    dom_id: '#swagger',
                    url: atob(this.source),
+                   deepLinking: true,
                    requestInterceptor: (request) => {
                        if((new URL(request.url)).host === (new URL(config.gitlab_server)).host) {
                            request.headers['Authorization'] = `Bearer ${this.$store.state.access_token}`;
@@ -74,7 +75,7 @@
 
     .swagger-ui .scheme-container {
         margin: 0;
-        padding: 0px 0px 0px 30px;
+        padding: 0 0 0 30px;
         background: none;
         -webkit-box-shadow: none;
         box-shadow: none;
