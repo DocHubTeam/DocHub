@@ -19,16 +19,22 @@ window.Vue = Vue;
 Vue.prototype.$axios = Axios;
 Vuex.Store.prototype.$axios = Axios;
 
-let storage = new Vuex.Store(gitlab);
-window.Vuex = storage;
-storage.dispatch('init');
+let store = new Vuex.Store(gitlab);
+window.Vuex = store;
+store.dispatch('init');
 
 // eslint-disable-next-line no-console
-console.log('!!!!!!!!!!!!!');
+// console.info(config);
+// eslint-disable-next-line no-debugger
+// debugger;
 
 new Vue(Object.assign({
-  el: '#app',
-  router,
-  vuetify: new Vuetify(),
-  store: new Vuex.Store(gitlab)
+    el: '#app',
+    router,
+    vuetify: new Vuetify({
+        icons: {
+            iconfont: 'mdi', // default - only for display purposes
+        },
+    }),
+    store
 }, Root));

@@ -1,0 +1,61 @@
+skinparam useBetaStyle true
+'left to right direction
+skinparam {
+    HyperLinkColor #000
+	wrapWidth 200
+	maxMessageSize 200
+	'hide stereotype
+	defaultfontname Roboto, sans-serif
+	roundCorner 10
+	'linetype ortho
+	'linetype polyline
+	nodesep 50
+	ranksep 50
+	shadowing false
+	padding 2
+}
+
+<style>
+    component {
+        BackGroundColor #fff
+        RoundCorner 10
+        LineColor #000
+        FontColor #333
+        HyperLinkColor #333
+
+        .focus {
+            FontColor #fff
+            BackGroundColor #3495db
+            HyperLinkColor #fff
+            HyperLinkUnderline false
+        }
+    }
+    database {
+        BackGroundColor #fff
+        RoundCorner 10
+        LineColor #000
+        FontColor #333
+        HyperLinkColor #333
+
+        .focus {
+            FontColor #fff
+            BackGroundColor #3495db
+            HyperLinkColor #fff
+            HyperLinkUnderline false
+        }
+    }
+    queue {
+        BackGroundColor #fff
+        RoundCorner 10
+        LineColor #000
+        FontColor #333
+        HyperLinkColor #333
+
+        .focus {
+            FontColor #fff
+            BackGroundColor #3495db
+            HyperLinkColor #fff
+            HyperLinkUnderline false
+        }
+    }
+</style>
