@@ -140,7 +140,7 @@ const parser = {
 			this.pushToMergeMap(path, result, location);
 		} else if (Array.isArray(source)) {
 			if (Array.isArray(destination)) {
-				result = JSON.parse(JSON.stringify(destination)).concat(JSON.parse(JSON.stringify(source)));
+				result = [...new Set(JSON.parse(JSON.stringify(destination)).concat(JSON.parse(JSON.stringify(source))))];
 			} else {
 				result = JSON.parse(JSON.stringify(source));
 			}
