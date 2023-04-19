@@ -6,6 +6,7 @@ const pluginsConf = require('./plugins.json');
 const PluginMaker = require('./src/building/plugin-maker');
 const path = require('path');
 const package = require('./package.json');
+const fs = require('fs');
 
 const plugins = [];
 const entries = {
@@ -73,6 +74,16 @@ if (process.env.VUE_APP_DOCHUB_MODE === 'plugin') {
 let config = {
 	runtimeCompiler: true,
 	devServer: {
+    client: {
+      overlay: false
+    },
+    server: {
+      type: 'spdy',
+      options: {
+        key: fs.readFileSync('./dev.local.key'),
+        cert: fs.readFileSync('./dev.local.crt')
+      }
+    }
 		/*
 		allowedHosts: [
 			'localhost'
