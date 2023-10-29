@@ -1,3 +1,16 @@
-# Манифест описывающий сам DocHub
-imports:
-  # Подключение манифестов
+imports:  
+  - application_arch/_root.yaml
+  - artifacts/_root.yaml
+  - business_arch/_root.yaml
+  - dictionaries/_root.yaml
+  - documentation/_root.yaml
+  - enterprise_arch/_root.yaml
+  - information_arch/_root.yaml
+  - metamodels/_root.yaml
+  - standards/_root.yaml  
+  - tech_arch/_root.yaml
+  
+  
+  
+  
+  
