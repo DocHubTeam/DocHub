@@ -17,16 +17,18 @@ datasets:
   dochub.charts.examples.polararea:
     source: >
       (
-        [
-          {
-            "label": "Система 3",
-            "color": "magenta",
-            "data": [10, 20, 30, 40, 50, 60]
-          },
-          {
-            "label": "Система 4",
-            "color": "green",
-            "data": [95, 85, 75, 65, 55, 45]
-          }
-        ]
+        {
+          'datasets': [
+            {
+              "label": "Система 3",
+              "color": "magenta",
+              "data": [10, 20, 30, 40, 50, 60]
+            },
+            {
+              "label": "Система 4",
+              "color": "green",
+              "data": [95, 85, 75, 65, 55, 45]
+            }
+          ]
+        }
       )

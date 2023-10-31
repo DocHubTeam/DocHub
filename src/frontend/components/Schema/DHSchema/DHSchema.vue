@@ -52,7 +52,7 @@
         v-on:track-click="onTrackClick(track)"
         v-on:track-leave="onTrackLeave(track)" />
     </template>
-      
+
     <schema-node
       v-bind:offset-x="0"
       v-bind:offset-y="0"
@@ -163,7 +163,7 @@
   import SVGSymbolComponent from '!!raw-loader!./symbols/component.xml';
 
   const OPACITY = 0.3;
-  const IS_DEBUG = false;
+  const IS_DEBUG = true;
 
   export default {
     name: 'DHSchema',

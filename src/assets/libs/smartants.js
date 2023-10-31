@@ -1,1 +1,883 @@
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('3 W={2j:"1Z-1j-21",1U:"24-28-1A",1L:"29-1p-1A",1Q:"2b-2d-2e",1y:"1J-M"},2g=1C,23=10;13 1v(t,e){z o=0,s=0;I(3 e 1j t)o+=e.w*e.h,s=8.U(s,e.w);3 h=[{x:0,y:0,w:8.U(8.27(8.2c(o/.2a)),s,e||0),h:1/0,O:[]}];z r=0,i=0,a=[];I(3 e 1j t)I(z t=h.H-1;t>=0;t--){3 o=h[t];g(!(e.w>o.w||e.h>o.h&&h.1o)){g(e.h>o.h&&!h.1o){3 s=e.h-o.h,r=o.y+o.h,i=o.y;h.k((e=>{e.y>=r?e.y+=s:e.y>=i&&e.y+e.h>=r?e.h+=s:t&&(h.1o=!0)}))}g(e.x=o.x,e.y=o.y,a.B(e),i=8.U(i,e.y+e.h),r=8.U(r,e.x+e.w),e.w===o.w&&e.h===o.h){3 e=h.25();t<h.H&&(h[t]=e)}16 e.h===o.h?(o.x+=e.w,o.w-=e.w):e.w===o.w?(o.y+=e.h,o.h-=e.h):(h.B({x:o.x+e.w,y:o.y,w:o.w-e.w,h:e.h}),o.y+=e.h,o.h-=e.h);1n}}9{w:r,h:i,22:o/(r*i)||0}}13 1T(t,e,o,s){9{A:J,j:t||5,R:e||1X,15:o||{},7:{x:J,y:J,D:J,L:J},2i(){6.7={x:J,y:J,D:J,L:J}},1i(t,e,o,s){(J===6.7.x||6.7.x>t)&&(6.7.x=t),(J===6.7.y||6.7.y>e)&&(6.7.y=e),(J===6.7.D||6.7.D<o)&&(6.7.D=o),(J===6.7.L||6.7.L<s)&&(6.7.L=s)},1s(t,e){3 o=8.q(t.N.G.F/6.j*1.1),h=8.q(t.N.G.E/6.j*1.5);z r={};3 i=13(t,e){9 e>=0&&t>=0&&e<=h&&t<=o},a=(t,e)=>!r[`${e}:${t}`],l=(t,e)=>r[`${e}:${t}`]||0,n=(t,e,o)=>r[`${e}:${t}`]=o;z u={};3 d=(t,e,o,s)=>e>=t.x-s&&e<=t.D+s&&o>=t.y-s&&o<=t.L+s,c=(e,o,s,h)=>{3 r=t.k[e].12;9 d(r,o,s,h)},x=(e,o,s)=>{3 h=t.k[e].Q;9 d(h,o,s,0)},y=(e,o,s)=>{I(3 h Y t.k){g(t.k[h].Q&&x(h,o,s))9!0;g(!(t.k[h].P.K||e.20(h)>=0)&&c(h,o,s,1))9!0}9!1},b=13(t){g(t.H<2)9[];3 e=[t[0]],o=t.H;z s=t[0].x,h=t[0].y;I(z r=1;r<o;r++)s!==t[r].x&&h!==t[r].y&&(e.B(t[r-1]),e.B(t[r]),s=t[r].x,h=t[r].y);9 e.B(t[o-1]),e},m=(t,e)=>{z r=[],i=e.x,a=e.y;I(;i!==t.x||a!==t.y;){z u=-1,d=o*h;3 x=[{x:-1,y:0,v:l(i-1,a)},{x:0,y:-1,v:l(i,a-1)},{x:1,y:0,v:l(i+1,a)},{x:0,y:1,v:l(i,a+1)}].k(((e,o)=>{3 s=t.x===i+e.x&&t.y===a+e.y;9(s||e.v>0&&e.v<d)&&(u=o,d=s?-1:e.v),e}));g(-1===u){g(6.A={18:W.1U,1p:r,1R:t,1Y:e,A:{x:i,y:a},19:`Ð§ÑÐ¾-ÑÐ¾Ð¿Ð¾ÑÐ»Ð¾Ð½ÐµÑÐ°ÐºÐ¿ÑÐ¸Ð²Ð¾ÑÑÑÐ°Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ð¸Ð¿ÑÑÐ¸Ð´Ð»ÑÑÐ¾ÑÐºÐ¸${i}:${a}1R:${t.x}:${t.y}`},s)9 1a.A(6.A),[];1l 6.A}g(i+=x[u].x,a+=x[u].y,n(i,a,-1),c(t.C,i,a,0))1n;c(e.C,i,a,.5)?r=[]:r.B({x:i,y:a})}9 r},f=[];9 e.k((e=>{r={};3 o=t.k[e.S],h=t.k[e.T];g(!o||!h){g(6.A={18:W.1Q,1d:e,19:`ÐÐµÑÐ¾Ð±ÑÐµÐºÑÐ¾Ð²Ð´Ð»ÑÑÐ²ÑÐ·Ð¸[${e.S}${e.1f}${e.T}]`},s)9 1e 1a.A(6.A);1l 6.A}{3 r={C:e.S},d={C:e.T},c=8.q(.5*6.j),x={x:8.q(o.X+c),w:8.q(o.F-2*c),y:8.q(o.V+c),h:8.q(o.E-2*c)},p={x:8.q(h.X+c),w:8.q(h.F-2*c),y:8.q(h.V+c),h:8.q(h.E-2*c)};g(r.y=8.q((.5*x.h+x.y)/6.j),d.y=8.q((.5*p.h+p.y)/6.j),r.x=8.q((.5*x.w+x.x)/6.j),d.x=8.q((.5*p.w+p.x)/6.j),!((e,o)=>{g(!i(e.x,e.y)||!i(o.x,o.y))9;z s=[{x:e.x,y:e.y}];3 h=[];I(3 s Y t.k)(s.1N(e.C)||s.1N(o.C))&&h.B(s);3 r=(t,e)=>{3 o=[];9 i(t+1,e)&&a(t+1,e)&&!y(h,t+1,e)&&o.B({y:e,x:t+1,v:l(t,e)+1}),i(t-1,e)&&a(t-1,e)&&!y(h,t-1,e)&&o.B({y:e,x:t-1,v:l(t,e)+1}),i(t,e+1)&&a(t,e+1)&&!y(h,t,e+1)&&o.B({y:e+1,x:t,v:l(t,e)+1}),i(t,e-1)&&a(t,e-1)&&!y(h,t,e-1)&&o.B({y:e-1,x:t,v:l(t,e)+1}),o};z d=!1,c=[];I(;s.H&&!d;){3 t=[];I(z e=0;e<s.H;e++){3 h=s[e],i=r(h.x,h.y);I(z e=0;e<i.H;e++){3 s=i[e];g(s.x===o.x&&s.y==o.y){d=!0;1n}x=s.x,b=s.y,u[`${b}:${x}`]?(n(s.x,s.y,s.v+2),c.B(s)):l(s.x,s.y)||(n(s.x,s.y,s.v+1),t.B({x:s.x,y:s.y}))}}s=t,s.H||(s=c,c=[])}1K x,b;9 d})(r,d)){g(6.A={18:W.1L,1d:e,19:`ÐÐµÐ¼Ð¾Ð³ÑÐ¿ÑÐ¾Ð»Ð¾Ð¶Ð¸ÑÑÐ¼Ð°ÑÑÑÑÑÐ¾Ñ${e.S}${e.1f}${e.T}`},s)9 1e 1a.A(6.A);1l 6.A}{3 t=m(r,d).k((t=>{1K e,o;9 e=t.x,o=t.y,u[`${o}:${e}`]=!0,t.x=8.q(t.x*6.j+.5*6.j),t.y=8.q(t.y*6.j+.5*6.j),6.1i(t.x,t.y,t.x+1,t.y+1),t}));f.B({C:`${8.q(26*8.2f())}:${e.S}${e.1f}${e.T}`,1d:e,1p:b(t)})}}})),f},1S(t){3 e={},o={};9 11.1O(t).1k((([s,h])=>{3 r=[],i={};s.1I(".").1k((s=>{r.B(s);3 a=r.1q("."),l=r.2h(0,r.H-1).1q(".");t[a]&&(!t[a].Z&&o[l]&&(t[a].Z=o[l]),i[a]=t[a],t[a].Z?(o[a]=t[a].Z,e[h.Z]={...e[h.Z],...i}):e.17={...e.17,...i})}))})),e},1b(e,o,s,h=0,r=0){3 i={K:{},M:"$1c"},a={};I(3 t Y e){z o=i;3 s=[];t.1I(".").k((t=>{s.B(t);3 h=s.1q(".");o.K[t]||(o.K[t]={C:h,1D:(e[h]||{}).1D,1H:(e[h]||{}).1H,1M:(e[h]||{}).1M,1r:(e[h]||{}).1r||h,K:{},M:(e[h]||{}).M||"$1J"}),o=o.K[t]}))}3 l=(e,s)=>{3 h=[];I(3 t Y e.K){3 o=e.K[t];l(o),h.B(o)}g(h.H){3 r={};z i={1t:-1,C:J};h.k((e=>{z s=0;3 h=o.2k((t=>(t.S===e.C||t.T===e.C)&&(s=8.U(s,(t.1r||"").H),!0))),a=8.U(8.q(h.H*t/4),1C,10*s),l={P:e,14:h,R:a,w:e.G.F+a,h:e.G.E+a};l.14.H>i.1t&&(i.1t=l.14.H,i.C=e.C),r[e.C]=l}));3 l=t=>{3 e=r[t];9 e&&(n.B(r[t]),1B r[t],e.14.k((t=>l(t.S)||l(t.T)))),!1},n=[];I(z t=11.1h(r);t.H;t=11.1h(r))i.C?(l(i.C),i.C=J):l(t[0]);3 u=(e.M?.2B("$")?1e 0:6.15[e.M])||6.15.$1c,{w:d,h:c}=1v(n,s);e.G={F:8.U(d,u.F),E:c+u.E},e.O=n.k((t=>(t.x+=.5*t.R,t.y+=.5*t.R+u.E,t.F=t.P.G.F,t.E=t.P.G.E,a[t.P.C]=t))),u?.F>0&&(e.1g=u)}16 e.G=6.15[e.M],e.G||(e.G={x:0,y:0,F:1x,E:1x},6.A={18:W.1y,19:`ÐÑÐ¿Ð¾Ð»ÑÐ·Ð¾Ð²Ð°Ð½Ð½ÐµÐ´Ð¾ÑÑÑÐ¿Ð½ÑÐ¹ÑÐ¸Ð¼Ð²Ð¾Ð»"${e.M}"`},1a.A(6.A)),1B e.K};l(i,s);3 n=(t,e,o)=>{I(3 s Y t){3 h=t[s];g(h.X=h.x+e,h.V=h.y+o,6.1i(h.X,h.V,h.X+h.F,h.V+h.E),h.12={x:h.X/6.j-.5,y:h.V/6.j-.5},h.12.D=h.12.x+h.F/6.j+.5,h.12.L=h.12.y+h.E/6.j+.5,h.P.O&&n(h.P.O,h.x+e,h.y+o),h.P.1g){3 t=h.P.1g;h.Q={x:h.X/6.j-.5,y:h.V/6.j-.5},h.Q.D=h.Q.x+t.F/6.j+.5,h.Q.L=h.Q.y+t.E/6.j+.5}}};9 n(i.O,.5*6.R+h,.5*6.R+r),{N:i,k:a}}}}!13(){3 t={W:W,1F:(t,e,o,s,h,r,i,a)=>1V 2C(((l,n)=>{3 u=1V 1T(s,h,r,a);2D{g(!11.1h(t).H){3 t=u.1b(e,o,i);t.1W=u.1s(t,o),t.7=u.7,l(t)}3 s=u.1S(e),h={};z r=0,a=0,n=0,d=!1;3 c=t=>{I(z e Y t)11.1O(t[e]).1k((([t,e])=>{g("2E"===t)c(e),a=u.7.L,r=0,n<u.7.D&&(n=u.7.D),u.7.D=0;16 g(2A.2z(e))a=u.7.L,r=0,n<u.7.D&&(n=u.7.D),u.7.D=0,c(e);16{3 t=e;"17"===t&&(d=!0);3 l=s[t];l&&(r=u.7.D,h[t]=u.1b(l,o,i,r,a),h[t].7=u.7)}}))};g(c(t),!d){3 t="17",e=s[t];g(e){3 s=u.7.L;h[t]=u.1b(e,o,i,r,a),h[t].7=u.7,h[t].7.L=s}}3 x=11.2y(h).2l(((t,{N:e,k:o})=>({...t,N:{M:"$1c",G:{F:t.N.G.F+e.G.F,E:t.N.G.E+e.G.E},O:[...t.N.O,...e.O],K:{...t.N.K,...e.K}},k:{...t.k,...o}})),{N:{G:{F:0,E:0},O:[],K:{},M:"$1c"},k:{}});x.1W=u.1s(x,o),u.7.D<n&&(u.7.D=n),x.7=u.7,l(x)}1w(t){n(t)}}))};6.1P?1P.$2x=t:1m.2w("2v",(e=>{3 o=e.1G.2u,s=e.1G.1u;t.1F(o.2t,o.2s,o.14,o.j,o.R,o.15,o.2r,o.2q).2p((t=>{1m.1z({1E:"2o",1u:s,2n:t})})).1w((t=>{1m.1z({1E:"2m",1u:s,A:t})}))}),!1)}();',62,165,'|||const|||this|valueBox|Math|return|||||||if|||trackWidth|map||||||round|||||||||let|error|push|id|dx|height|width|box|length|for|null|subitems|dy|symbol|layers|boxes|node|symbolTrackRect|distance|from|to|max|absoluteY|ERRORS|absoluteX|in|tag||Object|trackRect|function|links|symbols|else|default|code|text|console|buildGraph|landscape|link|void|style|symbolBox|keys|touchValue|of|forEach|throw|self|break|fixed|path|join|title|buildTracks|count|queryID|potpack|catch|32|UNDEFINED_SYMBOL|postMessage|fail|delete|80|hideTitle|result|make|data|background|split|undefined|var|RESTORE_PATH_FAIL|opacity|includes|entries|window|NOT_FOUND_OBJECTS|start|splitNodesByTag|core|TRACK_GEN_FAIL|new|tracks|50|end|out|indexOf|bound|fill|CHAR_WIDTH|track|pop|1e5|ceil|gen|restore|95|not|sqrt|found|objects|random|MIN_DISTANCE|slice|resetValueBox|OUT_OF_BOUND|filter|reduce|ERROR|graph|OK|then|isDebug|availableWidth|nodes|grid|params|message|addEventListener|SmartAnts|values|isArray|Array|startsWith|Promise|try|row'.split('|'),0,{}))
+// Сначала тут минимифицировать https://codebeautify.org/minify-js
+// Затем здесь обсфуцировать https://wtools.io/ru/javascript-obfuscator
+
+const ERRORS = {
+  OUT_OF_BOUND: 'out-of-bound',
+  TRACK_GEN_FAIL: 'track-gen-fail',
+  RESTORE_PATH_FAIL: 'restore-path-fail',
+  NOT_FOUND_OBJECTS: 'not-found-objects',
+  UNDEFINED_SYMBOL: 'undefined-symbol'
+};
+
+const MIN_DISTANCE = 80;
+const CHAR_WIDTH = 10;
+
+function potpack(boxes, availableWidth) {
+
+  // calculate total box area and maximum box width
+  let area = 0;
+  let maxWidth = 0;
+
+  for (const box of boxes) {
+    area += box.w * box.h;
+    maxWidth = Math.max(maxWidth, box.w);
+  }
+
+  // Сортировать по высоте, по убыванию
+  // boxes.sort((a, b) => b.h - a.h);
+
+  // Стремимся к квадратному контейнеру,
+  // скорректированный оптимального использования пространства
+  const startWidth = Math.max(Math.ceil(Math.sqrt(area / 0.95)), maxWidth, availableWidth || 0);
+
+  // Начинаем пустого пространства шириной startWidth, неограниченного снизу
+  const spaces = [{x: 0, y: 0, w: startWidth, h: Infinity, boxes:[]}];
+
+  let width = 0;
+  let height = 0;
+  //let index = 0;
+  let processedBoxes = [];
+
+  for (const box of boxes) {
+    // box.node.title = ++index;
+    // Просматриваем свободные области в обратном порядке, чтобы сначала проверять меньшие
+    for (let i = spaces.length - 1; i >= 0; i--) {
+      const space = spaces[i];
+
+      // Ищем свободное пространство в которое может вместиться текущий ящик
+      // if (box.w > space.w || box.h > space.h) continue;
+      if ((box.w > space.w) || ((box.h > space.h) && spaces.fixed) ) continue;
+
+      // Если высота очередного блока больше, но по ширине нормально, то раздвигаем его
+      // |-------|
+      // |  box  |
+      // |_______|
+      // |   +   |
+      // |___+___|
+      if ((box.h > space.h) && !spaces.fixed) {
+        const delta = box.h - space.h;
+        const dy = space.y + space.h;
+        const y = space.y;
+        spaces.map((item) => {
+          if (item.y >= dy) {
+            item.y += delta;
+          } else if ((item.y >= y) && (item.y + item.h >= dy)) {
+            item.h += delta;
+          } else if (i) {
+            spaces.fixed = true;
+          }
+        });
+      }
+
+      // Подходящее свободно место найдено. Ящик добавляется в его верхний левый угол.
+      // |-------|-------|
+      // |  box  |       |
+      // |_______|       |
+      // |         space |
+      // |_______________|
+      box.x = space.x;
+      box.y = space.y;
+      processedBoxes.push(box);
+
+      height = Math.max(height, box.y + box.h);
+      width = Math.max(width, box.x + box.w);
+
+      if (box.w === space.w && box.h === space.h) {
+        // Если пространство полностью утилизировано, удаляем его
+        const last = spaces.pop();
+        if (i < spaces.length) spaces[i] = last;
+      } else if (box.h === space.h) {
+        // Пространство соответствует высоте ящика, отрезам от него часть равную ящику справа
+        // |-------|---------------|
+        // |  box  | updated space |
+        // |_______|_______________|
+        space.x += box.w;
+        space.w -= box.w;
+      } else if (box.w === space.w) {
+        // Пространство соответствует ширине ящика, отрезам от него часть равную ящику сверху
+        // |---------------|
+        // |      box      |
+        // |_______________|
+        // | updated space |
+        // |_______________|
+        space.y += box.h;
+        space.h -= box.h;
+
+      } else {
+        // Если ящик не полностью занял пространство, корректируем доступное и создаем "обрезок"
+        // |-------|-----------|
+        // |  box  | new space |
+        // |_______|___________|
+        // | updated space     |
+        // |___________________|
+        spaces.push({
+          x: space.x + box.w,
+          y: space.y,
+          w: space.w - box.w,
+          h: box.h
+        });
+        space.y += box.h;
+        space.h -= box.h;
+      }
+      break;
+    }
+  }
+
+  return {
+    w: width,
+    h: height,
+    fill: (area / (width * height)) || 0
+  };
+}
+
+// Движок расчета треков и графа
+function core(trackWidth, distance, symbols, isDebug) {
+  return {
+    // Если в процессе выполнения возникнет ошибка, здесь будут подробности
+    error: null,
+    // Ширина треков
+    trackWidth: trackWidth || 5,
+    // Дистанция между объектами
+    distance: distance || 50,
+    // Размеры символов
+    symbols: symbols || {},
+    // Здесь накапливаем информацию о реально занятом пространстве диаграммой
+    valueBox: {
+      x: null,
+      y: null,
+      dx: null,
+      dy: null
+    },
+    // Фиксирует наличие объекта, который аффектит на область реальной значимости диаграммы
+    resetValueBox() {
+      this.valueBox = {
+        x: null,
+        y: null,
+        dx: null,
+        dy: null
+      };
+    },
+
+    touchValue(x, y, dx, dy) {
+      ((this.valueBox.x === null) || (this.valueBox.x > x)) && (this.valueBox.x = x);
+      ((this.valueBox.y === null) || (this.valueBox.y > y)) && (this.valueBox.y = y);
+      ((this.valueBox.dx === null) || (this.valueBox.dx < dx)) && (this.valueBox.dx = dx);
+      ((this.valueBox.dy === null) || (this.valueBox.dy < dy)) && (this.valueBox.dy = dy);
+    },
+    // Строим треки
+    buildTracks(graph, links) {
+      const size = {
+        width: Math.round(graph.layers.box.width / this.trackWidth * 1.1),
+        height: Math.round(graph.layers.box.height / this.trackWidth * 1.5)
+      };
+
+      // Поле расчета волны
+      let waveField = {};
+
+      // Проверяем, что точка в области
+      const isInSpace = function(x, y) {
+        return y >= 0 && x >= 0 && y <= size.height && x <= size.width;
+      };
+
+      // Проверяем, что точка не занята
+      const isFreeCell = (x, y) => {
+        return !waveField[`${y}:${x}`];
+      };
+
+      // Получаем значение ячейки волны
+      const getCellValue = (x, y) => {
+        return waveField[`${y}:${x}`] || 0;
+      };
+
+      // Устанавливаем значение ячейки волны
+      const setCellValue = (x, y, v) => {
+        return waveField[`${y}:${x}`] = v;
+      };
+
+      // Уже занятые точки
+      let lockedCells = {};
+
+      // Устанавливает пометку на заблокированную ячейку
+      const lockCell = (x, y) => {
+        return lockedCells[`${y}:${x}`] = true;
+      };
+
+      // Проверяет заблокирована ли ячейка
+      const isLockedCell = (x, y) => {
+        return !!lockedCells[`${y}:${x}`];
+      };
+
+      const isBoxAreaOf = (trackRect, x, y, margin) => {
+        return (x >= trackRect.x - margin) && (x <= trackRect.dx + margin)
+          && (y >= trackRect.y - margin) && (y <= trackRect.dy + margin);
+      };
+
+      // Проверка попадают ли координаты в объект
+      const isObjectAreaOf = (id, x, y, margin) => {
+        const trackRect = graph.map[id].trackRect;
+        return isBoxAreaOf(trackRect, x, y, margin);
+      };
+
+      const isSymbolAreaOf = (id, x, y) => {
+        const trackRect = graph.map[id].symbolTrackRect;
+        return isBoxAreaOf(trackRect, x, y, 0);
+      };
+
+      // Проверка попадают ли координаты в любой объект за исключением ex
+      const isObjectAreaExcept = (ex, x, y) => {
+        for(const id in graph.map) {
+          // Учитываем только простые объекты (исключаем комплексные)
+          if (graph.map[id].symbolTrackRect && isSymbolAreaOf(id, x, y)) return true;
+          if (graph.map[id].node.subitems || ex.indexOf(id) >=0 ) continue;
+          if (isObjectAreaOf(id, x, y, 1)) return true;
+        }
+        return false;
+      };
+
+      // Поиск пути
+      const find = (start, end) => {
+        // Если вывалились за поле, уходим
+        if(!isInSpace(start.x, start.y) || !isInSpace(end.x, end.y)) {
+          return;
+          /*
+          this.error = {
+              code: ERRORS.OUT_OF_BOUND,
+              text: `Точки прокладки маршрута вышли за пределы start.x:${start.x}, start.y:${start.y} end.x:${end.x}, end.y:${end.y} width: ${size.width}, height: ${size.height}`
+          };
+          if (isDebug) {
+              // eslint-disable-next-line no-console
+              console.error(this.error);
+              return;
+          } else throw this.error;
+          */
+        }
+
+        // Аккумулятор волны
+        let wave = [{x: start.x, y: start.y}];
+        // Объекты исключаемые из обхода волны
+        const exObjects = [];
+
+        // Добавляем в исключения id начального и конечного объекта
+        // и все вложенные объекты, если это группа
+        for(const id in graph.map) {
+          if (id.includes(start.id) || id.includes(end.id))
+            exObjects.push(id);
+        }
+
+        // Делаем шаг
+        const doStep = (x, y) => {
+          const res = [];
+
+          if(isInSpace(x + 1, y) && isFreeCell(x + 1, y) && !isObjectAreaExcept(exObjects, x + 1, y))
+            res.push( { y, x: x + 1, v: getCellValue(x, y) + 1});
+
+          if(isInSpace(x - 1, y) && isFreeCell(x - 1, y) && !isObjectAreaExcept(exObjects, x - 1, y))
+            res.push( { y, x: x - 1, v: getCellValue(x, y) + 1});
+
+          if(isInSpace(x, y + 1) && isFreeCell(x, y + 1) && !isObjectAreaExcept(exObjects, x, y + 1))
+            res.push( { y: y + 1, x, v: getCellValue(x, y) + 1});
+
+          if(isInSpace(x, y - 1) && isFreeCell(x, y - 1) && !isObjectAreaExcept(exObjects, x, y - 1))
+            res.push( { y: y - 1, x, v: getCellValue(x, y) + 1});
+
+          return res;
+        };
+
+        // Признак того, что получилось найти путь к объекту
+        let isSuccess = false;
+        let reserve = []; // Резервные точки с пересечениями треков, используются если не получилось пройти по свободному полю
+
+        // Продолжаем пока есть варианты движения
+        while(wave.length && !isSuccess) {
+          const points = [];
+          for(let i = 0; i < wave.length; i++ ) {
+            // Точка сканирования
+            const scan = wave[i];
+            // Получаем информацию о пространстве вокруг точки
+            const landscape = doStep(scan.x, scan.y);
+            // Анализируем пространство
+            for (let j = 0; j < landscape.length; j++) {
+              const point = landscape[j];
+              if (point.x === end.x && point.y == end.y) {
+                isSuccess = true;
+                break;
+              }
+              if (isLockedCell(point.x, point.y)) {
+                setCellValue(point.x, point.y, point.v + 2);
+                reserve.push(point);
+                continue;
+              }
+              if(!getCellValue(point.x, point.y)) {
+                setCellValue(point.x, point.y, point.v + 1);
+                points.push({x: point.x, y: point.y} );
+              }
+            }
+          }
+          wave = points;
+          // Если свободный маршрут кончился, берем точки из резерва
+          if (!wave.length) {
+            wave = reserve;
+            reserve = [];
+          }
+        }
+
+        return isSuccess;
+      };
+
+      const simplifyPath = function(path) {
+        if (path.length < 2) return [];
+        const result = [path[0]];
+        const len = path.length;
+        let oldX = path[0].x;
+        let oldY = path[0].y;
+        for (let i = 1; i < len; i++) {
+          if ((oldX !== path[i].x) && (oldY !== path[i].y)) {
+            result.push(path[i-1]);
+            result.push(path[i]);
+            oldX = path[i].x;
+            oldY = path[i].y;
+          }
+        }
+        result.push(path[len - 1]);
+        return result;
+      };
+
+      // Восстанавливаем маршрут по карте волны
+      const restorePath = (start, end) => {
+        let path = [];
+        let x = end.x;
+        let y = end.y;
+        // setCellValue(end.x, end.y, -1);
+        while ((x !== start.x) || (y !== start.y)) {
+          // Параметры оптимального пути
+          let minIndex = -1;
+          let minSteps = size.width * size.height; // Устанавливаем запредельное значение шагов
+          // Прощупываем точки
+          const cells = [
+            {
+              x: - 1,
+              y: 0,
+              v : getCellValue(x - 1, y)
+            },
+            {
+              x: 0,
+              y: - 1,
+              v : getCellValue(x, y - 1)
+            },
+            {
+              x: 1,
+              y: 0,
+              v : getCellValue(x + 1, y)
+            },
+            {
+              x: 0,
+              y: 1,
+              v : getCellValue(x, y + 1)
+            }
+          ].map((cell, index) => {
+            // Находим оптимальное направление пути
+            const detected = (start.x === x + cell.x) && (start.y === y + cell.y);
+            if (detected || (cell.v > 0 && cell.v < minSteps)) {
+              minIndex = index;
+              minSteps = detected ? - 1 : cell.v;
+            }
+            return cell;
+          });
+
+          // Если внезапно закончились варианты, генерируем ошибку
+          if (minIndex === -1) {
+            this.error = {
+              code: ERRORS.TRACK_GEN_FAIL,
+              path,
+              start,
+              end,
+              error: {x, y},
+              text: `Что-то пошло не так при восстановлении пути для точки ${x}:${y} start: ${start.x}:${start.y}`
+            };
+            if (isDebug) {
+              // eslint-disable-next-line no-console
+              console.error(this.error);
+              return [];
+            } else throw this.error;
+          }
+
+          x += cells[minIndex].x;
+          y += cells[minIndex].y;
+          setCellValue(x, y, -1);
+
+          // Если добрались до целевого объекта прекращаем строить путь
+          if (isObjectAreaOf(start.id, x, y, 0)) break;
+
+          //  Если путь проходит через стартовый объект, очищаем пройденный путь
+          if (isObjectAreaOf(end.id, x, y, 0))
+            path = [];
+          else
+            path.push({x, y});
+        }
+
+        return path;
+      };
+
+      // Результат генерации треков
+      const tracks = [];
+
+      // Перебираем все связи
+      links.map((link) => {
+        waveField = {};
+        const from = graph.map[link.from];
+        const to = graph.map[link.to];
+        if (from && to) {
+          const start = { id: link.from };
+          const end = { id: link.to };
+          const border = Math.round(this.trackWidth * 0.5);
+          const fromArea = {
+            x: Math.round(from.absoluteX + border),
+            w: Math.round(from.width - border * 2),
+            y: Math.round(from.absoluteY + border),
+            h: Math.round(from.height - border * 2)
+          };
+          const toArea = {
+            x: Math.round(to.absoluteX + border),
+            w: Math.round(to.width - border * 2),
+            y: Math.round(to.absoluteY + border),
+            h: Math.round(to.height - border * 2)
+          };
+
+          start.y = Math.round((0.5 * fromArea.h + fromArea.y) / this.trackWidth);
+          end.y = Math.round((0.5 * toArea.h + toArea.y) / this.trackWidth);
+          start.x = Math.round((0.5 * fromArea.w + fromArea.x) / this.trackWidth);
+          end.x = Math.round((0.5 * toArea.w + toArea.x) / this.trackWidth);
+
+          // Если путь найден
+          if (find(start, end)) {
+            const path = restorePath(start, end).map((item) => {
+              lockCell(item.x, item.y);
+              item.x = Math.round(item.x * this.trackWidth + this.trackWidth * 0.5);
+              item.y = Math.round(item.y * this.trackWidth + this.trackWidth * 0.5);
+              this.touchValue(item.x, item.y, item.x + 1, item.y + 1);
+              return item;
+            });
+            tracks.push({
+              id: `${Math.round(Math.random() * 100000)}:${link.from}${link.style}${link.to}`,
+              link,
+              path: simplifyPath(path)
+            });
+          } else {
+            this.error = {
+              code: ERRORS.RESTORE_PATH_FAIL,
+              link,
+              text: `Не могу проложить маршрут от ${link.from}${link.style}${link.to}`
+            };
+            if (isDebug) {
+              // eslint-disable-next-line no-console
+              console.error(this.error);
+              return;
+            } else throw this.error;
+          }
+        } else {
+          this.error = {
+            code: ERRORS.NOT_FOUND_OBJECTS,
+            link,
+            text: `Нет объектов для связи [${link.from}${link.style}${link.to}]`
+          };
+          if (isDebug) {
+            // eslint-disable-next-line no-console
+            console.error(this.error);
+            return;
+          } else throw this.error;
+        }
+      });
+
+      return tracks;
+    },
+
+    splitNodesByTag(nodes) {
+      const tagMap = {};
+      const parentTags = {};
+
+      Object.entries(nodes)
+        .forEach(([id, node]) => {
+          const domains = [];
+          const map = {};
+          id.split('.').forEach(domain => {
+            domains.push(domain);
+            const id = domains.join('.');
+            const parentId = domains.slice(0, domains.length-1).join('.');
+            if (nodes[id]) {
+              if (!nodes[id].tag && parentTags[parentId]) {
+                nodes[id].tag = parentTags[parentId];
+              }
+              map[id] = nodes[id];
+              if (nodes[id].tag) {
+                parentTags[id] = nodes[id].tag;
+                tagMap[node.tag] = {
+                  ...tagMap[node.tag],
+                  ...map
+                };
+              } else {
+                tagMap['default'] = {
+                  ...tagMap['default'],
+                  ...map
+                };
+              }
+            }
+          });
+        });
+      return tagMap;
+    },
+
+    // Строим граф нод
+    // nodes - массив нод
+    // links - массив связей
+    // availableWidth - доступное пространство по ширине
+    buildGraph(nodes, links, availableWidth, marginLeft=0, marginTop=0) {
+      // Однонаправленный граф иерархии элементов диаграммы
+      const layers = { subitems : {}, symbol: '$landscape' };
+      // Карта идентификаторов элементов и их расположения
+      const map = {};
+
+      // Разбираем линейный массив в граф
+      for (const id in nodes) {
+        let head = layers;
+        const domains = [];
+        id.split('.').map((domain) => {
+          domains.push(domain);
+          const id = domains.join('.');
+          if (!head.subitems[domain]) head.subitems[domain] = {
+            id,
+            hideTitle: (nodes[id] || {}).hideTitle,
+            background: (nodes[id] || {}).background,
+            opacity: (nodes[id] || {}).opacity,
+            title: (nodes[id] || {}).title || id,
+            subitems: {},
+            symbol: (nodes[id] || {}).symbol || '$undefined'
+          };
+          head = head.subitems[domain];
+        });
+      }
+
+      // Формируем макет
+      const revealLayer = (layer, width) => {
+        const subitems = [];
+        for (const id in layer.subitems) {
+          const subitem = layer.subitems[id];
+          revealLayer(subitem);
+          subitems.push(subitem);
+        }
+        if (subitems.length) {
+          const boxesMap = {};
+          let topConnectivity = {
+            count: -1,
+            id: null
+          };
+
+          subitems.map((node) => {
+            let maxTitleLen = 0;
+            const connectivity = links.filter((item) => {
+              if ((item.from === node.id) || (item.to === node.id)) {
+                maxTitleLen = Math.max(maxTitleLen, (item.title || '').length);
+                return true;
+              }
+              return false;
+            });
+            // Выбираем дистанцию учитывая:
+            const distance = Math.max(
+              Math.round(connectivity.length * trackWidth / 4),   // Количество связей
+              MIN_DISTANCE,                                       // Минимальную дистанцию
+              maxTitleLen * CHAR_WIDTH                            // Длину текста в связях
+            );
+            const result = {
+              node,
+              links: connectivity,
+              distance,
+              // Учитываем дистанцию
+              w: node.box.width + distance,
+              h: node.box.height + distance
+            };
+            if (result.links.length > topConnectivity.count) {
+              topConnectivity.count = result.links.length;
+              topConnectivity.id = node.id;
+            }
+            boxesMap[node.id] = result;
+          });
+
+          const releaseBoxLinks = (nodeId) => {
+            const box = boxesMap[nodeId];
+            if (box) {
+              boxes.push(boxesMap[nodeId]);
+              delete boxesMap[nodeId];
+              box.links.map((link) => releaseBoxLinks(link.from) || releaseBoxLinks(link.to));
+            }
+            return false;
+          };
+
+          const boxes = [];
+          for(let keys = Object.keys(boxesMap); keys.length ; keys = Object.keys(boxesMap)) {
+            if (topConnectivity.id) {
+              releaseBoxLinks(topConnectivity.id);
+              topConnectivity.id = null;
+            } else {
+              releaseBoxLinks(keys[0]);
+            }
+          }
+
+          const symbolBox = (layer.symbol?.startsWith("$") ? undefined : this.symbols[layer.symbol])
+            || this.symbols['$landscape'];
+
+
+          // Считаем оптимальное расположение
+          const {w, h} = potpack(boxes, width);
+
+          layer.box = {
+            width: Math.max(w, symbolBox.width),
+            height: h + symbolBox.height
+          };
+
+          layer.boxes = boxes.map((box) => {
+            // Определяем фактические координаты объекта
+            // Бере не ту дистанцию видимо?
+            box.x += box.distance * 0.5;
+            box.y += box.distance * 0.5 + symbolBox.height;
+            box.width = box.node.box.width;
+            box.height = box.node.box.height;
+            return map[box.node.id] = box;
+          });
+
+          if (symbolBox?.width > 0) { layer.symbolBox = symbolBox; }
+
+        } else {
+          layer.box  = this.symbols[layer.symbol];
+          if (!layer.box ) {
+            layer.box = {x: 0, y: 0, width: 32, height: 32};
+            this.error = {
+              code: ERRORS.UNDEFINED_SYMBOL,
+              text: `Использован недоступный символ "${layer.symbol}"`
+            };
+            // eslint-disable-next-line no-console
+            console.error(this.error);
+          }
+          delete layer.subitems;
+        }
+      };
+
+      revealLayer(layers, availableWidth);
+
+      // Пересчет абсолютных координат объектов
+      const appendMeta = (boxes, offsetX, offsetY) => {
+        for (const id in boxes) {
+          const box = boxes[id];
+          box.absoluteX = box.x + offsetX;
+          box.absoluteY = box.y + offsetY;
+
+          this.touchValue(
+            box.absoluteX,
+            box.absoluteY,
+            box.absoluteX + box.width,
+            box.absoluteY + box.height
+          );
+
+          box.trackRect = {
+            x: box.absoluteX / this.trackWidth,
+            y: box.absoluteY / this.trackWidth
+          };
+          box.trackRect.dx = box.trackRect.x + box.width / this.trackWidth;
+          box.trackRect.dy = box.trackRect.y + box.height / this.trackWidth;
+          box.node.boxes && appendMeta(box.node.boxes, box.x + offsetX, box.y + offsetY);
+
+          if (box.node.symbolBox) {
+            const symbolBox = box.node.symbolBox;
+            box.symbolTrackRect = {
+              x: box.absoluteX / this.trackWidth,
+              y: box.absoluteY / this.trackWidth
+            };
+            box.symbolTrackRect.dx = box.symbolTrackRect.x + symbolBox.width / this.trackWidth;
+            box.symbolTrackRect.dy = box.symbolTrackRect.y + symbolBox.height / this.trackWidth;
+          }
+        }
+      };
+
+      appendMeta(
+        layers.boxes,
+        this.distance * 0.5 + marginLeft,
+        this.distance * 0.5 + marginTop
+      );
+      // appendMeta(layers.boxes, this.distance * 0.5, this.distance * 0.5);
+
+      return {
+        layers,
+        map
+      };
+    }
+  };
+}
+
+
+// Построитель графов и треков диаграммы
+(function() {
+  const kernel = {
+    ERRORS,
+    // Построить граф и треки
+    make(grid, nodes, links, trackWidth, distance, symbols, availableWidth, isDebug) {
+      return new Promise((success, reject) => {
+        const builder = new core(trackWidth, distance, symbols, isDebug);
+        try {
+          // - Фильтруем ноды под каждый тег
+          // - Раскладываем ноды по гриду
+          // - мердж, центровка
+          // - прокладываем линки на смерженом графе
+
+          if(!Object.keys(grid).length) {
+            console.log(nodes);
+            const graph = builder.buildGraph(nodes, links, availableWidth);
+
+            graph.tracks = builder.buildTracks(graph, links);
+            graph.valueBox = builder.valueBox;
+            success(graph);
+          }
+
+          const taggedNodes = builder.splitNodesByTag(nodes);
+          const graphs = {};
+          let ml = 0;
+          let mt = 0;
+          let mdx = 0;
+          let hasDefault = false;
+
+          const renderGrid = grid => {
+            for(let key in grid) {
+
+              Object.entries(grid[key])
+                .forEach(([key, node]) => {
+
+                  if(key === 'row') {
+                    // next line here
+                    renderGrid(node);
+                    mt = builder.valueBox.dy;
+                    ml = 0;
+                    (mdx < builder.valueBox.dx) && (mdx = builder.valueBox.dx);
+                    //todo: переделать отрисовку элементов грида без порчи valuebox
+                    builder.valueBox.dx = 0;
+                  }
+                  else {
+                    if(Array.isArray(node)) {
+                      // and here
+                      mt = builder.valueBox.dy;
+                      ml = 0;
+                      (mdx < builder.valueBox.dx) && (mdx = builder.valueBox.dx);
+                      builder.valueBox.dx = 0;
+
+                      renderGrid(node);
+                    } else {
+                      const tagName = node;
+                      if(tagName === 'default')
+                        hasDefault = true;
+                      const nodes = taggedNodes[tagName];
+                      if(nodes) {
+                        ml = builder.valueBox.dx;
+                        graphs[tagName] = builder.buildGraph(nodes, links, availableWidth, ml, mt);
+                        graphs[tagName]['valueBox'] = builder.valueBox;
+                      }
+                    }
+                  }
+                });
+            }
+          };
+
+          renderGrid(grid);
+
+          if(!hasDefault) {
+            const tagName = 'default';
+            const nodes = taggedNodes[tagName];
+            if(nodes) {
+              const margin = builder.valueBox.dy;
+
+              graphs[tagName] = builder.buildGraph(nodes, links, availableWidth, ml, mt);
+              graphs[tagName]['valueBox'] = builder.valueBox;
+              graphs[tagName]['valueBox'].dy = margin;
+            }
+          }
+
+          const merged =
+            Object.values(graphs)
+              .reduce((merge, { layers, map }) => {
+                  return { ...merge,
+                    layers: {
+                      symbol: '$landscape',
+                      box: {
+                        width:
+                          merge.layers.box.width
+                          + layers.box.width,
+                        height:
+                          merge.layers.box.height
+                          + layers.box.height
+                      },
+                      boxes: [
+                        ...merge.layers.boxes,
+                        ...layers.boxes
+                      ],
+                      subitems: {
+                        ...merge.layers.subitems,
+                        ...layers.subitems
+                      }
+                    },
+                    map: {
+                      ...merge.map,
+                      ...map
+                    }
+                  };
+                },
+                {
+                  layers: {
+                    box: {
+                      width: 0,
+                      height: 0
+                    },
+                    boxes: [],
+                    subitems: {},
+                    symbol: '$landscape'
+                  },
+                  map: {}
+                });
+
+          merged.tracks = builder.buildTracks(merged, links);
+          (builder.valueBox.dx < mdx) && (builder.valueBox.dx = mdx);
+          merged.valueBox = builder.valueBox;
+
+          success(merged);
+        } catch (e) {
+          reject(e);
+        }
+      });
+    }
+  };
+  // Если работаем в основном потоке
+  if(this.window) {
+    window.$SmartAnts = kernel;
+  } else { // Если работаем как воркер
+    self.addEventListener('message', (message)=> {
+      const params = message.data.params;
+      const queryID = message.data.queryID;
+      kernel.make(
+        params.grid,
+        params.nodes,
+        params.links,
+        params.trackWidth,
+        params.distance,
+        params.symbols,
+        params.availableWidth,
+        params.isDebug
+      ).then((graph) => {
+        self.postMessage({
+          result: 'OK',
+          queryID,
+          graph
+        });
+      }).catch((error) => {
+        self.postMessage({
+          result: 'ERROR',
+          queryID,
+          error
+        });
+      });
+    }, false);
+  }
+})();

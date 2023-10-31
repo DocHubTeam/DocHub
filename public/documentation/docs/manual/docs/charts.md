@@ -1,15 +1,15 @@
 # Диаграммы
 
-Для представления диаграмм используется библиотека [chart.js 3.9.1](https://www.chartjs.org/)
-в обёртке [vue-chartjs v4.1.2](https://vue-chartjs.org/)
+Для представления диаграмм используется библиотека [chart.js v3](https://www.chartjs.org/)
+в обёртке [vue-chartjs v4](https://vue-chartjs.org/) 
 
 Большинство настроек диаграмм передаётся в библиотеку без изменений, 
-поэтому для глубокой настройки диаграммы необходимо обращаться к документации библиотек соответствующих версий.
+поэтому для глубокой настройки диаграммы необходимо обращаться к документации библиотек соответствующих версий (для Vue 2).
 
 ## Общий подход для настройки диаграммы
 
 ```yaml
-  ...
+...
   dochub.charts.examples.common:
     description: Общий подход настройки диаграммы
     author: V.Markin
@@ -19,9 +19,6 @@
       - доступность
       - производительность
       - надежность
-      - сопровождаемость
-      - обслуживаемость
-      - безопасность
     # размер диаграммы
     size: 600
     # настройки диаграммы. см. chart.js
@@ -29,43 +26,51 @@
       elements:
         line:
           borderWidth: 7
-      scales:
-        r:
-          min: 0
-          max: 150
-    # массив датасетов для заполнения диаграмм
     source:
-      - label: Система 1
-        # если поле заполнено, то применяются настройки представления датасета по-умолчанию,
-        # но их можно переопределить. Детализацию по свойствам см. chart.js
-        color: rgb(179,181,198)
-        # переопределяем цвет точек
-        pointBackgroundColor: green
-        # данные диаграммы
-        data:
-          - 65
-          - 59
-          - 90
-          - 81
-          - 56
-          - 55
-      - label: Система 2
-        # color не определён, устанавливаем представление датасета вручную
-        backgroundColor: rgba(255,99,132,0.2)
-        borderColor: rgba(255,99,132,1)
-        pointBackgroundColor: rgba(255,99,132,1)
-        pointBorderColor: '#fff'
-        pointHoverBackgroundColor: '#fff'
-        pointHoverBorderColor: rgba(255,99,132,1),
-        fill: false,
-        data:
-          - 28
-          - 48
-          - 40
-          - 19
-          - 96
-          - 27
-  ...
+      # Метки (даже их часть) можно получать из source
+      labels:
+        - сопровождаемость
+        - обслуживаемость
+        - безопасность
+      # Настройки (даже их часть) можно получать из source
+      options:
+        scales:
+          r:
+            min: 0
+            max: 150
+      # массив датасетов для заполнения диаграмм
+      datasets:
+        - label: Система 1
+          # если поле заполнено, то применяются настройки представления датасета по-умолчанию,
+          # но их можно переопределить. Детализацию по свойствам см. chart.js
+          color: rgb(179,181,198)
+          # переопределяем цвет точек
+          pointBackgroundColor: green
+          # данные диаграммы
+          data:
+            - 65
+            - 59
+            - 90
+            - 81
+            - 56
+            - 55
+        - label: Система 2
+          # color не определён, устанавливаем представление датасета вручную
+          backgroundColor: rgba(255,99,132,0.2)
+          borderColor: rgba(255,99,132,1)
+          pointBackgroundColor: rgba(255,99,132,1)
+          pointBorderColor: '#fff'
+          pointHoverBackgroundColor: '#fff'
+          pointHoverBorderColor: rgba(255,99,132,1),
+          fill: false,
+          data:
+            - 28
+            - 48
+            - 40
+            - 19
+            - 96
+            - 27
+...
 ```
 
 ![Общий подход настройки диаграммы на примере Радара](@document/dochub.charts.examples.common)
@@ -73,61 +78,44 @@
 
 ## Радар
 ```yaml
-  ...
+...
   dochub.charts.examples.radar:
     description: Пример использования диаграммы Радар
     author: V.Markin
     type: chart-radar
-    labels:
-      - доступность
-      - производительность
-      - надежность
-      - сопровождаемость
-      - обслуживаемость
-      - безопасность
     size: 400
     origin: dochub.charts.examples.radar
     source: ($)
-    ...
+...
 datasets:
   dochub.charts.examples.radar:
     source: >
       (
-        [
+        {
+          'size': 600,
+          'labels': ['доступность', 'производительность', 'надежность', 'сопровождаемость', 'обслуживаемость', 'безопасность'],
+          'datasets': [
             {
                 "label": "Система 3",
                 "color": "magenta",
-                "data": [
-                    10,
-                    20,
-                    30,
-                    40,
-                    50,
-                    60
-                ]
+                "data": [10, 20, 30, 40, 50, 60]
             },
             {
                 "label": "Система 4",
                 "color": "green",
-                "data": [
-                    95,
-                    85,
-                    75,
-                    65,
-                    55,
-                    45
-                ]
+                "data": [95, 85, 75, 65, 55, 45]            
             }
-        ]
+          ]
+        }
       )
-    ...
+...
 ```
 
 ![Радар](@document/dochub.charts.examples.radar)
 
 ## Столбиковая диаграмма
 ```yaml
-  ...
+...
   dochub.charts.examples.bar:
     description: Пример использования Столбиковой диаграммы
     author: V.Markin
@@ -148,25 +136,26 @@ datasets:
     height: 800
     origin: dochub.charts.examples.bar
     source: ($)
-  ...
+...
 datasets:
   dochub.charts.examples.bar:
     source: >
       (
-        [
-          {
-            "label": "2022",
-            "backgroundColor": "lightblue",
-            "data": [30, 10, 2, 29, 50, 30, 29, 70, 30, 20, 42, 11]
-          },
-          {
-            "label": "2023",
-            "color": "green",
-            "data": [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
-          }
-        ]
+        {
+          'datasets': [
+            {
+              "label": "2022",
+              "backgroundColor": "lightblue",
+              "data": [30, 10, 2, 29, 50, 30, 29, 70, 30, 20, 42, 11]
+            },
+            {
+              "label": "2023",
+              "color": "green",
+              "data": [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+            }
+          ]
+        }
       )
-
 ...
 ```
 
@@ -187,18 +176,20 @@ datasets:
   dochub.charts.examples.bubble:
     source: >
       (
-        [
-          {
-            'label': 'Набор 1',
-            'backgroundColor': '#f87979',
-            'data': [ {'x':20,'y':25,'r':5}, {'x':40,'y':10,'r':10}, {'x':30,'y':22,'r':30} ]
-          },
-          {
-            'label': 'Набор 2',
-            'backgroundColor': '#7C8CF8',
-            'data': [ {'x':10,'y':30,'r':15}, {'x':20,'y':20,'r':10}, {'x':15,'y':8,'r':30} ]
-          }        
-        ]
+        {
+          'datasets': [
+            {
+              'label': 'Набор 1',
+              'backgroundColor': '#f87979',
+              'data': [ {'x':20,'y':25,'r':5}, {'x':40,'y':10,'r':10}, {'x':30,'y':22,'r':30} ]
+            },
+            {
+              'label': 'Набор 2',
+              'backgroundColor': '#7C8CF8',
+              'data': [ {'x':10,'y':30,'r':15}, {'x':20,'y':20,'r':10}, {'x':15,'y':8,'r':30} ]
+            }        
+          ]
+        }
       )
 ...
 ```
@@ -209,24 +200,26 @@ datasets:
 
 ```yaml
 ...
-  dochub.charts.examples.doughnut:
-    description: Пример использования Кольцевой диаграммы
-    author: V.Markin
-    type: chart-doughnut
-    labels:
-      - VueJs
-      - EmberJs
-      - ReactJs
-      - AngularJs
-    source: >
-      (
-        [
+    dochub.charts.examples.doughnut:
+      description: Пример использования Кольцевой диаграммы
+      author: V.Markin
+      type: chart-doughnut
+      labels:
+        - VueJs
+        - EmberJs
+        - ReactJs
+        - AngularJs
+      source: >
+        (
           {
-            'color': ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-            'data': [40, 20, 80, 10]
+            'datasets': [
+              {
+                'color': ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+                'data': [40, 20, 80, 10]
+              }
+            ]
           }
-        ]
-      )
+        )
 ...
 ```
 
@@ -255,18 +248,20 @@ datasets:
       - декабрь
     source: >
       (
-        [
-          {
-            "label": "2022",
-            "color": "lightblue",
-            "data": [30, 10, 2, 29, 50, 30, 29, 70, 30, 20, 42, 11]
-          },
-          {
-            "label": "2023",
-            "color": "green",
-            "data": [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
-          }
-        ]
+        {
+          'datasets': [
+            {
+              "label": "2022",
+              "color": "lightblue",
+              "data": [30, 10, 2, 29, 50, 30, 29, 70, 30, 20, 42, 11]
+            },
+            {
+              "label": "2023",
+              "color": "green",
+              "data": [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+            }
+          ]
+        }
       )
 ...
 ```
@@ -277,24 +272,22 @@ datasets:
 
 ```yaml
 ...
-  dochub.charts.examples.pie:
-    description: Пример использования Круговой диаграммы
-    author: V.Markin
-    type: chart-pie
-    labels:
-      - VueJs
-      - EmberJs
-      - ReactJs
-      - AngularJs
-    source: >
-      (
-        [
+    dochub.charts.examples.pie:
+      description: Пример использования Круговой диаграммы
+      author: V.Markin
+      type: chart-pie
+      source: >
+        (
           {
-            'color': ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-            'data': [40, 20, 80, 10]
+            'labels': ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
+            'datasets': [
+              {
+                'color': ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+                'data': [40, 20, 80, 10]
+              }
+            ]
           }
-        ]
-      )
+        )
 ...
 ```
 
@@ -322,20 +315,21 @@ datasets:
   dochub.charts.examples.polararea:
     source: >
       (
-        [
-          {
-            "label": "Система 3",
-            "color": "magenta",
-            "data": [10, 20, 30, 40, 50, 60]
-          },
-          {
-            "label": "Система 4",
-            "color": "green",
-            "data": [95, 85, 75, 65, 55, 45]
-          }
-        ]
+        {
+          'datasets': [
+            {
+              "label": "Система 3",
+              "color": "magenta",
+              "data": [10, 20, 30, 40, 50, 60]
+            },
+            {
+              "label": "Система 4",
+              "color": "green",
+              "data": [95, 85, 75, 65, 55, 45]
+            }
+          ]
+        }
       )
-
 ...
 ```
 
@@ -356,20 +350,21 @@ datasets:
   dochub.charts.examples.scatter:
     source: >
       (
-        [
-          {
-            'label': 'Набор данных 1',
-            'color': '#f87979',
-            'data': [ {'x':-2,'y':4}, {'x':-1,'y':1}, {'x':0,'y':0}, {'x':1,'y':1}, {'x':2,'y':4} ]
-          },
-          {
-            'label': 'Набор данных 2',
-            'color': '#7acbf9',
-            'data': [ {'x':-2,'y':-4}, {'x':-1,'y':-1}, {'x':0,'y':1}, {'x':1,'y':-1}, {'x':2,'y':-4} ]
-          }
-        ]      
+        {
+          'datasets': [
+            {
+              'label': 'Набор данных 1',
+              'color': '#f87979',
+              'data': [ {'x':-2,'y':4}, {'x':-1,'y':1}, {'x':0,'y':0}, {'x':1,'y':1}, {'x':2,'y':4} ]
+            },
+            {
+              'label': 'Набор данных 2',
+              'color': '#7acbf9',
+              'data': [ {'x':-2,'y':-4}, {'x':-1,'y':-1}, {'x':0,'y':1}, {'x':1,'y':-1}, {'x':2,'y':-4} ]
+            }
+          ]
+        }
       )
-
 ...
 ```
 

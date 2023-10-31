@@ -33,13 +33,13 @@ export default {
   data() {
     return {
       refresher: null,
-      width: this.profile?.width || this.profile?.size || 400,
-      height: this.profile?.height || this.profile?.size || 400,
+      width: this.profile.width || this.profile.size || 400,
+      height: this.profile.height || this.profile.size || 400,
       chartData: {
         labels: [],
         datasets: []
       },
-      chartOptions: { ...defaultOptions, ...this.profile?.options }
+      chartOptions: { ...defaultOptions, ...this.profile.options }
     };
   },
   watch: {
@@ -57,14 +57,15 @@ export default {
     },
     doRefresh() {
       if (this.profile) {
-        this.chartData.labels = this.profile.labels;
-        this.chartOptions = { ...defaultOptions, ...this.profile?.options };
 
         this.pullData().then((result) => {
           try {
-            this.chartData.datasets = result.map((dataset) =>
+            this.chartData.labels = [...(result?.labels || []), ...(this.profile.labels || [])];
+            this.chartOptions = { ...defaultOptions, ...result?.options, ...this.profile.options };
+
+            this.chartData.datasets = result?.datasets?.map((dataset) =>
               dataset.color ? { ...this.dataSetWithDefaultOptions(dataset), ...dataset } : dataset
-            );
+            ) || [];
           } catch (e) {
             this.error = e;
           }
