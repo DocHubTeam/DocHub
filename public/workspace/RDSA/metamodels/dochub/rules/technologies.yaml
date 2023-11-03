@@ -1,0 +1,26 @@
+rules:
+  validators:
+    swamp.technologies:
+      title: Контроль технологий
+    swamp.technologies.empty:
+      title: У системы не указаны технологии
+      source: >
+        (
+          $MANIFEST := $;
+          $matcher := /^.*[world, swamp]\.partners.*$/;
+          $MANIFEST.components.$spread().(
+            $COMPONENT_ID := $keys()[0];
+            $matcher($COMPONENT_ID) ? '' : $.*.{
+              "id": $COMPONENT_ID,
+              "entity": entity,
+              "technologies": technologies
+            }
+          )[entity="system" and ($not(technologies) or $count(technologies) = 0) or ("TBD" in technologies)].(
+            {
+              "uid": "$smlt-technologies-empty-" & id,
+              "location": "/architect/components/" & id,
+              "correction": "Укажите технологии системы",
+              "description": "У каждой системы, разрабатываемой ГК Болото, должен быть указан список технологий"
+            }
+          )
+        )

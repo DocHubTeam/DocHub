@@ -1,0 +1,86 @@
+entities:
+  docs:
+    title: Документы
+    # Строим меню по объектам документа
+    menu: >
+      (
+        docs.$spread().(
+            *.location ? {
+                "location": *.location,
+                "link": "entities/docs/blank?dh-doc-id=" & $keys()[0]
+            }
+        )
+      )
+    # Схема данных объекта "Документ"
+    schema:
+      type: object
+      patternProperties:
+        "^[a-zA-Z][a-zA-Z0-9_-]*(\\.[a-zA-Z][a-zA-Z0-9_-]*)*$":
+          oneOf:
+            - type: object
+              properties:
+                title:
+                  title: Название документа
+                  type: string
+                location:
+                  title: Место расположения в меню
+                  type: string
+                icon:
+                  title: Иконка в меню
+                  type: string
+                type:
+                  title: Тип документа
+                  type: string
+                subjects:
+                  title: Принадлежит объектам
+                  type: array
+                  items:
+                    type: string
+                source:
+                  title: Источник данный (запрос или dataset)
+                  type: string
+                  oneOf:
+                    - type: string
+                      title: Идентификатор dataset
+                      pattern: "^[a-zA-Z][a-zA-Z0-9\_]*(\\.[a-zA-Z][a-zA-Z0-9\\_]*)*$"
+                    - type: string
+                      title: JSONata запрос
+                      pattern: "\\s*\\((.|\\s)*\\)\\s*"
+              required:
+                - source
+            - type: object
+              properties:
+                title:
+                  title: Название документа
+                  type: string
+                location:
+                  title: Место расположения в меню
+                  type: string
+                icon:
+                  title: Иконка в меню
+                  type: string
+                type:
+                  title: Тип документа
+                  type: string
+                subjects:
+                  title: Принадлежит объектам
+                  type: array
+                  items:
+                    type: string
+                template:
+                  title: Путь к файлу шаблона
+                  type: string
+                source:
+                  title: Данные для шаблона
+                  type: string
+                  oneOf:
+                    - type: string
+                      title: Идентификатор dataset
+                      pattern: "^[a-zA-Z][a-zA-Z0-9\_]*(\\.[a-zA-Z][a-zA-Z0-9\\_]*)*$"
+                    - type: string
+                      title: JSONata запрос
+                      pattern: "\\s*\\((.|\\s)*\\)\\s*"
+              required:
+                - template
+                - source
+      additionalProperties: false

@@ -1,0 +1,201 @@
+entities:
+  contexts:
+    config:      
+      renderCore: elk
+    api:
+      c4_context:
+        mapping:
+          system: System
+          database: SystemDb
+          person: Person
+          actor: Person        
+      fetchTitle: >
+        (
+          context.title ? context.title : componentId
+        )
+          
+    presentations:
+      c4_context:
+        title: Представление в C4 Context PlantUML
+        params:
+          title: Требуемые параметры для презентации
+          type: object
+          properties:
+            "dh-context-id":
+              title: Идентификатор контекста
+              type: string
+              pattern: ^[a-zA-Z][a-zA-Z0-9_-]*(\.[a-zA-Z][a-zA-Z0-9_-]*)*$
+          required:
+            - dh-context-id
+        type: plantuml
+        
+        $constructor: >  # Переносим необходимую информацию из контекста в презентацию 
+          (
+            $id := $params."dh-context-id";
+            $context := $lookup(contexts, $id);
+            $prototype := entities.contexts.presentations.c4_context;
+          
+            /* Преобразует относительные пути к файлам в прямые*/
+            $toDirectRes := function($value) {
+                $substring($value, 0, 4) = "res:" ? $value : "res://contexts/" & $id & "#" & $value
+            };
+
+            /* Если явно указан puml файл, просто рендерим его */
+            ($type($context.uml) = "string") and ($substring($context.uml, -5) = ".puml") ? (
+                {
+                  "type": "plantuml",
+                  "source": $toDirectRes($context.uml)
+                }
+            ) : (
+                $result := $context.source ? ($merge([$prototype, {
+                    "origin": { "_source": $context.source, "_origin": "($)" }
+                }])) : $prototype;
+
+                /* Если в контексте переопределен шаблон, используем его по прямой ссылке */
+                $result := $context.template 
+                    ? $merge([$result, { "template":  $toDirectRes($context.template) }])
+                    : $result;
+            )
+          )
+        template: templates/context.puml
+        source: >
+          (
+            $id := $params."dh-context-id";
+            /* Получаем доступ к оригинальным данным */
+            $manifest := _origin ? _origin : $;
+            /* Получаем контекст */
+            $context := $lookup($manifest.contexts, $id);
+            /* Если в контексте задан источник, берем его за основу */
+            $manifest := _source ? _source : $;
+          
+            $isExtraLinks := $not($string($context."extra-links") = "false");
+          
+            /* Получаем коллекцию дефолтных вспомогательных функций */
+            $defFunctions := $manifest.entities.contexts.api;
+          
+            /* Получаем коллекцию дефолтных параметров */
+            $defConfig := $manifest.entities.contexts.config; 
+          
+            /* Определяем движок рендеринга */
+            $renderCore := $lookup({
+              "elk": "!pragma layout elk",
+              "smetana": "!pragma layout smetana"
+            }, $defConfig.renderCore);
+
+            $fetchTitle := $exists($context.api) and $exists($context.api.fetchTitle) ?
+              $context.api.fetchTitle : $defFunctions.fetchTitle;
+            $title := $eval($fetchTitle, {
+              "manifest": $manifest,
+              "context": $context,
+              "contextId": $id,
+              "componentId": $params.componentId
+            });
+            /* Формируем заголовок */
+            $header := "title: " & $title & "\n";
+          
+            $tags := $exists($context.api) and $exists($context.api.tags) ? (
+              $join(
+                $context.api.tags.$spread().{
+                    "id": $keys()[0],
+                    "value": $.*}.(
+                    "AddElementTag(" & id & "," &
+                    $join(value.$spread().{
+                        "key": $keys()[0],
+                        "value": $.*
+                    }.(
+                        key & "=" & value
+                    ), ",") & ")\n"
+                )
+              , "\n")
+            ) : ("");
+
+            /* Получаем все компоненты входящие в контекст */
+            $components := $eval($defFunctions.fetchComponents, {
+              "manifest": $manifest,
+              "contextId": $id,
+              "extra-links": $isExtraLinks,
+              "componentId": $params.componentId
+            });
+
+            /* Генерируем области */
+            $areas := $eval($defFunctions.fetchAreas, {
+              "components": $components
+            });
+          
+            /* Генерируем PlantUML диаграмму компонентов */
+            $elements := (
+                        $join($map($areas, function($domain, $index) {(
+                            $result := "";
+                            $component := $lookup($components, $domain);
+                            $component := $not($exists($component)) ? ($lookup($manifest.components, $domain)) : $component;
+                            $context := $lookup($manifest.contexts, $domain);
+
+                            /* Определяем является ли элемент областью */
+                            $isAreaBegin := $areas[$index + 1].$substring(0, $domain.$length() + 1) = $domain & ".";
+
+                            $result := $result & ($isAreaBegin ? (
+                                $title := $component.title ? $component.title : (
+                                    $context.title ? $context.title : $domain
+                                );
+                                    "Boundary"
+                                    & ($component.external ? "_Ext" : "")
+                                    & "("
+                                    & $domain & ","
+                                    & $title
+                                    & ") {\n";
+                            ) : "");
+
+                            /* Если домен является компонентом, выводим его на диаграмму */
+                            $result := $result & (
+                                $not($isAreaBegin) and $component ? (
+                                    /* Открываем секцию компонента */
+                                    $entity := $lookup($defFunctions.c4_context.mapping, $component.entity ? $component.entity : "system");
+                                    $entity := $not($exists($entity))? "System": $entity;
+                                    $entity
+                                    & ($component.external ? "_Ext" : "") 
+                                    & "("
+                                    & $domain
+                                    & ","
+                                    & $component.title
+                                    & ","
+                                    & "$link=" & "/architect/components/" & $domain
+                                    & ($exists($component.tags) ? (
+                                      ", $tags=" & $join($component.tags, ",")
+                                    ))
+                                    & ")\n";
+                                ): "";
+                            );
+
+                            /* Определяем, что область нужно закрыть*/
+                            $result & (
+                              $count($split($domain, ".")) > 1 
+                              and ($count($split($domain, ".")) > $count($split($areas[$index + 1], "."))
+                            ) ? "}\n" : "");
+                        )}));
+                      );
+            /* Получаем список связей */
+            $links := $eval($defFunctions.fetchLinks, {
+              "components": $components
+            });
+          
+            /* Генерируем код связей */
+            $linksCode := $join($links.(
+              "Rel("
+              &from
+              &"," 
+              &to
+              &",\""
+              &title
+              &"\", "
+              &"$link=\""
+              &link
+              &"\")\n"
+            ), "");
+          
+            /* Готовим данные для передачи в шаблон */
+            {
+              "renderCore": $renderCore,
+              "presentation": $defConfig.defaultPresentation,
+              "code": $header & $tags & $elements & $linksCode
+            }
+          )

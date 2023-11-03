@@ -1,0 +1,28 @@
+# Расширение сущности "Contexts" для генерации PlantUML диаграмм
+entities:
+  docs:
+    # Основное представление документов
+    presentations:
+      blank:
+        title: Представление документа
+        params:
+          title: Требуемые параметры для презентации
+          type: object
+          properties:
+            "dh-doc-id":
+              title: Идентификатор документа
+              type: string
+              pattern: ^[a-zA-Z][a-zA-Z0-9_-]*(\.[a-zA-Z][a-zA-Z0-9_-]*)*$
+          required:
+            - dh-doc-id
+        $constructor: >
+          (
+            /* Получаем объект документа */ 
+            $doc := $lookup(docs, $params."dh-doc-id");
+            /* Для рендера берем за основу объек документа */
+            $merge([$doc, (
+              {
+                "$base": "/docs/" & $params."dh-doc-id"
+              }
+            )])
+          )

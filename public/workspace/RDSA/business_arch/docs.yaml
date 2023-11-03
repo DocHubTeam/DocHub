@@ -1,0 +1,9 @@
+docs:
+  # Заглушка пока нет описсания по бизнес архитектуре
+  swamp.business_arch:    
+    location: 02. Бизнес архитектура
+    description: Описание бизнес архитектуры
+    type: markdown
+    template: business_arch.md
+    
+

@@ -1,0 +1,42 @@
+docs:
+  systems_table_list:
+    type: table
+    headers:
+      - value: title
+        text: Система
+        sortable: true
+        align: left
+        width: 10%
+        link: link_to_system
+
+      - value: owner_unit
+        text: Принадлежность
+        sortable: true
+        align: left
+        width: 10%
+
+      - value: description
+        text: Описание
+        sortable: false
+        align: left
+        width: 40%
+
+      - value: application_owner
+        text: Владелец приложения
+        sortable: true
+        align: left
+        width: 10%
+
+      - value: system_entities
+        text: Бизнес-сущности
+        link: link_to_system_entities
+        align: left
+        width: 10%
+
+    source: swamp.dataset.systems_list
+
+  systems_list:
+    location: 04. Прикладная архитектура/01. Список систем
+    type: markdown
+    source: systems_table.md
+

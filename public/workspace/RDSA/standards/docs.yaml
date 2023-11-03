@@ -1,0 +1,9 @@
+docs:
+  # Заглушка пока нет стандартов, потому далим
+  swamp.standards:    
+    location: 01. Архитектурные принципы и стандарты/03. Архитектурные стандарты
+    description: Стандарты и конвенции кодирования в DocHub
+    type: markdown
+    template: standards.md
+    
+

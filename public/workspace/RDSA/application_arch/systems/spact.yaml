@@ -1,0 +1,26 @@
+components:
+  swamp.crocodile.spact:
+    title: S.Pact    # Название компонента
+    entity: system   # Сущность компонента из PlantUML (https://plantuml.com/ru/deployment-diagram)    
+    short_description: Сервис для создания и подписания договоров
+    description: Сервис для создания и подписания договоров
+    business_owners:
+      - Вупсень
+      - Пупсень
+    application_owner: Корней Корнеич    
+    critical_level: business_critical #administrative/business_operational/business_critical/mission_critical
+    system_category: business_app #channel_app/business_app/ext_business_app/it_app/ext_it_app          
+    aspects:                # Аспекты, которе реализует компонент
+      - finance.finance_contract
+    business_entities:      
+      - draftagreement
+      - currency
+      - region
+      - organization
+      - contractoraccount
+      - contract
+    links:
+      # Интеграции между системами одного БЮ
+      - id: swamp.frog.1cbit_finance
+        direction: <--
+    color: Yellow

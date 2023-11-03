@@ -1,0 +1,9 @@
+docs:
+  # Заглушка пока нет описсания по бизнес архитектуре
+  swamp.solution_arch:
+    location: 06. Архитектура решений
+    description: Архитектура решений
+    type: markdown
+    template: solution_arch.md
+    
+

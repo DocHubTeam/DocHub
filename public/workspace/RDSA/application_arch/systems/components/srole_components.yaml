@@ -1,0 +1,150 @@
+components:
+  swamp.crocodile.srole.app:
+    title: Основное приложение
+    entity: component
+    technologies:
+      - Python
+      - Django
+      - Django REST Framework
+      - Faust
+    links:
+      - id: swamp.crocodile.srole.db_postgresql
+        direction: -->
+      - id: swamp.crocodile.srole.redis_master
+        direction: -->
+      - id: swamp.crocodile.srole.celery
+        direction: -->
+    deployment_units:
+      prod.main: #<prod/stage/dev>.<имя du>        
+        resource_type: k8s #k8s/virtual/phisycal        
+        cpu_type: highend #highend/standart/lowend
+        cpu: 1 #float - количество ядер
+        ram: 1 #float - количество памяти в Gb
+        storage_type: standart #highend/standart/lowend/extralowend
+        storage_size: 0.1 #Gb  
+      stage.main:
+        resource_type: k8s #k8s/virtual/phisycal        
+        cpu_type: highend #highend/standart/lowend
+        cpu: 2 #float - количество ядер
+        ram: 8 #float - количество памяти в Gb
+        storage_type: standart #highend/standart/lowend/extralowend
+        storage_size: 0.1 #Gb   
+
+  swamp.crocodile.srole.celery:
+    title: Celery
+    description: Очередь задач
+    entity: component
+    technologies:
+      - Python
+      - Django
+      - Celery
+    links:
+      - id: swamp.crocodile.srole.db_postgresql
+        direction: -->
+    deployment_units:
+      prod.main: #<prod/stage/dev>.<имя du>        
+        resource_type: k8s #k8s/virtual/phisycal        
+        cpu_type: highend #highend/standart/lowend
+        cpu: 1 #float - количество ядер
+        ram: 1 #float - количество памяти в Gb
+        storage_type: standart #highend/standart/lowend/extralowend
+        storage_size: 0.1 #Gb  
+      stage.main:
+        resource_type: k8s #k8s/virtual/phisycal        
+        cpu_type: highend #highend/standart/lowend
+        cpu: 2 #float - количество ядер
+        ram: 8 #float - количество памяти в Gb
+        storage_type: standart #highend/standart/lowend/extralowend
+        storage_size: 0.1 #Gb   
+
+
+  swamp.crocodile.srole.web:
+    title: NGINX
+    entity: component
+    technologies:
+      - Python
+      - Django
+    links:
+      - id: swamp.crocodile.srole.app
+        direction: -->
+    deployment_units:
+      prod.main: #<prod/stage/dev>.<имя du>        
+        resource_type: k8s #k8s/virtual/phisycal        
+        cpu_type: highend #highend/standart/lowend
+        cpu: 1 #float - количество ядер
+        ram: 1 #float - количество памяти в Gb
+        storage_type: standart #highend/standart/lowend/extralowend
+        storage_size: 0.1 #Gb  
+      stage.main:
+        resource_type: k8s #k8s/virtual/phisycal        
+        cpu_type: highend #highend/standart/lowend
+        cpu: 2 #float - количество ядер
+        ram: 8 #float - количество памяти в Gb
+        storage_type: standart #highend/standart/lowend/extralowend
+        storage_size: 0.1 #Gb
+
+  swamp.crocodile.srole.db_postgresql:
+    title: DB
+    description:
+    entity: database
+    technologies:
+      - PostgreSQL
+    deployment_units:
+      prod.main: #<prod/stage/dev>.<имя du>
+        resource_type: k8s #k8s/virtual/phisycal        
+        cpu_type: highend #highend/standart/lowend
+        cpu: 1 #float - количество ядер
+        ram: 1 #float - количество памяти в Gb
+        storage_type: standart #highend/standart/lowend/extralowend
+        storage_size: 0.1 #Gb    
+      stage.main:
+        resource_type: k8s #k8s/virtual/phisycal        
+        cpu_type: highend #highend/standart/lowend
+        cpu: 1 #float - количество ядер
+        ram: 1 #float - количество памяти в Gb
+        storage_type: standart #highend/standart/lowend/extralowend
+        storage_size: 0.1 #Gb
+
+  swamp.crocodile.srole.redis_master:
+    title: Redis
+    description: Кэш, хранение сессий, брокер сообщений для Celery
+    entity: component
+    technologies:
+      - Redis
+    deployment_units:
+      prod.main: #<prod/stage/dev>.<имя du>
+        resource_type: virtual #k8s/virtual/phisycal        
+        cpu_type: highend #highend/standart/lowend
+        cpu: 1 #float - количество ядер
+        ram: 1 #float - количество памяти в Gb
+        storage_type: standart #highend/standart/lowend/extralowend
+        storage_size: 10 #Gb   
+      stage.main:
+        resource_type: virtual #k8s/virtual/phisycal        
+        cpu_type: highend #highend/standart/lowend
+        cpu: 1 #float - количество ядер
+        ram: 1 #float - количество памяти в Gb
+        storage_type: standart #highend/standart/lowend/extralowend
+        storage_size: 10 #Gb   
+
+
+  swamp.crocodile.srole.celery_exporter:
+    title: Celery-exporter
+    description:
+    entity: component
+    technologies:
+      - Python
+      - Django
+    links:
+      - id: swamp.crocodile.srole.redis_master
+        direction: -->
+
+  swamp.crocodile.srole.postgres_exporter:
+    title: Postgres Exporter
+    description: Метрики в Prometheus
+    entity: component
+    technologies:
+      - PostgreSQL
+    links:
+      - id: swamp.crocodile.srole.db_postgresql
+        direction: -->

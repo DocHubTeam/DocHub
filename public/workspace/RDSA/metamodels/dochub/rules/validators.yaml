@@ -1,0 +1,144 @@
+# Правила контроля целостности DocHub
+rules:
+  validators:
+    dochub:
+      title: DocHub
+    dochub.metamodel:
+      title: Контроль ядра метамодели
+    dochub.metamodel.contexts:
+      title: Контроль целостности контекстов
+    dochub.metamodel.contexts.no_found_component:
+      title: Несуществующие компоненты
+      source: >
+        ([(  
+          $MANIFEST := $;
+          contexts.$spread().(                      
+            $CONTEXT_ID := $keys()[0];
+            *.components.
+              {                   
+                "contextID": $CONTEXT_ID,
+                "componentID": $
+              };
+          )[$ and $not($substring(componentID, -2) = ".*") and $not($exists($lookup($MANIFEST.components, componentID)))]
+        ).{
+            "uid": "$dh-mm-nfc-" & contextID & "-" & componentID,
+            "correction": "Определите компонент или удалите ссылку на него в контексте",
+            "description": "Возможно компонент [" & componentID & "] не описан или описан в подключаемой 
+            кодовой базе архитектуры, которая сейчас недоступна.",
+            "location": "/architect/contexts/" & contextID
+        }])
+    dochub.metamodel.contexts.outof:
+      title: Компоненты вне контекста
+      source: >
+        (
+          $MANIFEST := $;
+          $USED := $distinct(contexts.*.components);
+          [components.$spread().(
+              $ID := $keys()[0];
+              {
+                  "id" : $ID,
+                  "mask" : $USED[$wcard($ID, $)]
+              }
+          )[$not($exists(mask))].{
+            "uid": "$dh-mm-ofb-" & id,
+            "correction": "Добавьте компонент в контекст",
+            "description": "Предполагается, что компонент не включенный в контекст не учтен.",
+            "location": "/architect/components/" & id
+          }]
+        )
+    dochub.metamodel.components:
+      title: Контроль целостности компонентов
+    dochub.metamodel.components.no_found_aspect:
+      title: Аспект не определен
+      source: >
+        ([(  
+          $MANIFEST := $;
+          components.$spread().(                      
+            $COMPONENT_ID := $keys()[0];
+            *.aspects.
+              {                   
+                "componentID": $COMPONENT_ID,
+                "aspectID": $
+              };
+          )[$ and $not($exists($lookup($MANIFEST.aspects, aspectID)))]
+        ).{
+            "uid": "$dh-mm-nfa-" & contextID & "-" & componentID,
+            "correction": "Определите аспект или удалите ссылку на него",
+            "description": "Возможно аспект [" & aspectID & "] не описан или описан в подключаемой 
+            кодовой базе архитектуры, которая сейчас недоступна.",
+            "location": "/architect/spects/" & aspectID
+        }])
+    dochub.metamodel.components.no_define_parent:
+      title: Компонент верхнего уровня не определен
+      source: >
+        (
+            $ens := function($id) {
+                (
+                    $ids := $split($id, ".");
+                    $join($map($ids, function($v, $i, $a) {
+                            $i < $count($ids) - 1 ? $v : undefined
+                    }), ".")
+                )
+            };
+
+            $MANIFEST := $;
+
+            [[$distinct(components.$spread().(
+                $ens($keys()[0])
+            ))[$not($exists($lookup($MANIFEST.components, $)))]].{
+                "uid": "$dh-mm-cmp-ndp-" & $,
+                "correction": "Опишите компонент с идентификатором [" & $ & "]",
+                "description": "Предполагается, что для всех уровней компоненты определены."
+            }]
+        )
+    dochub.metamodel.components.links:
+      title: Связь компонентов
+    dochub.metamodel.components.links.nofound:
+      title: Связь с несуществующими компонентами
+      source: >
+        (
+            $MANIFEST := $;
+            [[components.$spread().(
+                $ID := $keys()[0];
+                $.*.links.{
+                    "ownerID": $ID,
+                    "linkID": id
+                }
+            )[$ and $not($exists($lookup($MANIFEST.components, linkID)))]].{
+                "uid": "$dh-mm-cmp-lnk-nf-" & ownerID & "-" & linkID,
+                "correction": "Определите компонент [" & linkID & "] или удалите ссылку на него",
+                "description": "Возможно компонент [" & linkID & "] не описан или описан в подключаемой 
+                кодовой базе архитектуры, которая сейчас недоступна.",
+                "location": "/architect/components/" & ownerID
+            }]
+        )
+    dochub.metamodel.aspects:
+      title: Контроль целостности аспектов
+    dochub.metamodel.aspects.no_define_parent:
+      title: Аспект верхнего уровня не определен
+      source: >
+        (
+            $ens := function($id) {
+                (
+                    $ids := $split($id, ".");
+                    $join($map($ids, function($v, $i, $a) {
+                            $i < $count($ids) - 1 ? $v : undefined
+                    }), ".")
+                )
+            };
+
+            $MANIFEST := $;
+
+            [[$distinct(aspects.$spread().(
+                $ens($keys()[0])
+            ))[$not($exists($lookup($MANIFEST.aspects, $)))]].{
+                "uid": "$dh-mm-apt-ndp-" & $,
+                "correction": "Опишите аспект с идентификатором [" & $ & "]",
+                "description": "Предполагается, что для всех уровней аспекты определены."
+            }]
+        )
+
+                  
+
+
+        

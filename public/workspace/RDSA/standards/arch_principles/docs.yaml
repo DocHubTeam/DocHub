@@ -1,0 +1,7 @@
+docs:
+  arch_principles:
+    location: 01. Архитектурные принципы и стандарты/02. Архитектурные принципы
+    description: Архитектурные принципы
+    type: markdown
+    source: arch_principles.md
+

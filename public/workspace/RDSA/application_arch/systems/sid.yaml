@@ -1,0 +1,24 @@
+components:
+  swamp.crocodile.sid:
+    title: S.ID    # Название компоненты
+    entity: system   # Сущность компонента из PlantUML (https://plantuml.com/ru/deployment-diagram)    
+    system_status: production
+    short_description: Общекорпоративный сервис SSO (Single Sign-On)
+    description: Сервис SSO (Single Sign-On). Реализована возможность авторизации через OAuth 2 и OpenID Connect.
+    business_owners:
+      - Крокодил Гена
+      - Шапокляк
+    application_owner: Чебурашка
+    budget_holder: Малыш
+    architect: Карлсон
+    critical_level: business_critical #administrative/business_operational/business_critical/mission_critical
+    system_category: business_app #channel_app/business_app/ext_business_app/it_app/ext_it_app    
+    technologies:  # Используемые технологии
+      - Django
+      - Python
+      - Faust
+      - PostgreSQL
+      - Redis
+      - Kafka
+      - Nginx
+    

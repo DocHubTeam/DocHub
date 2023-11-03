@@ -1,0 +1,25 @@
+components:
+  swamp.crocodile.srole:
+    title: S.Role    # Название компоненты
+    entity: system   # Сущность компонента из PlantUML (https://plantuml.com/ru/deployment-diagram)    
+    system_status: production
+    short_description: Сервис управления ролями на уровне компании
+    description: Сервис управления ролями на уровне компании
+    business_owners:
+      - Крокодил Гена
+      - Шапокляк
+    application_owner: Чебурашка
+    budget_holder: Малыш
+    architect: Карлсон
+    critical_level: business_operational #administrative/business_operational/business_critical/mission_critical
+    system_category: business_app #channel_app/business_app/ext_business_app/it_app/ext_it_app    
+    technologies:  # Используемые технологии
+      - Django
+      - Python      
+      - PostgreSQL
+      - Redis
+      - Kafka
+      - Nginx
+    links:      
+      - id: swamp.hippo.grafana
+        direction: <--

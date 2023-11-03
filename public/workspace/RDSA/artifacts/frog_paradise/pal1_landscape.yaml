@@ -1,0 +1,13 @@
+contexts:   # Контексты представления архитектурных компонентов
+  arch.swamp.frog_paradise:
+    title: Верхнеуровневый прикладной ландшафт (ПА-L1) для БЮ Лягушачий рай
+    location: 03. Верхнеуровневый прикладной ландшафт (ПА-L1)/Лягушачий рай
+#    extra-links: true
+    extra-links: false
+    # uml:
+    #   $notation: plantuml  # sber C4Model plantuml
+    #   $autor: Frog
+    #   $version: 0.0.1
+    #   $moment: 20.11.2022
+    components:
+      - swamp.frog.*

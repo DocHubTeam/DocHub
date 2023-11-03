@@ -1,0 +1,280 @@
+technologies:               # Описание технологического стека
+  sections:                 # Определение разделов стека
+    language:               # Идентификатор раздела
+      title: Языки программирования   # Название раздела
+    framework:
+      title: Фреймворки
+    DBMS:
+      title: СУБД
+    tools:
+      title: Инструментарий
+    storages:
+      title: Хранилища
+    browsers:
+      title: Браузеры
+
+# Описание языков программирования
+  items:                      # Перечисление технологий
+    JavaScript:             # Идентификатор технологии
+      aliases:            # Синонимы технологии
+        - js
+        - ts
+        - ecmascript
+        - javascript
+        - TypeScript
+        - typescript
+      title: JavaScript           # Название технологии
+      link: https://ru.wikipedia.org/wiki/JavaScript      # Ссылка на документацию
+      section: language   # Идентификатор секции технологии
+      status: adopt      # Статус технологии adopt / trial / assess / hold
+
+    Python:
+      aliases:        
+        - Python
+        - python
+        - py
+      section: language
+      link: https://www.python.org/
+      status: adopt
+
+    Csharp:
+      aliases:
+        - c#
+        - C#
+        - csharp
+      section: language
+      link: https://ru.wikipedia.org/wiki/C_Sharp
+      status: adopt
+
+    Golang:
+      aliases:
+        - go
+        - golang
+        - Golang
+      section: language
+      link: https://go.dev/
+      status: adopt
+    
+    1C:
+      aliases:
+        - 1c
+        - 1C        
+      section: language
+      link: https://1c.ru/
+      status: adopt
+
+    Java:
+      aliases:
+        - Java
+        - java
+      section: language
+      link: https://ru.wikipedia.org/wiki/Java
+      status: adopt
+
+    Kotlin:
+      aliases:
+        - Kotlin
+      section: language
+      link: https://kotlinlang.org/docs/home.html
+      status: adopt
+
+# Описание фреймворков
+    Django:
+      aliases:
+        - django
+        - Django
+      section: framework
+      link: https://www.djangoproject.com
+      status: adopt
+    
+    Flask:
+      aliases:
+        - Flask
+        - flask
+      section: framework
+      link: https://flask.palletsprojects.com/
+      status: adopt
+
+    Django_REST:
+      aliases:
+        - Django REST framework
+        - django rest framework
+      section: framework
+      link: https://www.django-rest-framework.org/
+      status: adopt
+
+    FastAPI:
+      aliases:
+        - FastAPI
+        - fastAPI        
+      section: framework
+      link: https://fastapi.tiangolo.com/
+      status: adopt
+
+    ASP.NET_MVC:
+      aliases:
+        - ASP.NET MVC
+      section: framework
+      link: https://ru.wikipedia.org/wiki/ASP.NET_MVC_Framework
+      status: adopt
+
+    ASP.NET_Core:
+      aliases:
+        - ASP.NET Core
+      section: framework
+      link: https://ru.wikipedia.org/wiki/ASP.NET_Core
+      status: adopt
+
+    EntityFramework:
+      aliases:
+        - Entity Framework
+        - Entity Framework Core
+      section: framework
+      link: https://docs.microsoft.com/ru-ru/ef/
+      status: adopt
+
+    React:
+      aliases:
+        - React
+        - ReactJS
+        - React.js
+        - reactjs
+      section: framework
+      link: https://reactjs.org/
+      status: adopt
+
+    Vuejs:
+      aliases:
+        - Vuejs
+        - Vue.js        
+      section: framework
+      link: https://vuejs.org/
+      status: adopt
+
+    Nodejs:
+      aliases:
+        - Nodejs
+        - Node.js        
+      section: framework
+      link: https://nodejs.org/en/
+      status: adopt
+
+    Angular:
+      aliases:
+        - Angular
+        - angular        
+      section: framework
+      link: https://angular.io/
+      status: adopt
+
+    RESTFulAPI:
+      aliases:
+        - RESTful
+        - RESTful API
+      section: framework
+      link: https://ru.wikipedia.org/wiki/REST
+      status: adopt
+
+    Spring:
+      aliases:
+        - spring
+        - spring boot
+        - Spring
+      section: framework
+      link: https://spring.io/
+      status: adopt
+
+# Описание СУБД
+    PostgreSQL:
+      aliases:
+        - PostgreSQL
+        - Postgres
+        - postgresql
+      section: DBMS
+      link: https://www.postgresql.org/
+      status: adopt
+
+    MSSQL:
+      aliases:
+        - MS SQL 
+        - Microsoft SQL
+      section: DBMS
+      link: https://www.microsoft.com/ru-ru/sql-server
+      status: adopt
+
+    ArangoDB:
+      aliases:
+        - ArangoDB
+      section: DBMS
+      link: https://www.arangodb.com/
+      status: adopt
+
+    MariaDB:
+      aliases:
+        - MariaDB
+      section: DBMS
+      link: https://mariadb.org/
+      status: adopt
+
+# Описание инструментов
+    Git:
+      aliases:
+        - Git
+        - git
+      section: tools
+      link: https://git-scm.com/
+      status: adopt
+
+    PluntUML:
+      aliases:
+        - PluntUML        
+      section: tools
+      link: https://plantuml.com/ru/
+      status: trial
+    
+    DocHub:
+      aliases:
+        - DocHub        
+      section: tools
+      link: https://dochub.info/main
+      status: trial
+
+    Celery:
+      aliases:
+        - celery
+      section: tools
+      link: https://docs.celeryq.dev/en/stable/
+      status: adopt
+
+    Redis:
+      aliases:
+        - redis
+      section: tools
+      link: https://aws.amazon.com/ru/redis/
+      status: adopt
+
+    JDK:
+      aliases:
+        - jdk17
+      section: tools
+      link: https://adoptium.net/temurin/releases/
+
+
+# Описание хранилищ
+    S3MinIO:
+      aliases:
+        - minio
+        - MinIO
+        - s3minio
+      section: storages
+      link: https://min.io/
+      status: adopt
+
+    NetStorage:
+      aliases:
+        - NetStorage
+        - Network storage
+        - Local storage
+      section: storages      
+      status: adopt
+

@@ -1,0 +1,25 @@
+docs:
+  useful_links_table:
+    type: table    
+    headers:
+      - value: section
+        text: Раздел
+        sortable: true
+        align: left
+
+      - value: name
+        text: Название
+        sortable: true
+        align: left
+        link: link
+        width: 30%
+
+      - value: description
+        text: Описание
+        sortable: true
+        align: left
+    source: >
+      (
+         $.useful_links^(type)
+      )
+

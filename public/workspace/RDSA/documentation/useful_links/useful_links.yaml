@@ -1,0 +1,17 @@
+useful_links:
+  - name: Официальный сайт DocHub
+    link: https://dochub.info/main
+    description: На сайте вы можете найти всю необходимыю информацию по DocHub, при этом нужно учитывать что сайт построен на платформе DocHub, что даёт общее предствление о его устройстве.
+    section: Архитектура
+
+  - name: Ссылка на репозиторий DocHub в GitHub
+    link: https://github.com/RabotaRu/DocHub
+    description: В репозитории вы найдете все исходники и инструкцию для устновки DocHub.
+    section: Архитектура
+
+  - name: Ссылка на репозиторй с примерами от сообщества
+    link: https://github.com/rpiontik/DocHubExamples
+    description: В репозитории вы найдете примеры от участников сообщества развития DocHub.
+    section: Архитектура
+
+

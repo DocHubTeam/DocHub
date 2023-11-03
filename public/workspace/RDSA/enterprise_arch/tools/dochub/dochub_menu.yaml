@@ -1,0 +1,117 @@
+dochub_menu:
+  dochub:
+    title: 0. DocHub
+    order: 1
+
+  dochub.arch_governance:
+    title: 01. Архитектурные принципы и стандарты
+    order: 1000
+  dochub.arch_governance.introdaction:
+    title: 01. Введение в архитектуру
+    order: 1200
+  dochub.arch_governance.principles:
+    title: 02. Архитектурные принципы
+    order: 1200
+  dochub.arch_governance.standards:
+    title: 03. Архитектурные стандарты
+    order: 1300  
+  dochub.arch_governance.patterns:
+    title: 04. Типовые паттерны реализации задач
+    order: 1400
+
+  dochub.business_arch:
+    title: 02. Бизнес архитектура
+    order: 2000
+  dochub.business_arch.proc_map:
+    title: 01. Карта процессов
+    order: 2100
+
+  dochub.inform_arch:
+    title: 03. Информационная архитектура
+    order: 3000
+  dochub.inform_arch.business_entities:
+    title: 01. Бизнес-сущности
+    order: 3100
+
+  dochub.app_arch:
+    title: 04. Прикладная архитектура
+    order: 4000
+  dochub.app_arch.systems_list:
+    title: 01. Список систем
+    order: 4100
+  dochub.app_arch.app_map:
+    title: 02. Карта приложений
+    order: 4200
+  dochub.app_arch.pal1:
+    title: 03. Верхнеуровневый прикладной ландшафт ПА-L1
+    order: 4300
+  dochub.app_arch.pal1_details:
+    title: 04. Детальная документация систем ПА-L1
+    order: 4400
+  dochub.app_arch.pal2:
+    title: 05. Детальная архитектуры систем ПА-L2
+    order: 4500
+  dochub.app_arch.pal2_details:
+    title: 06. Детальная документация систем ПА-L2
+    order: 4600
+
+  dochub.tech_arch:
+    title: 05. Технологическая архитектура
+    order: 5000
+
+
+  dochub.arch_decision:
+    title: 06. Архитектура решений
+    order: 6000
+  dochub.arch_decision.adl:
+    title: 01. Architecture decision log
+    order: 6100
+  dochub.arch_decision.tactical:
+    title: 02. Тактические архитектуры
+    order: 6200
+
+  dochub.arch_dev:
+    title: 07. Развитие корп архитектуры
+    order: 7000
+  dochub.arch_dev.processes:
+    title: 01. Политики и архитектурные процессы
+    order: 7100
+  dochub.arch_dev.tools:
+    title: 02. Инструменты
+    order: 7200
+  dochub.arch_dev.tools.dochub:
+    title: 01. DocHub
+    order: 7210
+  dochub.arch_dev.tools.dochub.dochub_app_arch_desc_guide:
+    title: 01. Руководство по описанию прикладной архитектуры
+    order: 7211
+  dochub.arch_dev.tools.dochub.menu_structure:
+    title: 02. Целевая структура меню
+    order: 7212  
+  dochub.arch_dev.tools.dochub.jsonata_query_example:
+    title: 03. Примеры запросов JSONata
+    order: 7213
+  dochub.arch_dev.tools.dochub.problems:
+    title: Проблемы
+    order: 7214
+  dochub.arch_dev.tools.dochub.devtool:
+    title: JSONata
+    order: 7215
+  dochub.arch_dev.teams:
+    title: 03. Команды
+    order: 7220
+  dochub.arch_dev.plan:
+    title: 04. План развития
+    order: 7230
+
+  dochub.dictionaries:
+    title: 08. Справочники
+    order: 8000
+  dochub.dictionaries.settings:
+    title: 01. Настройки
+    order: 8100
+
+  dochub.glossary:
+    title: Глосарий терминов
+    order: 10000
+

@@ -1,0 +1,15 @@
+contexts:   # Контексты представления архитектурных компонентов
+  arch.swamp.common:
+    title: ГК Болото
+    location: 03. Верхнеуровневый прикладной ландшафт (ПА-L1)/ГК Болото
+    extra-links: true
+    # extra-links: false
+    uml:
+      $notation: plantuml  # sber C4Model plantuml
+      $autor: Frog
+      $version: '0.0.1'
+      $moment: 20.11.2022
+    components:
+      - swamp.frog.*
+      - swamp.hippo.*
+      - swamp.crocodile.*      

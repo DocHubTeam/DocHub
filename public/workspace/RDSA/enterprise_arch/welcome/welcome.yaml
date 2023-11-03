@@ -1,0 +1,11 @@
+docs:
+  swamp.welcome:
+    type: markdown
+    source: welcome.md    
+
+  # test:
+  #   location: Тест
+  #   description: Нет
+  #   type: markdown
+  #   template: welcome.md
+

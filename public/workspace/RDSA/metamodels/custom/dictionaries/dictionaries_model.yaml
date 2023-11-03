@@ -1,0 +1,78 @@
+entities: # Сущности расширенной метамодели
+  # Бизнес-сущности
+  dictionaries:               # Секция, где будет описываться объекты сущности "взаимодействие". Обязательно.
+    title: Справочники   # Название сущности. Обязательно.
+    description: >          # Описание сущности текст или ссылка на документ. Необязательно.
+        Справочники для хранения различной статической информации используемой внутри DocHub
+    menu: >
+        (
+            $dictionaries := $.dictionaries;
+            $makeLocation := function($id) {(
+                $arrleft := function($arr ,$count) {
+                    $map($arr, function($v, $i) {
+                    $i <= $count ? $v
+                    })
+                };
+                $domains := $split($id, ".");
+                "08. Справочники/" & $join($map($domains, function($domain, $index) {(
+                    $lookup($dictionaries, $join($arrleft($domains, $index), ".")).title
+                    )}), "/");
+            )};
+
+            $append([{
+                "icon": *.icon,                                                 /* Получаем иконку */
+                "link": "entities/dictionaries/tree",                           /* Ссылка на форму представления tree (дерево дерево объектов "interactions") */
+                "location": "08. Справочники"                                    /* Расположение в меню */
+            }],
+                [$.dictionaries.$spread().{
+                    "icon": *.icon,                                             /* Получаем иконку */
+                    "link": "entities/dictionaries/dictionary_card?id=" & $keys()[0],     /* Формируем ссылку на бланк документ */
+                    "location": $makeLocation($keys()[0])                       /* Формируем расположение в меню */
+                }][location]
+            );
+        )
+
+    presentations:
+      tree:
+        type: plantuml
+        template: templates/tree.puml
+        source: >
+            (
+                $set("rpev-id", undefined);
+                $arrleft := function($arr ,$count) {
+                    $map($arr, function($v, $i) {
+                        $i <= $count ? $v
+                    })
+                };
+                $dictionaries := $.dictionaries;
+                [$dictionaries.$spread().($merge([{"id" : $keys()[0]}, $.*]))^(id).(
+                    $prev_nodes := $split($get("rpev-id"), ".");
+                    $prev_level := $count($prev_nodes);
+                    $curr_nodes := $split(id, ".");
+                    $set("isdiff", false);
+                    $result := $map($curr_nodes, function($v, $i) {(
+                        $set("isdiff", $get("isdiff") or $prev_level = 0 or $prev_level <= $i or $v != $prev_nodes[$i]) ? (
+                            $id := $join($arrleft($curr_nodes, $i), ".");
+                            $dictionary :=  $lookup($dictionaries, $id);
+                            {
+                                "id": $id,
+                                "level": $pad("", $i + 2, "*"),
+                                "title": $dictionary ? $dictionary.title : $id,
+                                "link": "/entities/dictionaries/dictionary_card?id=" & $id
+                            }
+                        );
+                    )});
+                    $set("rpev-id", id);
+                    $result
+                )];
+            )
+        # Выводим карточку выбранного справочника
+      dictionary_card:
+        type: markdown
+        template: templates/dictionary_card.md
+        source: >
+            (
+                $dictionaries := [$.dictionaries.$spread().$merge([$.*, {"id": $keys($)}])];
+                $dictionaries [id=$params.id];
+            )
+

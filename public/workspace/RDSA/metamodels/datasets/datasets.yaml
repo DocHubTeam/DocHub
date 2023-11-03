@@ -1,0 +1,68 @@
+datasets:
+  # Получаем список систем с линками на карточку системы
+  swamp.dataset.systems_list:
+    source: >
+      (
+        $REPO := $;
+        [$distinct([components.$spread().(
+          $COMPONENT_ID := $keys()[0];
+          $BASE_ID := $split($COMPONENT_ID, ".", 2) ~> $join('.');
+
+          $systems := $.*.{
+            "id": $COMPONENT_ID,
+            "link_to_system": "/architect/components/" & $COMPONENT_ID,
+            "title": title,
+            "entity": entity,
+            "system_entities": "Ссылка",
+            "link_to_system_entities": "/entities/business_entities/business_entities_table_in_systems.filtered?system_id=" & $COMPONENT_ID,
+            "description": description,
+            "application_owner": application_owner,            
+            "owner_unit":  $BASE_ID ? $lookup($REPO.components, $BASE_ID).title : $BASE_ID
+          };
+          $systems[entity="system"];
+        )])^(id)]
+
+      )
+
+  # Получаем список бизнес-сущностей с линками на карточку бизнес-cущности
+  swamp.dataset.business_entities_list:
+    source: >
+      (
+      [$.business_entities.$spread().(
+      $ENTITY_ID :=  $keys()[0];
+      $entities := $.*.{
+        "id": $ENTITY_ID,
+        "title":  title,
+        "description":  description,
+        "link_to_entity": "/entities/business_entities/business_entity_card?id=" & $ENTITY_ID
+        };
+      )]^(title)
+      )
+
+  # Cписок бизнес-сущностей в системах с линками на карточку бизнес-cущности
+  swamp.dataset.business_entities_in_systems:            # Идентификатор источника
+    source: >                   # JSONata запрос к архитектуре
+      (
+          $MANIFEST := $;
+          $distinct([$MANIFEST.components.$spread().(
+          $COMPONENT := $;
+          $COMPONENT_ID := $keys()[0];
+          $business_entities :=  $distinct($COMPONENT.*.business_entities.(
+              $ENTITY := $;
+              $ENTITIES := $lookup($MANIFEST.business_entities, $ENTITY);
+              $ENTITIES := $merge([$ENTITIES, {"id": $ENTITY}]);
+              $COMPONENT := $lookup($MANIFEST.components, $COMPONENT_ID);
+              {
+              "id": $ENTITIES.id,                /* ID бизнес-сущности в DocHub */             
+              "title": $type($ENTITIES.title)="string" ? $ENTITIES.title : "Ошибка в идентификаторе бизнес-сущности",
+              "link_to_entity": $type($ENTITIES.title)="string" ? "/entities/business_entities/business_entity_card?id=" & $ENTITIES.id : "",
+              "system_id": $COMPONENT_ID,
+              "link_to_system": "/architect/components/" & $COMPONENT_ID,
+              "system_title": $COMPONENT.title,
+              "system_entities": "Отбор по системе",
+              "link_to_system_entities": "/entities/business_entities/business_entities_table_in_systems.filtered?system_id=" & $COMPONENT_ID
+              }
+              )
+          );
+          )])^(system_id)
+        )

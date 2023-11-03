@@ -1,0 +1,9 @@
+aspects:
+  qa_systems:
+    title: QA системы
+    location: QA системы
+
+  sales:
+    title: Продажи
+    location: Продажи
+    

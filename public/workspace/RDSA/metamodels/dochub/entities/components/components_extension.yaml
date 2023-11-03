@@ -1,0 +1,71 @@
+entities:
+  components:
+    # Расширяем презентацию сущности
+    presentations:
+      # Встраиваемся в основную перезентацию (т.е. она уже существует)
+      blank:
+        # Добавляем собственный виджет
+        widgets:
+          outside_links: # Идентификатор виджета
+            # Название виджета
+            title: Кто зависит от этого компонента
+            # Идентификатор презентации, которая будет использоваться в виджете
+            presentation: outside_links
+            # В params можно передать дополнительные параметры
+            # презентации, которые будут доступны в перемнной $params
+            #params:
+            #  param1: Значение параметра 1
+            #  param2: Значение параметра 2
+            # Расположение
+            # < - слева
+            # > - справа
+            # = - Растянуть на 100%
+            align: "<"
+      # Добавляем собственную презентацию
+      # Будем показывать внешние связи на данный компонент
+      outside_links: # Идентификатор представления
+        # Контракт по параметрам представления в формате JSONSchema
+        params:
+          type: object
+          properties:
+            component:
+              title: Идентификатор компонента
+              type: string
+          required:
+            - component
+        # Тип документа шаблона
+        type: table
+        # Определяем заголовок таблицы
+        headers:
+          - value: id             # Идентификатор зависимого компонента
+            text: Идентификатор   # Заголовок колокнки
+            sortable: true        # Производить сортировку по колонке
+            align: left           # Форматирование по горизонтали
+            width: 40%            # Ширина колонки
+            link: link
+          - value: title          # Наименование зависимого компонента
+            text: Наименование
+            sortable: true
+            align: left           # Форматирование по горизонтали
+            width: 40%
+            link: link
+          - value: direction      # Направление связи
+            text: Направление связи
+            sortable: true
+            align: center
+            width: 20%
+        # Данные для шаблона
+        source: >
+          (
+            [$distinct(components.$spread().(
+              $id := $keys()[0];
+              $title := *.title;
+              $links := $distinct($.*.links[id=$params.component].("" & direction));
+              $links.{
+                "id": $id,
+                "title": $title,
+                "direction": $links,
+                "link": "/architect/components/" & $id
+              }
+            ))^(id)]
+          )	

@@ -1,0 +1,10 @@
+components:
+  # внутренние клиенты Экосистемы
+
+  swamp.creeping_snake:
+    title: Змей-ползучий
+    entity: person   # Сущность компонента из PlantUML (https://plantuml.com/ru/deployment-diagram)
+
+  swamp.Moidodyr:
+    title: Мойдодыр
+    entity: person   # Сущность компонента из PlantUML (https://plantuml.com/ru/deployment-diagram)

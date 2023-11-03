@@ -1,0 +1,28 @@
+functions:  
+  # Описание 
+  # Функция формирует строку ресурсов для вывода в карточке развертывания системы. На вход принимает 3 парметра:
+  # context - сюда мы передаем значения ресурсов
+  # mult - мулитипликатор, т.е. у каждой среды есть мультиплкатор на который мы увеличиваем ресурсы, если не нужно увеличивать, то передаем 1
+  # output_type - вид возвращаемой строк: short - короткий варинат без типов ресурсов, full - полный вариант
+  
+  # Примеры
+  # $eval($functions.get_resources,{"context": $, "mult": multiplier, "output_type": "short"})
+  # $eval($functions.get_resources,{"context": $, "mult": 1, "output_type": "full"})
+  get_resources: >
+    (
+      $context := $.context;
+      $mult := $.mult;
+      $output_type := $.output_type;
+      $output_type = "short"
+      ? "RAM: " & $context.ram * $mult & "Gb" & "\n"            
+        & "CPU: " & $context.cpu * $mult & "Core" & "\n"        
+        & ($context.storage_size > 0
+        ? "Storage: " & $context.storage_size * $mult & "Gb")
+      : "RAM: " & $context.ram * $mult & "Gb" & "\n"
+        & "CPU type: " & $context.cpu_type & "\n"
+        & "CPU: " & $context.cpu * $mult & "Core" & "\n"
+        & ($context.storage_size > 0 
+          ? "Storage type: " & $context.storage_type & "\n"
+          & "Storage: " & $context.storage_size * $mult & "Gb" : "")
+    )
+  

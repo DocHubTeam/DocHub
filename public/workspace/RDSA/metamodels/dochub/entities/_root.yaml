@@ -1,0 +1,5 @@
+imports:
+  - components/_root.yaml
+  - aspects/_root.yaml
+  - contexts/_root.yaml
+  - documents/_root.yaml

@@ -1,0 +1,24 @@
+components:
+  swamp.hippo.allure:
+    title: Allure    # Название компонента
+    entity: system   # Сущность компонента из PlantUML (https://plantuml.com/ru/deployment-diagram)    
+    short_description: Фреймворк для создания отчётов автотестов
+    description: Фреймворк от Яндекса для создания простых и понятных отчётов автотестов
+    business_owners:
+      - Не найдены
+    application_owner: Змей-ползучий   
+    critical_level: administrative #administrative/business_operational/business_critical/mission_critical
+    system_category: it_app #channel_app/business_app/ext_business_app/it_app/ext_it_app    
+    aspects:                # Аспекты, которе реализует компонент
+      - qa_systems 
+    business_entities:      
+      - bank
+      - country
+      - unit
+      - organization
+      - contractoraccount
+      - chekingaccount  
+    links:
+      # Интеграции между системами одного БЮ
+      - id: swamp.frog.1cbit_finance
+        direction: <--

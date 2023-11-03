@@ -1,0 +1,30 @@
+docs:
+  table_glossary:
+    type: table
+    # location: Глоссарий терминов
+    headers:
+      - value: type
+        text: Тип
+        sortable: true
+        align: left
+
+      - value: name
+        text: Термин
+        sortable: true
+        align: left
+
+      - value: shortname
+        text: Сокращение
+        sortable: true
+        align: left
+
+      - value: comment
+        text: Комментарий
+        sortable: true
+        align: left
+
+    source: >
+      (
+         $.glossary.terms^(type, name)
+      )
+

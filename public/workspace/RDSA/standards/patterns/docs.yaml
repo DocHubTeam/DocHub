@@ -1,0 +1,122 @@
+docs:
+  arch_patterns.partner_companies_interaction:
+    location: 01. Архитектурные принципы и стандарты/04. Типовые паттерны реализации задач/Взаимодействие с компаниями-партнерами
+    autor: Valentin Kozlov
+    type: smartants           # Тип документа
+    source:                   # Задаем константные данные для генерации диаграммы
+      config:                 
+        distance: 100         
+        trackWidth: 20        
+      nodes:
+        # Внешняя среда
+        partner:         # FrontEnd приложение
+          title: Система компании-партнера
+          symbol: system
+        swampdmz:
+          title: Болото DMZ
+        swampdmz.apigateway:           # API шлюз
+          title: API Шлюз      
+          symbol: component    
+        # Внутренняя среда
+        swamp:                      
+          title: Внутренняя среда Болота
+        swamp.sso:
+          title: SSO
+          symbol: component      
+        swamp.internalapigetway:
+          title: Внутренний API Getway
+          symbol: component
+        swamp.system:
+          title: Системы c Web API
+        swamp.system.api: 
+          title: Web API
+          symbol: component  
+        swamp.kafka:
+          title: Kafka
+        swamp.kafka.rest: 
+          title: Kafka REST
+          symbol: component  
+
+      links:                
+        - from: partner
+          to: swampdmz.apigateway
+          title: Запрос            
+          style: "->" 
+        - from: swampdmz.apigateway
+          to: partner  
+          title: Результат запроса          
+          style: "->"    
+        - from: swampdmz.apigateway
+          to: swamp.sso
+          title: Логин и пароль
+          style: "->"
+        - from: swamp.sso
+          to: swampdmz.apigateway
+          title: JWT токен
+          style: "->"
+        - from: swamp.internalapigetway
+          title: Авторизованный пользователь
+          to: swampdmz.apigateway          
+          style: "<->"
+        - from: swamp.internalapigetway
+          to: swamp.system.api          
+          style: "<->"
+        - from: swamp.internalapigetway
+          to: swamp.kafka.rest          
+          style: "<->"
+
+
+      # Анимация
+      animation:
+        # Здесь создаем именованные действия, которы будут доступны в сценариях
+        actions:
+          hello:                            # Идентификатор действия
+          - action: info                    # Информировать пользователя. Доступны: clean / info / focus-node / focus-neighbors
+            text: Давайте мы объясним как работает этот архитектурный паттерн   # Текст, который будет выводиться пользователю
+          focus_partner:                           
+          - action: focus-node              # Установить фокус на объекте диаграммы
+            target: partner            # RegEx выражение определяющее с какими идентификаторами будут выделены элементы диаграммы
+          - action: info                    # Одно действие может иметь пакет команд, которые будут выполнены последовательно
+            text: Это система компании-партнера, которой мы предоставляем доступ по Web API
+          focus_partner_neighbors:
+          - action: focus-neighbors              # Здесь просим выделить всех соседей
+            target: partner       # По маске
+          - action: info
+            text: Все запросы из приложения компании-партнера поступают в API шлюз
+          focus_sso_neighbors:
+          - action: focus-neighbors
+            target: swamp.sso
+          - action: info
+            text: Перед тем как запрос уйдет к внутреннему API Getway будет выполнена аутентификации через сервис SSO "S.ID"
+          focus_internalapigetwayd_neighbors:
+          - action: focus-neighbors         # Подсвечиваем всех соседей
+            target: swamp.internalapigetway       # Шлюза
+          - action: info
+            text: Если S.ID вас узнал, то вы получите JWT токен с котрым дальше сможете выполнить переданный вами запрос через внутренний API Getway.
+          clean:
+          - action: clean                   # Отчистить действия 
+            target: ".*"                    # выполненные над всеми объектами на диаграмме
+
+        scenarios:
+          explain:                          # Идентификатор сценария
+            title: Объясни мне, паттерн "Взаимодействие с компаниями-партнерами"  # Название сценария для пользователя
+            steps:
+            - action: clean
+            - action: hello                 # Идентификатор действия
+              delay: 2000                   # Длительность шага в миллисекундах
+              voice: true                   # Признак голосовой подсказки. Переход на следующий шаг не происходит пока не будет завершен синтез речи
+            - action: clean
+            - action: focus_partner 
+              delay: 2000 
+              voice: true
+            - action: focus_partner_neighbors
+              delay: 2000
+              voice: true
+            - action: clean
+            - action: focus_sso_neighbors
+              delay: 2000
+              voice: true
+            - action: clean
+            - action: focus_internalapigetwayd_neighbors
+              delay: 2000
+              voice: true

@@ -1,0 +1,25 @@
+components:
+  swamp.crocodile.crm:
+    title: CRM    # Название компонента
+    entity: system   # Сущность компонента из PlantUML (https://plantuml.com/ru/deployment-diagram)    
+    short_description: CRM-система для продажи недвижимости
+    description: CRM-система (customer relationship management) — это способ управления взаимоотношениями с клиентами и оптимизации бизнес-процессов
+    business_owners:
+      - Татоша
+      - Какоша
+    application_owner: Мойдодыр
+    critical_level: mission_critical #administrative/business_operational/business_critical/mission_critical
+    system_category: business_app #channel_app/business_app/ext_business_app/it_app/ext_it_app       
+    aspects:                # Аспекты, которе реализует компонент
+      - sales
+    business_entities:      
+      - bank1
+      - chekingaccount
+      - contractor
+      - region
+      - unit
+      - agreementtype 
+    links:
+    # Интеграции между системами одного БЮ
+      - id: swamp.frog.1cbit_finance
+        direction: <--

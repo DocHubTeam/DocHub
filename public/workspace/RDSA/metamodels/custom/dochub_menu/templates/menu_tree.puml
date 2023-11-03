@@ -1,0 +1,37 @@
+@startwbs
+<style>
+wbsDiagram {
+    node {
+        :depth(0) {
+        BackgroundColor 60a8c4
+        }
+
+        :depth(1) {
+            BackgroundColor 7ac1de
+        }            
+
+        :depth(2) {
+            BackgroundColor abcdef
+        }
+            
+        :depth(3) {
+            BackgroundColor a1e8ff
+        }
+
+        :depth(4) {
+            BackgroundColor c6e6f5
+        }
+        
+        :depth(5) {
+            BackgroundColor ecf7fc
+        }
+    }
+}
+</style>
+
+
+* Структура меню DocHub
+{{#.}}
+{{level}} {{title}}
+{{/.}}
+@endwbs

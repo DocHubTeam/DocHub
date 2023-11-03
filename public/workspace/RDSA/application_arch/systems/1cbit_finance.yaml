@@ -1,0 +1,19 @@
+components:
+  swamp.frog.1cbit_finance:
+    title: 1С Бит.Финанс
+    entity: system
+    short_description: Функциональная подсистема автоматизирующая договорной учет
+    description: Функциональная подсистема автоматизирующая договорной учет    
+    business_owners:
+      - Кикимора-болотная
+    application_owner: Лягушка    
+    critical_level: mission_critical #administrative/business_operational/business_critical/mission_critical
+    system_category: business_app #channel_app/business_app/ext_business_app/it_app/ext_it_app          
+    links:
+      # Cвязи с системами
+      # - id: swamp.crocodile.spact
+      #   direction: <--
+      - id: swamp.frog.spoll
+        direction: <--
+      - id: swamp.crocodile.crm
+        direction: <--

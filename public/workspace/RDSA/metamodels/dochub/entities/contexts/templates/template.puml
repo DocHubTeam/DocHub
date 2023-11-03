@@ -1,0 +1,188 @@
+@startuml
+skinparam useBetaStyle true
+allow_mixing
+{{renderCore}}
+skinparam {
+    HyperLinkColor #000
+	wrapWidth 200
+	maxMessageSize 200
+	'hide stereotype
+	defaultfontname Roboto, sans-serif
+	roundCorner 10
+	'linetype ortho
+	'linetype polyline
+	nodesep 70
+	ranksep 70
+	shadowing false
+	padding 2
+}
+
+<style>
+    component {
+        BackGroundColor #fff
+        RoundCorner 10
+        LineColor #000
+        FontColor #333
+        HyperLinkColor #333
+
+        .focus {
+            FontColor #fff
+            BackGroundColor #3495db
+            HyperLinkColor #fff
+            HyperLinkUnderline false
+        }
+    }
+    database {
+        BackGroundColor #fff
+        RoundCorner 10
+        LineColor #000
+        FontColor #333
+        HyperLinkColor #333
+
+        .focus {
+            FontColor #fff
+            BackGroundColor #3495db
+            HyperLinkColor #fff
+            HyperLinkUnderline false
+        }
+    }
+    queue {
+        BackGroundColor #fff
+        RoundCorner 10
+        LineColor #000
+        FontColor #333
+        HyperLinkColor #333
+
+        .focus {
+            FontColor #fff
+            BackGroundColor #3495db
+            HyperLinkColor #fff
+            HyperLinkUnderline false
+        }
+    }
+</style>
+
+!unquoted procedure $Region($alias, $label, $type)
+    !if ($type)
+        rectangle "$label" <<$type>> as $alias
+    !else
+        rectangle "$label" as $alias
+    !endif
+!endprocedure
+
+!unquoted procedure $Header($Title="Header", $Authors="Name", $Version="0.1", $Date="01.01.1999")
+    header
+        !if ($Authors)
+            Authors: $Authors
+        !endif
+        !if ($Version)
+            Version: $Version
+        !endif
+        !if ($Date)
+            Date: $Date
+        !endif
+
+    endheader
+
+    hide empty members
+
+    title $Title
+!endprocedure
+
+
+'Стили Person
+skinparam component<<Person>> {
+	backgroundColor Transparent
+	borderColor Transparent
+	shadowing false
+	hide stereotype
+	borderthickness 1
+	FontSize 14
+    FontStyle Bold
+}
+
+!unquoted procedure $join_start()
+    %set_variable_value("$join_append", 0)
+!endprocedure
+
+!unquoted function $join_append()
+    !$val = %get_variable_value("$join_append")
+    !if $val == 0
+        %set_variable_value("$join_append", 1)
+    !endif
+    !return $val
+!endfunction
+
+!unquoted procedure $join_end()
+    %set_variable_value("$join_append", 0)
+!endprocedure
+
+!unquoted procedure $Entity($entity, $ACName, $id, $ACType, $Colored = "")
+    $join_start()
+    !if ($entity == component)
+        component $id $Colored [
+        <b>$ACName</b>
+        ====
+    !elseif ($entity == system)
+        component $id $Colored [
+            <b>$ACName</b>
+            ====
+    !elseif ($entity == actor || $entity == person)
+        actor $id [
+        ..===$ACName..
+        ]
+    !else
+        $entity $id [
+            <b>$ACName</b>
+            ====
+    !endif
+!endprocedure
+
+!unquoted procedure $EntityEnd($entity)
+    !if ($entity == component)
+    ]
+    !elseif ($entity == system)
+    ]
+    !elseif ($entity == actor || $entity == person)
+'nothing
+    !else
+    ]
+    !endif
+    $join_end()
+!endprocedure
+
+!unquoted procedure $EntityAspect($entity, $prop)
+    !if ($entity == component)
+        !$val = $join_append()
+        !if ($val != 0)
+        ---
+        !endif
+        * $prop
+    !elseif ($entity == system)
+        * $prop
+    !elseif ($entity == actor || $entity == person)
+'nothing
+    !else
+        * $prop
+    !endif
+!endprocedure
+
+!unquoted procedure $EntityExpand($entity, $ID)
+    !if ($entity == component)
+        ---
+        [[/entities/contexts/{{presentation}}?dh-context-id=$ID ≫≫]]
+    !elseif ($entity == system)
+        ---
+        [[/entities/contexts/{{presentation}}?dh-context-id=$ID ≫≫]]
+    !elseif ($entity == actor || $entity == person)
+'nothing
+    !else
+'nothing
+    !endif
+!endprocedure
+
+left to right direction
+
+{{&code}}
+
+@enduml

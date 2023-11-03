@@ -1,0 +1,55 @@
+business_entities:
+  bank:
+    title: Банки
+    description: pass    
+    parameters:
+      - name: bank_name
+        description: Наименование банка
+      - name: bik
+        description: БИК банка
+
+  chekingaccount:
+    title: Расчетные счета
+    description: pass
+
+  contractor:
+    title: Контрагенты
+    description: pass
+
+  contractoraccount:
+    title: Счета контрагентов
+    description: pass
+
+  country:
+    title: Страны
+    description: pass
+
+  currency:
+    title: Валюты
+    description: pass
+    
+  organization:
+    title: Организации
+    description: pass
+
+  region:
+    title: Регионы
+    description: pass
+
+  unit:
+    title: Единицы измерения
+    description: pass
+
+  agreementtype:
+    title: Типы договоров
+    description: pass
+  
+  contract:
+    title: Договоры
+    description: pass
+
+  draftagreement:
+    title: Проекты договоров
+    description: pass
+
+  

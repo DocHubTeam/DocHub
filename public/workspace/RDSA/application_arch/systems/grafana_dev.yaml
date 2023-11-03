@@ -1,0 +1,24 @@
+components:
+  swamp.hippo.grafana:
+    title: Grafana
+    entity: system   # Сущность компонента из PlantUML (https://plantuml.com/ru/deployment-diagram)    
+    description: Свободная программная система визуализации данных, ориентированная на данные систем ИТ-мониторинга. Данный инстанс используется в командах разработки.
+    short_description: Витрина мониторинга систем и сервисов
+    business_owners:
+      - Тараканище
+    application_owner: Волки    
+    critical_level: administrative #administrative/business_operational/business_critical/mission_critical
+    system_category: it_app #channel_app/business_app/ext_business_app/it_app/ext_it_app       
+    aspects:                # Аспекты, которе реализует компонент
+      - monitoring
+    links:
+      # Интеграции между системами одного БЮ
+      - id: swamp.frog.1cbit_finance
+        direction: <--
+      - id: swamp.frog.spoll
+        direction: <--
+      - id: swamp.crocodile.crm
+        direction: <--
+    color: Red
+
+        

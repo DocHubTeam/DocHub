@@ -1,0 +1,14 @@
+components:
+  swamp:
+    title: Болото
+    entity: unit
+  swamp.hippo:
+    title: Бизнес-юнит Бегемота
+    entity: unit
+  swamp.frog:
+    title: Бизнес-юнит Лягушки
+    entity: unit
+  swamp.crocodile:
+    title: Бизнес-юнит Крокодила
+    entity: unit
+  

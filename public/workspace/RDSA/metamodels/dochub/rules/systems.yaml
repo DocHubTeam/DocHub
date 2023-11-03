@@ -1,0 +1,62 @@
+rules:
+  validators:
+    system:
+      title: Валидатор систем/сервисов
+      schema:                                         # JSON Schema
+        type: object
+        properties:
+        # ------------------------
+          short_description:
+            type: string
+            minLength: 10
+        # ------------------------
+          critical_level:
+            enum:
+            - low
+            - middle
+            - high
+            - critical
+        # ------------------------
+          customer_type:
+            type: array
+            minItems: 1
+            items:
+              type: string
+              minLength: 3
+        # ------------------------
+          system_category:
+            type: array
+            minItems: 1
+            items:
+              type: string
+              minLength: 5
+          # ------------------------                     
+        required:
+          - short_description
+          - critical_level
+          - customer_type
+          - system_category          
+
+        additionalProperties: true
+      source: >                                       # Источник данных об ошибках
+        (
+          /* Создаем валидатор JSON schema */
+          $validator := $jsonschema(rules.validators.system.schema);  /* Схему валидата получаем из контекста отклонения (rules.validators.system.schema)*/
+          /* Формируем базу для проверки */
+          ([([
+            components_test.$spread().( /* Сканируем все компоненты */
+              $ID := $keys()[0];              
+              {                                                               /* Генерируем массив признаков проблем */
+                "isSystem": *.entity = "system",                           /* Это система */
+                "isFitDomain": $boolean($match($ID, /swamp\.*\.*/)), 
+                "id": $ID,                                                    /* Запоминаем идентификатор компонента */
+                "isvalid": $validator($.*)                                    /* Валидируем компонент по схеме */									
+              }
+            )        
+          ][isFitDomain and isSystem and isvalid != true]).isvalid.{    /* Генерируем отклонения по выявленным нарушениям */
+            "uid": %.id  & "-" & $replace($replace(instancePath, "/", "-"), "-", "",1),           /* Уникальный идентификатор выявленной ошибки */
+            "location": "/architect/components/" & %.id,                      /* Ссылка на расположение объекта ошибки */
+            "correction": "Корректно заполните реквизит: "& $replace(instancePath, "/", "",1),                       /* Рекомендации как исправить проблему */
+            "description": message
+          }])
+        )

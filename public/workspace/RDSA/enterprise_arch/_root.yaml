@@ -1,0 +1,6 @@
+imports:
+  - tools/_root.yaml
+  - welcome/_root.yaml  
+  - adr/_root.yaml  
+  - docs.yaml
+  - processes/_root.yaml

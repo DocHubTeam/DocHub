@@ -1,0 +1,165 @@
+# Расширение сущности "Contexts" для генерации SmartAnts диаграмм
+entities:
+  contexts:
+    # Предопределенные конфигурационные параметры для генерации контекстов
+    config:
+      asRowHeight: 14   # Высота строки аспекта
+      asPadding: 8      # Отступы
+      asFontWidth: 7   # Ширина символов для расчета ширины строк
+      asFontHeight: 12  # Высота символов
+    # API презентаций SmartAnts
+    api:
+      # Генерирует ноды для диаграммы
+      # Входящие параметры:
+      #   manifest    - данные архитектуры
+      #   components  - архитектурные компоненты
+      makeSANodes: >
+        (
+          $merge(components.$spread().(
+            {
+              $keys()[0]: {
+                "title": $.*.title,
+                "symbol":
+                    /* Если это актор, то используем встроенный символ */
+                    $.*.entity = "actor" ? "user" : (
+                      /* Если спекты не указаны, выводится стандартный символ системы */
+                      $count($.*.aspects) = 0 
+                      ? "system"
+                      /* Иначе используем сгенерированные символы */
+                      : "symbol-" & $keys()[0] 
+                    )
+              }
+            }
+          ))            
+        )
+
+      # Генерирует символ для элементов диаграммы
+      # Входящие параметры:
+      #   manifest    - данные архитектуры
+      #   componentId - идентификатор компонента
+      makeSASymbol: >
+        (
+          /* Обрабатываем входящие параметры */
+          $manifest := manifest;
+          $component := $lookup($manifest.components, componentId);
+          $defConfig := $manifest.entities.contexts.config;
+        
+          /* Получаем высоту строки аспекта */
+          $rowHeight := $defConfig.asRowHeight;
+          /* Получаем отступы */
+          $padding := $defConfig.asPadding;
+          /* Получаем ширину символа */
+          $fontWidth := $defConfig.asFontWidth;
+          /* Получаем ширину символа */
+          $fontHeight := $defConfig.asFontHeight;
+        
+          /* Определяем количество аспектов для вычисления высоты символа */
+          $aspectCount := $count($component.aspects);
+        
+          /* Формируем массив аспектов */
+          $aspects := $component.aspects.(
+            $aspect := $lookup($manifest.aspects, $);
+            {
+              "id" : $,
+              "title": $aspect.title ? $aspect.title : $ 
+            }
+          );
+        
+          /* Определяем максимальную длину текста для вычисления ширины символа */
+          $maxTitle := $max($aspects.($length(title)));
+        
+          /* Вычисляем размеры символа */
+          $width := $maxTitle ? $maxTitle * $fontWidth + $padding * 2 : 64; /* Умножаем на ширину символа */   
+          $height := ($aspectCount + 1) * $rowHeight + $padding * 2; /* Умножаем на высоту строки */
+        
+          /* Генерируем символ */
+          {
+            "symbol-" & componentId: 
+                "<g>"
+                    /* Создаем контейнер */
+                    & "<rect width=" & $width & " height=" & $height & " fill=\"#eee\" stroke=\"#222\" rx=3 />"
+                    /* Заполняем аспектами */
+                    & $join($map($aspects, function($v, $i) {(
+                        "<a href=\"/architect/aspects/" & $v.id & "\" >"
+                        & "<text x=6 y=" & ($i * $rowHeight + $padding + $rowHeight) & " style=\"font-size:" & $fontHeight & "\" fill=\"blue\">" & $v.title & "</text>"
+                        & "</a>"
+                    )}))
+                & "</g>"
+          }
+        )
+      # Генерирует библиотеку символов
+      # Входящие параметры:
+      #   manifest    - данные архитектуры
+      #   components  - компоненты выводимые на диаграмму
+      makeSASymbolLibrary: >
+        (
+          /* Обрабатываем входящие параметры */
+          $manifest := manifest;
+          $merge(components.$spread().(
+            $eval($manifest.entities.contexts.api.makeSASymbol, {
+              "manifest": $manifest,
+              "componentId": $keys()[0]
+            })
+          ));
+        )
+    # Представления контекстов в PlantUML
+    presentations:
+      smartants:
+        title: Представление в SmartAnts
+        params:
+          title: Требуемые параметры для презентации
+          type: object
+          properties:
+            "dh-context-id":
+              title: Идентификатор контекста
+              type: string
+              pattern: ^[a-zA-Z][a-zA-Z0-9_-]*(\.[a-zA-Z][a-zA-Z0-9_-]*)*$
+          required:
+            - dh-context-id
+        type: smartants
+        source: >
+          (
+            $id := $params."dh-context-id";
+            $manifest := $;
+            $context := $lookup($manifest.contexts, $id);
+            $isExtraLinks := $not($string($context."extra-links") = "false");
+
+            /* Получаем коллекцию дефолтных вспомогательных функций */
+            $defFunctions := $manifest.entities.contexts.api;
+
+            /* Получаем все компоненты входящие в контекст */
+            $components := $eval($defFunctions.fetchComponents, {
+              "manifest": $manifest,
+              "contextId": $id,
+              "extra-links": $isExtraLinks,
+              "componentId": $params.componentId
+            });
+
+            /* Строим из компонентов ноды */
+            $nodes := $eval($defFunctions.makeSANodes, {
+              "manifest": $manifest,
+              "components": $components
+            });
+
+            /* Создаем библиотеку символов */
+            $symbols := $eval($defFunctions.makeSASymbolLibrary, {
+              "manifest": $manifest,
+              "components": $components
+            });
+
+            /* Получаем список связей */
+            $links := $eval($defFunctions.fetchLinks, {
+              "components": $components
+            }).{
+              "from": from,
+              "to": to,
+              "style": direction,
+              "title": title
+            };
+            /* Готовим данные для передачи в шаблон */
+            {
+              "nodes": $nodes,
+              "links": $links,
+              "symbols": $symbols
+            }
+          )

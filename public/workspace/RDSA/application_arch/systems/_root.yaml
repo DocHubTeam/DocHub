@@ -1,0 +1,10 @@
+imports:
+  - 1cbit_finance.yaml
+  - allure.yaml
+  - crm.yaml
+  - grafana_dev.yaml
+  - sid.yaml
+  - spact.yaml
+  - spoll.yaml
+  - srole.yaml
+  

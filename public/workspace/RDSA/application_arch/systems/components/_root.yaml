@@ -1,0 +1,3 @@
+imports:
+  - sid_components.yaml
+  - srole_components.yaml

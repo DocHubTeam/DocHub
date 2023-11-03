@@ -1,0 +1,47 @@
+entities: # Сущности расширенной метамодели
+  # Бизнес-сущности
+ dochub_menu:               # Секция, где будет описываться объекты сущности "взаимодействие". Обязательно.
+    title: Меню DocHub   # Название сущности. Обязательно.
+    description: >          # Описание сущности текст или ссылка на документ. Необязательно.
+      Структура меню DocHub
+    menu: >
+      (
+        [{
+          "location": "07. Развитие корп архитектуры/02. Инструменты/01. DocHub/03. Целевая структура меню DocHub",
+          "link": "entities/dochub_menu/menu_tree"
+        }]
+      )
+
+    presentations:
+      menu_tree:
+        type: plantuml
+        template: templates/menu_tree.puml
+        source: >
+          (
+              $set("rpev-id", undefined);
+              $arrleft := function($arr ,$count) {
+                  $map($arr, function($v, $i) {
+                      $i <= $count ? $v
+                  })
+              };
+              $dochub_menu := $.dochub_menu;
+              [$dochub_menu.$spread().($merge([{"id" : $keys()[0]}, $.*]))^(order).(
+                  $prev_nodes := $split($get("rpev-id"), ".");
+                  $prev_level := $count($prev_nodes);
+                  $curr_nodes := $split(id, ".");
+                  $set("isdiff", false);
+                  $result := $map($curr_nodes, function($v, $i) {(
+                      $set("isdiff", $get("isdiff") or $prev_level = 0 or $prev_level <= $i or $v != $prev_nodes[$i]) ? (
+                          $id := $join($arrleft($curr_nodes, $i), ".");
+                          $menu :=  $lookup($dochub_menu, $id);
+                          {
+                              "id": $id,
+                              "level": $pad("", $i + 2, "*"),
+                              "title": $menu ? $menu.title : $id
+                          }
+                      );
+                  )});
+                  $set("rpev-id", id);
+                  $result
+              )];
+          )

@@ -1,0 +1,189 @@
+#  Базовое описание сущности "Contexts"
+entities:
+  contexts:
+    title: Контексты
+    description: >
+      Представлять указанные архитектурные компоненты в виде диаграмм.
+    schema:
+      type: object
+      patternProperties:
+        "^[a-zA-Z][a-zA-Z0-9_-]*(\\.[a-zA-Z][a-zA-Z0-9_-]*)*$":
+          type: object
+          properties:
+            title:
+              title: Название контекста
+              type: string
+            location:
+              title: Место расположения в меню
+              type: string
+            icon:
+              title: Иконка в меню
+              type: string
+            components:
+              title: Комппоненты контекста
+              type: array
+              items:
+                type: string
+                title: Идентификатор компонента или маска
+                pattern: "^[a-zA-Z][a-zA-Z0-9\\_]*(\\.([a-zA-Z][a-zA-Z0-9\\_]*|\\*))*$"
+            extra-links:
+              title: Отображать компоненты ближайших связей
+              type: boolean
+            presentation:
+              title: Принудительно определяет презентацию
+              type: string
+              enum:
+                - plantuml
+                - smartants
+            uml:
+              title: Кастомизация контекста
+              oneOf:
+                - type: string
+                  title: Путь к файлу PlantUML
+                - type: object
+                  title: Дополнительные параметры
+                  properties:
+                    $before:
+                      title: Код встраиваемый до сгенерированного
+                      type: string
+                    $after:
+                      title: Код встраиваемый после сгенерированного
+                      type: string
+            api:
+              type: object
+              title: Переопределяемые API
+              properties:
+                fetchComponents:
+                  type: string
+                  title: Возвращает список компонентов в кормате ключ-значение
+                fetchLinks:
+                  type: string
+                  title: Возвращает список связей компонентов
+            source:
+              title: Источник данный (запрос или dataset)
+              type: string
+              anyOf:
+                - type: string
+                  title: Идентификатор dataset
+                  pattern: "^[a-zA-Z][a-zA-Z0-9\_]*(\\.[a-zA-Z][a-zA-Z0-9\\_]*)*$"
+                - type: string
+                  title: JSONata запрос
+                  pattern: "\\s*\\((.|\\s)*\\)\\s*"
+          required:
+            - title
+            - components
+      additionalProperties: false
+    # Определяет пути к объектам сущности
+    routes:
+      context: "/:id" # Путь к контексту
+    menu: >
+      (
+        $presentation := entities.contexts.config.defaultPresentation;
+        contexts.$spread().(
+            /* Если указана явно презентация, используем ее */
+            $presentation := $.*.presentation ? *.presentation : $presentation;
+            *.location ? {
+                "location": "04. Прикладная архитектура/" & *.location,
+                "link": "entities/contexts/" & $presentation & "?dh-context-id=" & $keys()[0]
+            }
+        );
+      )
+    # Предопределенные конфигурационные параметры для генерации контекстов
+    config:
+      # Идентификатор презентации по умолчанию
+      defaultPresentation: plantuml # plantuml / smartants / c4_context
+    # Общие API функции для генерирования контекста
+    api:
+      # Возввращает компоненты входящие в контекст
+      # Входящие параметры:
+      #   manifest      - данные архитектуры
+      #   contextId     - идентификатор контекста
+      #   extra-links   - признак необходимости отразить окружение
+      #   componentId   - идентификатор компонента для контекста SELF
+      fetchComponents: >
+        (
+          /* Обрабатываем параметры */
+          $params := $;
+          $manifest := $params.manifest;
+          /* Признак SELF контекста */
+          $isSelf := $params.componentId ? true : false;
+          /* Получаем объект контекста */
+          $context := $lookup($params.manifest.contexts, contextId);
+
+          /* Определяем необходимость показывать ближайшие связи */
+          $isExtraLinks := $params.componentId ? true : $params."extra-links";
+
+          /* Определяем, какие компоненты покажем в контексте */
+          $showComponents := $params.componentId
+            /* Если контекст под определенный компонент, ограничиваемся им. */
+            ? [$params.componentId]
+            /* Если нет берем все компоненты указанные в контексте */
+            : $context.components; 
+  
+          /* Если в контексте переопределена функция получения компонентов, используем ее*/
+          $context.api.fetchComponents ? (
+            $eval($context.api.fetchComponents, $params)
+          ) : (
+            /* Получаем все компоненты входящие в контекст */
+            $components := $merge($showComponents.(
+                $mask := $;
+                $manifest.components.$spread().(
+                    $componentId := $keys()[0];
+                    $result := $wcard($componentId, $mask) ? $
+                )
+            ));
+          
+            /* Добавляем окружение, если это нужно */
+            $merge([$components, $isExtraLinks ? (
+                $components.*.links.(
+                    {
+                        id: $isSelf 
+                          ? $merge([$lookup($manifest.components, id), { "links": [] }])
+                          : $lookup($manifest.components, id)
+                    }
+                );
+            ) : {}]);
+          )
+        )
+      # На основании списка компонентов генерирует массиа областей которые они затрагивают
+      # Входящие параметры:
+      #   components - список компонентов в формате fetchComponents
+      fetchAreas: >
+        (
+          $distinct(components.$spread().(
+              $componentId := $keys()[0];
+              $domains := $componentId.$split(".");
+              $limit := $count($domains) - 1;
+              $areaId := $map($domains, function($v, $i) {(
+                  $join($map($domains, function($sv, $si) {
+                      $si <= $i ? $sv
+                  }), ".")
+              )});
+          ))^($);
+        )
+      # Генерирует список отображаемых связей
+      # Входящие параметры:
+      #   components - список компонентов в формате fetchComponents
+      fetchLinks: >
+        (
+          /* Обрабатываем параметры */
+          $components := components;
+          $distinct(
+              $components.$spread().(
+                  $from := $keys()[0];
+                  $direction := $.*.direction ? $.*.direction : "--";
+                  $.*.links[$lookup($components, id)].(
+                    $title := title ? title : contract;
+                    $title := contract ? ("[[/docs/" & contract & " " & $title & "]]") : $title;
+                    {
+                      "from": $from,
+                      "to": (id ? id : "undefined"),
+                      "title": $title,
+                      "contract": contract,
+                      "direction": direction ? direction : "--"
+                    }
+                  )
+              )
+          );
+        )
+        

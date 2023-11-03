@@ -1,0 +1,31 @@
+components:
+  swamp.frog.spoll:
+    title: S.POLL    # Название компоненты
+    entity: system   # Сущность компонента из PlantUML (https://plantuml.com/ru/deployment-diagram)    
+    short_description: Сервис формирования опросов
+    description: Сервис формирования опросов
+    business_owners:
+      - Пиявки
+    application_owner: Лунтик    
+    critical_level: business_operational #administrative/business_operational/business_critical/mission_critical
+    system_category: business_app #channel_app/business_app/ext_business_app/it_app/ext_it_app        
+    aspects:                # Аспекты, которе реализует компонент
+      - hr
+    business_entities:      
+      - bank
+      - currency
+      - region
+      - chekingaccount
+      - contractoraccount
+      - contract
+    links:
+    # Интеграции между системами разных БЮ      
+    - id: swamp.frog.1cbit_finance
+      direction: <--
+    - id: swamp.crocodile.crm
+      direction: <--
+    - id: swamp.crocodile.spact
+      direction: <--
+
+
+
