@@ -259,7 +259,7 @@ components:
       - OAuth
 
   system.db:
-    title: Харнилища
+    title: Хранилища
     entity: database
     technologies:
       - PostgreSQL
