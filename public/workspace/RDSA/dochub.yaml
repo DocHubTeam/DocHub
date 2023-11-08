@@ -1,2 +1,337 @@
+#imports:
+#  - _root.yaml
+#******************************************************************************
+# Привет!
+#
+# Меня зовут Роман Пионтик. Я задумал этот инструмент, чтобы сделать нашу
+# с тобой жизнь чуточку проще. Давай я тебе быстро все здесь покажу на примере
+# простой архитектуры.
+#******************************************************************************
+
+# Здесь можно подключить репозитории архитектуры
 imports:
-  - _root.yaml
+#  - https://dochub.info/documentation/root.yaml  # по прямой ссылке (попробуй раскомментировать и посмотри на результат)
+#  - foo.yaml                                     # или по относительному пути
+
+# Это аспекты. Аспекты - аналитические маркеры, позволяющие выделять
+# сегменты архитектуры. Кликни на лупе слева и посмотри как они помогают
+# найти то, что нужно.
+aspects:
+  auth:                       # Идентификатор аспекта
+    title: Автризация         # Название
+    location: Авторизация     # Размещение в меню
+  user:
+    title: Пользователь
+    location: Пользователь
+  roles:
+    title: Ролевая модель
+    location: Ролевая модель
+  sportsmen:
+    title: Спортсмен
+    location: Спортсмены
+  competition:
+    title: Соревнование
+    location: Соревнование
+  trip:
+    title: Поход
+    location: Поход
+  mkk:
+    title: МКК
+    location: МКК
+
+# Диаграммы представлений
+contexts:
+  overview:                   # Схема верхнего уровня представления (L1 C4Model)
+    title: ИАС ФСТР              # Название диаграммы
+    location: Внешние связи          # Размещение диаграммы в меню
+    components:               # Компоненты, которые входят в диаграмму
+      - system
+      - user
+      - ias_sport
+      - sms_gateway
+  contextLinks:
+    title: Диаграмма контекстов
+    location: Диаграмма контекстов
+    components:
+      - userManagement
+      - personManagement
+      - tripManagement
+      - competitionManagement
+      - mkkManagement
+#-----------------------------------------------------------------------
+  system:                     # Архитектура системы (L2 C4Model)
+    title: Устройство системы
+    location: Контексты/Система
+    components:
+      - system.*              # Можно указать wildcard включаемых компонентов в диаграмму
+      - system.db.*
+
+  system.backend:             # Архитектура бэкенда (L3 C4Model)
+    title: Устройство бэкенда
+    location: Контексты/Система/Бэкенд
+    components:
+      - system.backend.*
+      - system.db
+
+
+
+# Архитектурные компоненты. Из них строится ИТ архитектура.
+components:
+  # Компоненты верхнего уровня (L1 C4Model)
+  user:                       # Идентификатор компонента
+    title: Пользователь       # Название
+    entity: actor             # Представление на схеме
+    links:                    # Компоненты с которым происходит взаимодействие
+      - id: system            # Идентификатор компонента
+        direction: -->       # Направление взаимодействия (<-- | -- | --> | <-->)
+        title: Использование        # Смысл взаимодействия
+
+  ias_sport:
+    title: ИАС СПОРТ
+    entity: component
+    links:
+      - id: system
+        direction: -->
+        title: Данные спортсменов
+      - id: system
+        direction: <--
+        title: Данные соревнований
+
+  sms_gateway:
+    title: СМС-Шлюз
+    entity: component
+    links:
+      - id: system
+        direction: -->
+        title: Передача СМС от туристических групп
+
+  userManagement:
+      title: Управление пользователями
+      entity: component
+      aspects:
+      - auth
+      - roles
+      links:
+      - id: personManagement
+        direction: -->
+        title: Создания/слияние записи
+
+  personManagement:
+    title: Управление спортсменами
+    entity: component
+    aspects:
+      - sportsmen
+    links:
+      - id: tripManagement
+        direction: <-->
+        title: Включение спортсмена в группу
+
+  competitionManagement:
+    title: Управление соревнованиями
+    entity: component
+    aspects:
+      - competition
+    links:
+      - id: tripManagement
+        direction: -->
+        title: Включение похода в соревнование
+      - id: personManagement
+        direction: -->
+        title: Добавление в судейскую бригаду
+
+  tripManagement:
+    title: Управление спортивными походами
+    entity: component
+    aspects:
+      - trip
+
+  mkkManagement:
+    title: Управление МКК
+    entity: component
+    aspects:
+      - mkk
+    links:
+      - id: personManagement
+        direction: -->
+        title: Включене в состав МКК
+      - id: tripManagement
+        direction: -->
+        title: Выпуск и контроль
+
+  system:
+    title: Система
+    entity: collections
+    aspects:                  # Аспекты, которые реализует компонент
+      - auth
+      - roles
+      - sportsmen
+      - trip
+      - competition
+
+
+  # Внутренняя архитектура компонентов верхнего уровня (L2 C4Model)
+  system.gateway:             # Иерархия компонентов определяется структурой их идентификаторов
+    title: API шлюз
+    entity: component
+    links:
+      - id: system.backend
+        title: Внешний API
+        direction: <-->
+        contract: https://editor.swagger.io/  # Можно указать контракт взаимодействия внешней ссылкой
+    technologies:             # Технологии используемые в компоненте
+      - HTTP
+      - REST
+
+  system.frontend:
+    title: UI
+    entity: component
+    links:
+      - id: system.backend
+        direction: <-->
+      - id: system.auth
+        direction: -->
+    technologies:
+      - HTTP
+      - REST
+
+  system.backend:
+    title: Бэкенд
+    entity: component
+    links:
+      - id: system.db
+        direction: <-->
+    aspects:
+      - trip
+      - competition
+      - sportsmen
+      - mkk
+      - user
+    technologies:
+      - PHP
+      - Laravel
+
+  # Детальная архитектура бэкенда (L3 C4Model)
+  system.backend.repository:
+    title: Репозитории
+    entity: component
+    links:
+      - id: system.db
+        direction: -->
+        title: CRUDL
+
+  system.backend.controllers:
+    title: Контроллеры
+    entity: component
+    links:
+      - id: system.backend.repository
+        direction: -->
+        title: Запрос данных
+      - id: system.backend.audit
+        direction: -->
+
+  system.backend.log:
+    title: Подсистема логирования
+    entity: component
+    links:
+      - id: system.db
+        direction: -->
+        title: Запись лога
+
+
+  system.backend.audit:
+    title: Подсистема аудита
+    entity: component
+    links:
+      - id: system.db
+        direction: -->
+        title: Запись аудита
+
+  system.auth:
+    title: Авторизация
+    entity: component
+    aspects:
+      - auth
+    links:
+      - id: system.db.users
+        direction: <-->
+    technologies:
+      - PHP
+      - OAuth
+
+  system.db:
+    title: Харнилища
+    entity: database
+    technologies:
+      - PostgreSQL
+  system.db.users:
+    title: Пользователи и роли
+    entity: database
+    technologies:
+      - PostgreSQL
+  system.db.ias:
+    title: Данные приложения
+    entity: database
+    technologies:
+      - PostgreSQL
+
+# Документы
+docs:
+  example:
+    location: Пример документа  # Размещение в меню
+    # Ссылка может быть как на внешний ресурс, так на файл по относительному пути
+    source: https://dochub.info/documentation/docs/manual/docs/examples/example.yaml
+    type: openapi               # Тип документа (OpenApi | Markdown | PlantUML | Table)
+  Wiki:
+    location: Документы
+    source: https://tree.taiga.io/project/nord_tramper-ias-federatsii-sportivnogo-turizma-rossii-sektor-avtomoto/wiki/home
+    type: markdown
+
+
+# Описание технологического стека
+technologies:
+  sections:                           # Определение разделов стека
+    language:                         # Идентификатор раздела
+      title: Языки программирования   # Название раздела
+    frameforks:
+      title: Фреймворки
+    databaeses:
+      title: Базы данных
+    storages:
+      title: Хранилища
+    protocols:
+      title: Протоколы
+  items:                              # Перечисление технологий
+    PHP:                              # Идентификатор технологии
+      aliases:                        # Синонимы технологии
+        - пыха
+      title: Супер-крутой язык программирования   # Название технологии
+      link: https://www.php.net/                  # Ссылка на документацию
+      section: language               # Идентификатор секции технологии
+      status: adopt                   # Статус технологии adopt / trial / assess / hold
+    Laravel:
+      title: Laravel
+      link: https://laravel.ru/
+      section: frameforks
+      status: trial
+    PostgreSQL:
+      title: PostgreSQL
+      link: https://www.postgresql.org/
+      section: databaeses
+      status: assess
+    HTTP:
+      title: HTTP
+      link: https://ru.wikipedia.org/wiki/HTTP
+      section: protocols
+      status: adopt
+    OAuth:
+      title: OAuth
+      link: https://ru.wikipedia.org/wiki/OAuth
+      section: protocols
+      status: adopt
+
+#******************************************************************************
+#                          Теперь ты почти все знаешь!
+#                    подробности на сайте https://dochub.info
+#    Если появятся вопросы, нужна будет помощь или ты захочешь сделать свой
+#           вклад в проект иди сюда - https://github.com/RabotaRu/DocHub
+#******************************************************************************
