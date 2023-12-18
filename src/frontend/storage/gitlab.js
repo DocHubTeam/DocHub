@@ -31,6 +31,8 @@ export default {
 		isReloading: true,
 		// Признак рендеринга в версии для печати
 		isPrintVersion: false,
+		// Признак полноэкранности диаграмм
+		isFullScreenMode: false,
 		// Идет процесс авторизации в gitlab
 		isOAuthProcess: null,
 		// Токен досутпа в GitLab
@@ -110,6 +112,9 @@ export default {
 		},
 		setPrintVersion(state, value) {
 			state.isPrintVersion = value;
+		},
+		setFullScreenMode(state, value) {
+			state.isFullScreenMode= value;
 		}
 	},
 
