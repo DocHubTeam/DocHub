@@ -1,5 +1,5 @@
 <template>
-  <div 
+  <div
     class="plantuml-place"
     v-on:contextmenu="showMenu">
     <error-boundary
@@ -78,6 +78,7 @@
     ],
     data() {
       return {
+        original: null,
         menu: { // Контекстное меню
           show: false,  // Признак отображения
           x : 0,  // Позиция x
@@ -133,10 +134,12 @@
     watch: {
       uml() {
         this.reloadSVG();
+      },
+      '$store.state.isFullScreenMode'() {
+        this.prepareSVG();
       }
     },
     mounted() {
-
       window.addEventListener('resize', this.reRender);
       this.reloadSVG();
       let oldClientHeight = this.$el.clientHeight;
@@ -173,7 +176,9 @@
 
         const originalHeight = this.viewBox.height * (this.svgEl.clientWidth / this.viewBox.width);
 
-        this.svgEl.style.height = originalHeight;
+        this.svgEl.style.height = this.$store.state.isFullScreenMode
+          ? Math.max(originalHeight, window.innerHeight)
+          : originalHeight;
 
         if (originalHeight < this.$el.clientHeight) {
           const k = this.viewBox.height / originalHeight;
@@ -184,13 +189,30 @@
         const offset = (this.viewBox.width - originWidth) / 2;
         this.viewBox.x -= offset;
       },
+      saveOriginal() {
+        const originalHeight = this.viewBox.height * (this.svgEl.clientWidth / this.viewBox.width);
+        this.original = {
+          height: originalHeight,
+          viewBoxHeight: this.$el.clientHeight * this.viewBox.height / originalHeight
+        };
+      },
+      resetToDefault() {
+        this.viewBox.height = this.original.viewBoxHeight;
+        this.svgEl.style.height = this.original.height;
+      },
       prepareSVG() {
         this.svgEl = this.$el.querySelectorAll('svg')[0];
         this.cacheViewBox = null;
         if (this.svgEl) {
           this.svgEl.style = null;
           this.svgEl.setAttribute('encoding', 'UTF-8');
-          this.doResize();
+          if(this.original && !this.$store.state.isFullScreenMode)
+            this.resetToDefault();
+          else {
+            this.saveOriginal();
+            this.doResize();
+          }
+
           href.elProcessing(this.svgEl);
           if (this.postrender) this.postrender(this.svgEl);
         }

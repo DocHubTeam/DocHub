@@ -287,6 +287,9 @@
       isFirefox() {
         return navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
       },
+      limitHeight() {
+        return this.$store.state.isFullScreenMode ? window.innerHeight : null;
+      },
       lineWidthLimit() {
         return +this.data.config?.lineWidthLimit || 20;
       },
@@ -351,6 +354,9 @@
     },
     watch: {
       data() {
+        this.$nextTick(() => this.rebuildPresentation());
+      },
+      '$store.state.isFullScreenMode'() {
         this.$nextTick(() => this.rebuildPresentation());
       },
       'selected.nodes'(value) {
@@ -563,6 +569,7 @@
           distance,
           this.landscape.symbols,
           availableWidth,
+          this.limitHeight,
           this.debug
         )
           .then((presentation) => {
