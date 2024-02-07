@@ -33,7 +33,7 @@ export default {
 				return this.zoomAndPan.cacheViewBox ?
 					this.zoomAndPan.cacheViewBox
 					// eslint-disable-next-line vue/no-side-effects-in-computed-properties
-					: this.zoomAndPan.cacheViewBox = this.zoomAndPanElement.viewBox.baseVal; 
+					: this.zoomAndPan.cacheViewBox = this.zoomAndPanElement.viewBox.baseVal;
 		},
 		zoomAndPanElement() {
 			return this.$refs.zoomAndPan;
@@ -82,6 +82,7 @@ export default {
 			this.ZoomAndPanViewBox.y += (this.zoomAndPan.moveY - event.clientY) * (this.koofScreenY || 0);
 			this.zoomAndPan.moveX = event.clientX;
 			this.zoomAndPan.moveY = event.clientY;
+			this.zoomAndPan.cacheViewBox = null;
 		},
 		zoomAndPanMouseUp() {
 			this.zoomAndPan.isMove = false;

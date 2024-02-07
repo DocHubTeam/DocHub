@@ -39,10 +39,6 @@
           <v-list-item-title>Версия для печати</v-list-item-title>
         </v-list-item>
         <v-list-item>
-          <v-checkbox v-model="isFullScreenMode" />
-          <v-list-item-title>Полноэкранные диаграммы</v-list-item-title>
-        </v-list-item>
-        <v-list-item>
           <v-list-item-title style="cursor: pointer;" v-on:click="doPrint">Печать</v-list-item-title>
         </v-list-item>
       </v-list>

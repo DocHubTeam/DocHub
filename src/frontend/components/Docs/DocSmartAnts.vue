@@ -1,6 +1,30 @@
 <template>
   <box>
     <v-card flat class="container" style="padding: 0; margin-top: 12px">
+      <div class="fullscreen-icon">
+        <v-icon v-on:click="openDialog">
+          fullscreen
+        </v-icon>
+      </div>
+      <v-dialog
+        v-model="dialog"
+        style="z-index: 9999">
+        <v-card>
+          <schema
+            ref="schema"
+            v-model="status"
+            class="schema"
+            v-bind:warnings="warnings"
+            v-bind:data="data"
+            v-bind:show-links="isShowLinks"
+            v-on:update:warnings="v => warnings = v"
+            v-on:playstop="onPlayStop"
+            v-on:playstart="onPlayStart"
+            v-on:selected-nodes="onSelectedNodes"
+            v-on:on-click-link="onClickLink"
+            v-on:contextmenu="showMenu" />
+        </v-card>
+      </v-dialog>
       <v-system-bar
         v-if="!isPrintVersion"
         class="toolbar"
@@ -141,6 +165,7 @@
     data() {
       return {
         isPlugin: env.isPlugin(),
+        dialog: false,
         warnings: [],
         sheet: false,
         menu: { // Контекстное меню
@@ -230,7 +255,15 @@
         return true;
       }
     },
+    watch: {
+      dialog(value) {
+        this.$store.commit('setFullScreenMode', value);
+      }
+    },
     methods: {
+      openDialog() {
+        this.dialog = true;
+      },
       // Возвращает SVG код диаграммы
       getSvg() {
         const addStyle = function(children) {
@@ -411,6 +444,16 @@
 .container {
   position: relative;
   text-align: center;
+  position: relative;
+}
+
+.container:hover > .fullscreen-icon {
+  display:block;
+}
+.fullscreen-icon {
+  position: absolute;
+  right: 20px;
+  display: none;
 }
 
 .toolbar {
