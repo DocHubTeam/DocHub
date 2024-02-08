@@ -9,7 +9,23 @@
       <v-dialog
         v-model="dialog"
         style="z-index: 9999">
-        <v-card>
+        <v-card class="dialog-card">
+          <smartants-bar
+            v-bind:warnings="warnings"
+            v-bind:focus-nodes="focusNodes"
+            v-bind:scenario="scenario"
+            v-bind:scenarios="scenarios"
+            v-bind:is-print-version="isPrintVersion"
+            v-bind:is-show-links="isShowLinks"
+            v-bind:is-unwisp="isUnwisp"
+            v-bind:is-paying="isPaying"
+            v-on:exportToExcalidraw="exportToExcalidraw"
+            v-on:doFocus="doFocus"
+            v-on:clearFocus="clearFocus"
+            v-on:playScenario="playScenario"
+            v-on:playNext="playNext"
+            v-on:setUnwisp="(v) => setUnwisp(v)"
+            v-on:setShowLinks="(v) => setShowLinks(v)" />
           <schema
             ref="schema"
             v-model="status"
@@ -25,86 +41,22 @@
             v-on:contextmenu="showMenu" />
         </v-card>
       </v-dialog>
-      <v-system-bar
-        v-if="!isPrintVersion"
-        class="toolbar"
-        floating
-        flat
-        color="#fff"
-        dense>
-        <v-btn icon title="Экспорт в Excalidraw" v-on:click="exportToExcalidraw">
-          <v-icon>mdi-download</v-icon>
-        </v-btn>
-        <v-btn v-if="selectedNodes" icon title="Кадрировать" v-on:click="doFocus">
-          <v-icon>mdi-crop-free</v-icon>
-        </v-btn>
-        <v-btn v-if="focusNodes" icon title="Полная диаграмма" v-on:click="clearFocus">
-          <v-icon>mdi-view-comfy</v-icon>
-        </v-btn>
-        <v-btn v-if="isUnwisp" icon title="Показать все связи" v-on:click="setUnwisp(false)">
-          <v-icon>mdi-arrow-decision-outline</v-icon>
-        </v-btn>
-        <v-btn v-if="!isUnwisp" icon title="Свернуть связи в жгуты" v-on:click="setUnwisp(true)">
-          <v-icon>mdi-arrow-decision-auto</v-icon>
-        </v-btn>
-        <v-btn v-if="isShowLinks" icon title="Показать только структуру" v-on:click="setShowLinks(false)">
-          <v-icon>mdi-monitor-dashboard</v-icon>
-        </v-btn>
-        <v-btn v-if="!isShowLinks" icon title="Показать связи" v-on:click="setShowLinks(true)">
-          <v-icon>mdi-sitemap</v-icon>
-        </v-btn>
-        <v-btn v-if="warnings?.length" icon title="Предупреждения" v-on:click="sheet = !sheet">
-          <v-icon style="color: rgb(255, 0, 0);">warning</v-icon>
-        </v-btn>
-
-        <v-bottom-sheet v-model="sheet">
-          <v-card
-            class="text-center"
-            height="200"
-            v-bind:style="!isPlugin ? 'padding: 20px 0px 0px 300px' : ''">
-            <v-card-text>
-              <ul>
-                <li v-for="warn in warnings" v-bind:key="warn">
-                  {{ warn }}
-                </li>
-              </ul>
-            </v-card-text>
-          </v-card>
-        </v-bottom-sheet>
-
-        <template v-if="scenario">
-          <v-select
-            v-model="scenario"
-            dense
-            item-text="text"
-            item-value="id"
-            v-bind:items="scenarios" />
-          <v-btn
-            icon
-            title="Проиграть сценарий"
-            v-on:click="playScenario">
-            <v-icon>{{ isPaying ? 'mdi-stop' : 'mdi-play' }}</v-icon>
-          </v-btn>
-          <!--
-            Имеются проблемы с перемоткой назад.
-            Плохо отрабатывают шаги очистки, т.е. отмотать состояние не удается без артефактов
-          <v-btn
-            v-if="isPaying"
-            icon
-            title="Дальше"
-            v-on:click="playPrev">
-            <v-icon>mdi-skip-previous</v-icon>
-          </v-btn>
-          -->
-          <v-btn
-            v-if="isPaying"
-            icon
-            title="Дальше"
-            v-on:click="playNext">
-            <v-icon>mdi-skip-next</v-icon>
-          </v-btn>
-        </template>
-      </v-system-bar>
+      <smartants-bar
+        v-bind:warnings="warnings"
+        v-bind:focus-nodes="focusNodes"
+        v-bind:scenario="scenario"
+        v-bind:scenarios="scenarios"
+        v-bind:is-print-version="isPrintVersion"
+        v-bind:is-show-links="isShowLinks"
+        v-bind:is-unwisp="isUnwisp"
+        v-bind:is-paying="isPaying"
+        v-on:exportToExcalidraw="exportToExcalidraw"
+        v-on:doFocus="doFocus"
+        v-on:clearFocus="clearFocus"
+        v-on:playScenario="playScenario"
+        v-on:playNext="playNext"
+        v-on:setUnwisp="(v) => setUnwisp(v)"
+        v-on:setShowLinks="(v) => setShowLinks(v)" />
       <schema
         ref="schema"
         v-model="status"
@@ -147,6 +99,7 @@
 <script>
 
   import Schema from '@front/components/Schema/DHSchema/DHSchema.vue';
+  import SmartantsBar from './SmartAntsBar.vue';
   import href from '@front/helpers/href';
   import download from '@front/helpers/download';
 
@@ -156,7 +109,8 @@
   export default {
     name: 'DocHubViewpoint',
     components: {
-      Schema
+      Schema,
+      SmartantsBar
     },
     mixins: [DocMixin],
     props: {
@@ -461,5 +415,11 @@
   top: 0px;
   left: 6px;
   max-width: calc(100% - 32px);
+}
+.dialog-card .toolbar {
+  position: sticky;
+  top: 20px;
+  display: inline-flex;
+  background: none !important;
 }
 </style>
