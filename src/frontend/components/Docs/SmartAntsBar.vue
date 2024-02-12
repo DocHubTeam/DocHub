@@ -1,5 +1,5 @@
 <template>
-  <v-system-bar v-if="!isPrintVersion" class="toolbar" floating flat color="#fff" dense>
+  <v-toolbar v-if="!isPrintVersion" class="toolbar" rounded elevation="1" color="#fff">
     <v-btn icon title="Экспорт в Excalidraw" v-on:click="$emit('exportToExcalidraw')">
       <v-icon>mdi-download</v-icon>
     </v-btn>
@@ -57,7 +57,7 @@
         <v-icon>mdi-skip-next</v-icon>
       </v-btn>
     </template>
-  </v-system-bar>
+  </v-toolbar>
 </template>
 
 <script>

@@ -397,7 +397,6 @@
 
 .container {
   position: relative;
-  text-align: center;
   position: relative;
 }
 
@@ -415,11 +414,12 @@
   top: 0px;
   left: 6px;
   max-width: calc(100% - 32px);
+  position: sticky;
+  top: 65px;
+  display: inline-flex;
+  left: 10px;
 }
 .dialog-card .toolbar {
-  position: sticky;
-  top: 20px;
-  display: inline-flex;
-  background: none !important;
+  top: 5px;
 }
 </style>
