@@ -413,6 +413,7 @@
   position: absolute;
   top: 0px;
   left: 6px;
+  margin-left: 6px;
   max-width: calc(100% - 32px);
   position: sticky;
   top: 65px;
@@ -421,5 +422,11 @@
 }
 .dialog-card .toolbar {
   top: 5px;
+  margin-left: 0;
+}
+
+.markdown-document .toolbar {
+  position: static;
+  margin-left: 0;
 }
 </style>
