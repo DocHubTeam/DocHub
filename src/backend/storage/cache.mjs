@@ -26,8 +26,9 @@ export function loadFromAssets(filename) {
 }
 
 // Подключает базовую метамодель
+// todo: проверить на дублирование с entities.mjs
 function loadBaseMatamodel() {
-    return yaml.parse(loadFromAssets('base.yaml'));
+    return yaml.parse(loadFromAssets('master-schema.yaml'));
 }
 
 // Кэш в памяти
