@@ -87,7 +87,7 @@
             "^[a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]*)*$": {
               "title": "Идентификатор сущности",
               "type": "object",
-              "properies": {
+              "properties": {
                 "presentations": {
                   "type": "object",
                   "additionalProperties": false,

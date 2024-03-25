@@ -153,7 +153,7 @@ entities:
         "^[a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]*)*$": # Шаблон ключа
           title: Идентификатор сущности
           type: object
-          properies:
+          properties:
             presentations:                    # Презентации
               type: object
               additionalProperties: false
