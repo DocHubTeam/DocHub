@@ -104,7 +104,7 @@ export default {
 				case 'id': {
 					const dataSet = this.pathResolver(`/datasets/${data}`);
 					if (dataSet && dataSet.subject) {
-						this.getData(context, dataSet.subject, params, dataSet.baseURI)
+						this.getData(context, dataSet.subject, {...params, datasetID: data}, dataSet.baseURI)
 							.then((data) => resolve(data))
 							.catch(reject);
 					} else reject(`Не найден источник данных [${data}]`);
@@ -130,7 +130,7 @@ export default {
 			if (subject.source || (subject.data /* depricated */)) {
 				if (subject.origin) {
 					if (typeof subject.origin === 'string') {
-						this.parseSource(context, subject.origin, subject, params, baseURI)
+						this.parseSource(context, subject.origin, subject, params, baseURI, params.datasetID)
 							.then((data) => exec(data))
 							.catch((e) => reject(e));
 					} else if ((typeof subject.origin === 'object') && !Array.isArray(subject.origin)) {
@@ -138,7 +138,7 @@ export default {
 						const data = {};
 						for (const key in subject.origin) {
 							++counter;
-							this.parseSource(context, subject.origin[key], subject, params, baseURI).then((content) => {
+							this.parseSource(context, subject.origin[key], subject, params, baseURI, params.datasetID).then((content) => {
 								data[key] = content;
 								if (!--counter) exec(data);
 							}).catch((e) => reject(e));

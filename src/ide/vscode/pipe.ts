@@ -22,12 +22,13 @@
   */
 
 import { v4 as uuidv4 } from 'uuid';
+import md5 from 'md5';
 
 import plantuml from '@front/helpers/plantuml';
 import config from '@front/config';
 
 const emit = (command: string, content: any): Promise<any> | void =>
-  vscode.postMessage({command, content});
+  vscode.postMessage({ command, content });
 
 export const listeners: { [key: string]: any } = {};
 
@@ -79,6 +80,22 @@ export default (): void => {
 
       return new Promise((res, rej): void => {
         listeners[uuid] = { res, rej };
+      });
+    },
+    clearDatasetsCache(datasetsIDs: string[]) {
+      const datasetCacheKeys = datasetsIDs.map(id => md5(`{"path":"/datasets/${id}"}`));
+      emit('clearCaches', { datasetCacheKeys });
+    },
+    updateCache(key: string, data: any) {
+      emit('updateCache', { key, data: JSON.stringify(data) });
+    },
+    pullFromCache(key: string, resolver: () => void, args: object): Promise<void> {
+      const uuid = uuidv4();
+
+      emit('pullFromCache', { uuid, key: md5(key) });
+
+      return new Promise((res, rej): void => {
+        listeners[uuid] = { res, rej, resolver, args };
       });
     },
     request(uri): Promise<void> {

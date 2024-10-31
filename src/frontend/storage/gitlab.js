@@ -64,6 +64,8 @@ export default {
 		moment: null,
 		// Обобщенный манифест
 		manifest: {},
+    // Зависимости dataset'ов
+    dependencyOf: {},
 		// Выявленные Проблемы
 		problems: [],
 		// Источники данных манифеста

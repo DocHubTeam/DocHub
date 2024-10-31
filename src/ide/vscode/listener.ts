@@ -94,6 +94,14 @@ export default (store: Store<any>): void => {
   window.addEventListener('message', (event: TEvent) => {
     const {command, content, error} = event?.data;
 
+    if(command === 'changeFile') {
+      const datasetsIDs = [...(window as any).Vuex.state.dependencyOf[content.uri]];
+
+      if(datasetsIDs && Array.isArray(datasetsIDs)) {
+        window.$PAPI.clearDatasetsCache(datasetsIDs);
+      }
+    }
+
     if(command === 'fetchPlugins') {
       const plugins = require('../../../plugins.json');
       window.$PAPI.pluginList({ plugins: plugins.inbuilt });
@@ -129,8 +137,23 @@ export default (store: Store<any>): void => {
       }
 
       try {
-        const data = normalizeResponse(type, value);
+        let data = normalizeResponse(type, value);
 
+        const { resolver, args, res } = listeners[uuid]
+        if (data.hasCache) {
+          // Если кэш есть - отдаем его
+          res(JSON.parse(data.cache))
+          return;
+        } else if(!data.hasCache && listeners[uuid].resolver) {
+          // Если нет - Получаем его из резолвера и аргументов
+          const key = data.key
+          resolver(...Object.entries(args)).then((data: any) => {
+            // Вызываем updateCache и отдаем данные
+            window.$PAPI.updateCache(key, data)
+            res(data);
+          });
+          return;
+        } else
         listeners[uuid].res({
           data,
           headers: {
