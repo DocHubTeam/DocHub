@@ -25,9 +25,8 @@ Maintainers:
 
 Contributors:
     R.Piontik <R.Piontik@mail.ru>
-    Nikolay Temnyakov <temnjakovn@gmail.com>
-    clayzenx <clay.zenx@gmail.com>
 */
+
 
 export default {
 	log(text, tag) {

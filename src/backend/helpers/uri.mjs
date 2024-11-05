@@ -1,5 +1,6 @@
 /*
 Copyright (C) 2021 owner Roman Piontik R.Piontik@mail.ru
+Copyright (C) 2023 Sber
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,10 +25,9 @@ Maintainers:
     R.Piontik <R.Piontik@mail.ru>
 
 Contributors:
-    R.Piontik <R.Piontik@mail.ru>
-    Vladislav Markin <markinvy@yandex.ru>
+    R.Piontik <R.Piontik@mail.ru> - 2023
+    Vladislav Markin, Sber - 2023
 */
-
 import uriToolConstructor from '../../global/manifest/tools/uri.mjs';
 
 const config = {
