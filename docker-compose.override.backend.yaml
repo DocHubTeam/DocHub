@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  nginx:
+    container_name: dochub-frontend
+    image: dochub-frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: nginx
+    ports:
+      - "8080:8080"
+  backend:
+    container_name: dochub-backend
+    image: dochub-backend
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "3030:3030"

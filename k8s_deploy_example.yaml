@@ -1,0 +1,163 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dochub-portal
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: dochub-web
+  name: dochub-web
+  namespace: dochub-portal
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dochub-web
+  template:
+    metadata:
+      labels:
+        app: dochub-web
+    spec:
+      containers:
+      - image: _IMG_TO_DEPLOY_  # replace with full registry path to builded DocHub image
+        imagePullPolicy: IfNotPresent
+        name: dochub-web
+        ports:
+        - containerPort: 8080
+          name: http-port
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 250m
+            memory: 250Mi
+---
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: dochub-web
+    namespace: dochub-portal
+  spec:
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: dochub-web
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dochub-web
+# uncomment below if you plan to use custom path in pathType.path field
+  # annotations:
+  #   nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx-ingress # remove if you plan to use defaul ingress-controller or replace with right ingressClassName
+  rules:
+  - host: dochub.example.org # replace with right host name
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service: 
+            name: dochub-web
+            port:
+              number: 8080
+---
+
+# BACKEND
+# Remove all lines below in case "Frontend only"
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: dochub-api
+  name: dochub-api
+  namespace: dochub-portal
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dochub-api
+  template:
+    metadata:
+      labels:
+        app: dochub-api
+    spec:
+      containers:
+      - image: _IMG_TO_DEPLOY_  # replace with full registry path to builded DocHub backend image
+        imagePullPolicy: IfNotPresent
+        name: dochub-api
+        ports:
+        - containerPort: 3030
+          name: api-port
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3030
+          initialDelaySeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3030
+          initialDelaySeconds: 15
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 250m
+            memory: 250Mi
+---
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: dochub-api
+    namespace: dochub-portal
+  spec:
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 3030
+    selector:
+      app: dochub-api
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dochub-api
+# uncomment below if you plan to use custom path in rules.host.http.paths.pathType.path field
+  # annotations:
+  #   nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx-ingress # remove if you plan to use defaul ingress-controller or replace with right ingressClassName
+  rules:
+  - host: dochub-api.example.org # replace with right host name
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service: 
+            name: dochub-api
+            port:
+              number: 8080
