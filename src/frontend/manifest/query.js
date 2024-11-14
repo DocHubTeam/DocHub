@@ -122,6 +122,11 @@ const queryDriver = {
     // Сводная JSONSchema по всем кастомным сущностям
     getObject(id) {
         return resolveJSONataRequest(queries.IDS.GET_OBJECT, { OBJECT_ID: id });
+    },
+
+    // Add new search query
+    search(searchText) {
+        return resolveJSONataRequest(queries.IDS.GLOBAL_SEARCH, { SEARCH_TEXT: searchText });
     }
 };
 

@@ -36,8 +36,18 @@ const QUERY_ID_JSONSCEMA_ENTITIES = '2e38141a-100a-4331-bc80-5dd198acc8b8';
 
 const QUERY_GET_OBJECT = '5786bdd1-07bd-4c6c-b1fb-d8efe2c7368f';
 
-// Строит пользовательское меню
-// Предопределенные запросы
+// First, define IDS
+const IDS = {
+    USER_MENU: QUERY_ID_USER_MENU,
+    TECHNOLOGIES: QUERY_ID_TECHNOLOGIES,
+    TECHNOLOGY: QUERY_ID_TECHNOLOGY,
+    DOCUMENTS_FOR_ENTITY: QUERY_ID_DOCUMENTS_FOR_ENTITY,
+    JSONSCEMA_ENTITIES: QUERY_ID_JSONSCEMA_ENTITIES,
+    GET_OBJECT: QUERY_GET_OBJECT,
+    GLOBAL_SEARCH: 'global.search'
+};
+
+// Then define queries
 const queries = {
     // Строит пользовательское меню
     [QUERY_ID_USER_MENU]: `
@@ -215,32 +225,60 @@ const queries = {
         $self := {%OBJECT_ID%};
         $self."$constructor" ? $eval($self."$constructor") : $self;
     )
-    `
-};
+    `,
+    [IDS.GLOBAL_SEARCH]: `
+    (
+        /* Get search text parameter */
+        $SEARCH := '{%SEARCH_TEXT%}';
+        $SEARCH_LOWER := $lowercase($SEARCH);
 
-export default {
-    // Идентификаторы предопределенных запросов
-    IDS: {
-        USER_MENU: QUERY_ID_USER_MENU,
+        /* Helper function for fuzzy matching */
+        $fuzzyMatch := function($text) {
+            $text ? $contains($lowercase($string($text)), $SEARCH_LOWER) : false
+        };
 
-        TECHNOLOGIES: QUERY_ID_TECHNOLOGIES,
-        TECHNOLOGY: QUERY_ID_TECHNOLOGY,
+        /* Search in components */
+        $COMPONENTS := components ? (
+            components.$spread().(
+                $ID := $keys()[0];
+                $COMP := $.*;
+                $fuzzyMatch($ID) or $fuzzyMatch($COMP.title) ? {
+                    "id": $ID,
+                    "title": $COMP.title,
+                    "entity": "component",
+                    "link": "/architect/components/" & $ID
+                }
+            )
+        ) : [];
 
-        DOCUMENTS_FOR_ENTITY: QUERY_ID_DOCUMENTS_FOR_ENTITY,
-        JSONSCEMA_ENTITIES: QUERY_ID_JSONSCEMA_ENTITIES,
+        /* Search in aspects */
+        $ASPECTS := aspects ? (
+            aspects.$spread().(
+                $ID := $keys()[0];
+                $ASP := $.*;
+                $fuzzyMatch($ID) or $fuzzyMatch($ASP.title) ? {
+                    "id": $ID,
+                    "title": $ASP.title,
+                    "entity": "aspect",
+                    "link": "/architect/aspects/" & $ID
+                }
+            )
+        ) : [];
 
-
-        // Возвращает объект по идентификатору с выполнением конструктора
-        GET_OBJECT: QUERY_GET_OBJECT
-    },
-    // Предопределенные запросы
-    QUERIES: queries,
-    // Вставляет в запрос параметры
-    makeQuery(query, params) {
-        // eslint-disable-next-line no-useless-escape
-        return query.replace(/.*(\{\%([A-Z|\_]*)\%\}).*/g, (p1, p2, p3) => {
-            return `${p1.replace(eval(`/{%${p3}%}/g`), params[p3])}`;
-        });
-    }
-};
-
+        /* Search in docs */
+        $DOCS := docs ? (
+            docs.$spread().(
+                $ID := $keys()[0];
+                $DOC := $.*;
+                $CONTENT := $eval($read($DOC.source)); // Read markdown content
+                (
+                    $fuzzyMatch($ID) or 
+                    $fuzzyMatch($DOC.location) or
+                    $fuzzyMatch($DOC.description) or
+                    $fuzzyMatch($CONTENT) or  // Search in markdown content
+                    ($DOC.subjects ? $DOC.subjects.($fuzzyMatch($)) : false)
+                ) ? [
+                    {
+                        "id": $ID,
+                        "title": $DOC.description,
+                        "entity"
