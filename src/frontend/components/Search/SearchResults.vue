@@ -7,8 +7,8 @@
           v-bind:items="searchResults"
           v-bind:headers="headers"
           v-bind:loading="loading"
-          v-bind:sort-by="['id']"
-          v-bind:sort-desc="[false]"
+          v-bind:sort-by="['score']"
+          v-bind:sort-desc="[true]"
           disable-pagination
           hide-default-footer
           class="elevation-1">
@@ -18,31 +18,83 @@
               small
               v-bind:color="getEntityColor(item.entity)"
               text-color="white">
-              {{ item.entity }}
+              {{ getEntityLabel(item.entity) }}
             </v-chip>
           </template>
           
           <!-- Title/Link column -->
           <template v-slot:[`item.title`]="{ item }">
-            <router-link 
-              v-if="item.link" 
-              v-bind:to="item.link">
-              {{ item.title }}
-            </router-link>
-            <template v-else>{{ item.title }}</template>
+            <div class="search-result-item">
+              <!-- Title with link -->
+              <div class="d-flex align-center">
+                <router-link v-if="item.link" v-bind:to="item.link">
+                  {{ item.title }}
+                </router-link>
+                <template v-else>{{ item.title }}</template>
+                
+                <!-- Relevance score for debugging -->
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-chip
+                      x-small
+                      label
+                      class="ml-2"
+                      color="grey lighten-3"
+                      v-bind="attrs"
+                      v-on="on">
+                      {{ relevanceText }}: {{ item.score }}
+                    </v-chip>
+                  </template>
+                  <span>{{ relevanceText }}: {{ item.score }}</span>
+                </v-tooltip>
+              </div>
+
+              <!-- Content match section -->
+              <template v-if="item.matchedInContent">
+                <div class="content-match mt-2">
+                  <v-chip
+                    x-small
+                    label
+                    color="blue-grey lighten-5"
+                    class="mb-1">
+                    {{ matchedInContentText }}
+                  </v-chip>
+                  
+                  <!-- Content snippet with highlighting -->
+                  <div 
+                    class="content-snippet grey--text text--darken-1"
+                    v-html="highlightMatches(item.contentSnippet)">
+                  </div>
+
+                  <!-- Headers where matches were found -->
+                  <div v-if="item.matchedHeaders && item.matchedHeaders.length" class="matched-headers mt-1">
+                    <v-chip
+                      x-small
+                      label
+                      v-for="header in item.matchedHeaders"
+                      v-bind:key="header"
+                      class="mr-1 mb-1"
+                      color="grey lighten-4">
+                      {{ header }}
+                    </v-chip>
+                  </div>
+                </div>
+              </template>
+            </div>
           </template>
         </v-data-table>
       </v-col>
     </v-row>
 
     <!-- No results message -->
-    <v-row v-if="!loading && searchResults.length === 0">
-      <v-col class="text-center">
-        <v-alert type="info" text>
-          No results found
-        </v-alert>
-      </v-col>
-    </v-row>
+    <template v-if="searchResults.length === 0 && !loading">
+      <div class="text-center my-4">
+        <v-icon large color="grey lighten-1">mdi-magnify-close</v-icon>
+        <div class="text-h6 grey--text text--darken-1">
+          {{ noResultsText }}
+        </div>
+      </div>
+    </template>
   </v-container>
 </template>
 
@@ -85,23 +137,30 @@
         loading: false,
         searchResults: [],
         headers: [
-          { 
-            text: 'Type',
+          {
+            text: 'Тип',
             value: 'entity',
-            width: '120px',
-            sortable: false
+            width: '120px'
           },
-          { 
-            text: 'ID',
-            value: 'id',
-            sortable: true
+          {
+            text: 'Заголовок',
+            value: 'title'
           },
-          { 
-            text: 'Title',
-            value: 'title',
-            sortable: true
+          {
+            text: 'Релевантность',
+            value: 'score',
+            width: '150px'
           }
-        ]
+        ],
+        entityLabels: {
+          component: 'Компонент',
+          aspect: 'Аспект',
+          document: 'Документ'
+        },
+        noResultsText: 'Результаты не найдены',
+        matchedInContentText: 'Найдено в содержимом',
+        relevanceText: 'Релевантность',
+        currentSearchTerm: ''
       };
     },
     watch: {
@@ -109,6 +168,7 @@
         immediate: true,
         handler(newQuery) {
           if (newQuery) {
+            this.currentSearchTerm = newQuery;
             this.performSearch(newQuery);
           } else {
             this.searchResults = [];
@@ -118,34 +178,32 @@
     },
     methods: {
       async performSearch(searchQuery) {
+        console.log('Performing search for:', searchQuery);
         this.loading = true;
-        this.searchResults = []; // Clear previous results
+        this.searchResults = [];
         
         try {
-          console.log('Performing search for:', searchQuery);
-          const searchExpression = query.search(searchQuery);
-          console.log('Search expression:', searchExpression);
+          const results = await query.searchWithContent(searchQuery);
+          console.log('Raw search results:', results);
           
-          const results = await query.expression(searchExpression).evaluate();
-          console.log('Raw results:', results);
-          
-          // Handle both array and single object results
           if (results) {
-            // Convert to array if single object
             const resultsArray = Array.isArray(results) ? results : [results];
+            console.log('Results array:', resultsArray);
             
-            // Transform and filter out any null/undefined values
             this.searchResults = resultsArray
-              .filter(item => item && item.id) // Only keep valid items
+              .filter(item => item && item.id)
               .map(item => ({
                 entity: String(item.entity || ''),
                 id: String(item.id || ''),
                 title: String(item.title || ''),
-                link: String(item.link || '')
+                link: String(item.link || ''),
+                matchedInContent: Boolean(item.matchedInContent),
+                contentSnippet: item.contentSnippet,
+                matchedHeaders: item.matchedHeaders || [],
+                score: Number(item.score || 0)
               }));
+            console.log('Processed search results:', this.searchResults);
           }
-          
-          console.log('Processed search results:', this.searchResults);
         } catch (error) {
           console.error('Search error:', error);
           console.error('Error details:', error.stack);
@@ -161,6 +219,25 @@
           document: 'info'
         };
         return colors[entity] || 'grey';
+      },
+      getEntityLabel(entity) {
+        return this.entityLabels[entity] || entity;
+      },
+      highlightMatches(text) {
+        if (!text || !this.currentSearchTerm) return text;
+        
+        const searchTerms = this.currentSearchTerm.toLowerCase().split(/\s+/);
+        let highlightedText = text;
+        
+        searchTerms.forEach(term => {
+          const regex = new RegExp(`(${term})`, 'gi');
+          highlightedText = highlightedText.replace(
+            regex, 
+            '<span class="highlight">$1</span>'
+          );
+        });
+        
+        return highlightedText;
       }
     }
   };
@@ -173,5 +250,38 @@
 
   .v-data-table ::v-deep a {
     text-decoration: none;
+  }
+
+  .search-result-item {
+    max-width: 800px;
+  }
+
+  .content-snippet {
+    font-size: 0.85em;
+    line-height: 1.4;
+    margin: 4px 0;
+    white-space: pre-line;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  .matched-headers {
+    font-size: 0.85em;
+  }
+
+  ::v-deep .highlight {
+    background-color: rgba(255, 213, 79, 0.4);
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+
+  .content-match {
+    background-color: #fafafa;
+    padding: 8px;
+    border-radius: 4px;
+    margin-top: 4px;
   }
 </style>

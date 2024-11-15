@@ -44,7 +44,8 @@ const IDS = {
     DOCUMENTS_FOR_ENTITY: QUERY_ID_DOCUMENTS_FOR_ENTITY,
     JSONSCEMA_ENTITIES: QUERY_ID_JSONSCEMA_ENTITIES,
     GET_OBJECT: QUERY_GET_OBJECT,
-    GLOBAL_SEARCH: 'global.search'
+    GLOBAL_SEARCH: 'global.search',
+    GLOBAL_SEARCH_WITH_CONTENT: 'global.search.with.content'
 };
 
 // Then define queries
@@ -281,4 +282,80 @@ const queries = {
                     {
                         "id": $ID,
                         "title": $DOC.description,
-                        "entity"
+                        "entity": "document",
+                        "link": "/docs/" & $ID,
+                        "matchedInContent": $fuzzyMatch($CONTENT) // Flag if matched in content
+                    }
+                ] : []
+            )
+        ) : [];
+
+        /* Combine results */
+        $ALL_RESULTS := (
+            $COMPONENTS_AND_ASPECTS := $append($COMPONENTS, $ASPECTS);
+            $DOCS_ARRAY := $DOCS[0];
+            $append($COMPONENTS_AND_ASPECTS, $DOCS_ARRAY)
+        );
+
+        /* Sort and return */
+        $ALL_RESULTS ? $ALL_RESULTS^(id) : []
+    )
+    `,
+    [IDS.GLOBAL_SEARCH_WITH_CONTENT]: `
+    (
+        /* Get search text parameter */
+        $SEARCH := searchText;
+        $SEARCH_LOWER := $lowercase($SEARCH);
+
+        /* Search in components */
+        $COMPONENTS := $each(components, function($value, $key) {
+            $fuzzyMatch($key) or $fuzzyMatch($value.title) ? {
+                "id": $key,
+                "title": $value.title,
+                "entity": "component",
+                "link": "/architect/components/" & $key,
+                "score": 5
+            }
+        });
+
+        /* Search in aspects */
+        $ASPECTS := $each(aspects, function($value, $key) {
+            $fuzzyMatch($key) or $fuzzyMatch($value.title) ? {
+                "id": $key,
+                "title": $value.title,
+                "entity": "aspect",
+                "link": "/architect/aspects/" & $key,
+                "score": 5
+            }
+        });
+
+        /* Get content results */
+        $CONTENT_RESULTS := contentResults;
+
+        /* Combine and sort results */
+        $ALL := [
+            $COMPONENTS[],
+            $ASPECTS[],
+            $CONTENT_RESULTS[]
+        ];
+
+        /* Return sorted results or empty array */
+        $ALL ? $sort($ALL, function($l, $r) {
+            $r.score - $l.score
+        }) : []
+    )
+    `
+};
+
+export default {
+    IDS,
+    QUERIES: queries,
+    // Вставляет в запрос параметры
+    makeQuery(query, params) {
+        // eslint-disable-next-line no-useless-escape
+        return query.replace(/.*(\{\%([A-Z|\_]*)\%\}).*/g, (p1, p2, p3) => {
+            return `${p1.replace(eval(`/{%${p3}%}/g`), params[p3])}`;
+        });
+    }
+};
+

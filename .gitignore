@@ -16,6 +16,10 @@ node_modules
 
 .eslintrc.json
 
+.cursorrules
+
+instructions.md
+
 # local env files
 *.env*
 !example.env
@@ -41,3 +45,5 @@ yarn-error.log*
 # Вызвало сбой сборки докера
 # пока вернем до прихода DevOps
 # package-lock.json*
+
+public/build/

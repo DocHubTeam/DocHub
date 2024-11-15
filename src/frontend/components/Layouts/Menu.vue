@@ -7,7 +7,9 @@
         clearable 
         v-model="searchQuery"
         v-on:keyup.enter="onSearch"
-        v-on:click:append="onSearch">
+        v-on:click:append="onSearch"
+        placeholder="Поиск..."
+        v-on:input="onSearchInput">
         <v-icon slot="append">
           mdi-magnify
         </v-icon>
@@ -185,15 +187,17 @@
       }
     },
     methods: {
-      async onSearch() {
-        if (!this.searchQuery.trim()) return;
-        
-        this.$emit('search', this.searchQuery.trim());
-        
-        this.$router.push({ 
-          name: 'search',
-          query: { q: this.searchQuery.trim() }
-        }).catch(() => null);
+      onSearch() {
+        console.log('Search triggered with query:', this.searchQuery);
+        if (this.searchQuery) {
+          this.$router.push({
+            name: 'search',
+            query: { q: this.searchQuery }
+          });
+        }
+      },
+      onSearchInput(value) {
+        console.log('Search input changed:', value);
       },
       isExpandItem(item) {
         return this.expands[item.location];
