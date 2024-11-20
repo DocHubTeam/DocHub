@@ -1,6 +1,5 @@
 <template>
   <v-container fluid>
-    <!-- Results table -->
     <v-row>
       <v-col>
         <v-data-table
@@ -12,8 +11,36 @@
           disable-pagination
           hide-default-footer
           class="elevation-1">
-          <!-- Entity type column -->
-          <template v-slot:[`item.entity`]="{ item }">
+          
+          <!-- Score header with info icon -->
+          <template #[`header.score`]>
+            <div class="score-header">
+              Релевантность
+              <v-tooltip bottom>
+                <template #activator="tooltip">
+                  <v-icon
+                    small
+                    class="info-icon"
+                    color="grey lighten-1"
+                    v-bind="tooltip.attrs"
+                    v-on="tooltip.on">
+                    mdi-information
+                  </v-icon>
+                </template>
+                <span>
+                  Релевантность результата поиска:<br>
+                  • Точное совпадение в заголовке: 10 баллов<br>
+                  • Совпадение в подзаголовках: 5 баллов каждое<br>
+                  • Совпадение в ключевых словах: 3 балла<br>
+                  • Совпадение в тексте: 1 балл за каждое<br><br>
+                  Компоненты и аспекты: фиксированные 5 баллов
+                </span>
+              </v-tooltip>
+            </div>
+          </template>
+
+          <!-- Entity column -->
+          <template #[`item.entity`]="{ item }">
             <v-chip
               small
               v-bind:color="getEntityColor(item.entity)"
@@ -21,35 +48,20 @@
               {{ getEntityLabel(item.entity) }}
             </v-chip>
           </template>
-          
-          <!-- Title/Link column -->
-          <template v-slot:[`item.title`]="{ item }">
+
+          <!-- Title column with content preview -->
+          <template #[`item.title`]="{ item }">
             <div class="search-result-item">
-              <!-- Title with link -->
               <div class="d-flex align-center">
-                <router-link v-if="item.link" v-bind:to="item.link">
+                <router-link 
+                  v-if="item.link" 
+                  v-bind:to="item.link"
+                  v-on:click.native="navigateToItem(item)">
                   {{ item.title }}
                 </router-link>
                 <template v-else>{{ item.title }}</template>
-                
-                <!-- Relevance score for debugging -->
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-chip
-                      x-small
-                      label
-                      class="ml-2"
-                      color="grey lighten-3"
-                      v-bind="attrs"
-                      v-on="on">
-                      {{ relevanceText }}: {{ item.score }}
-                    </v-chip>
-                  </template>
-                  <span>{{ relevanceText }}: {{ item.score }}</span>
-                </v-tooltip>
               </div>
 
-              <!-- Content match section -->
               <template v-if="item.matchedInContent">
                 <div class="content-match mt-2">
                   <v-chip
@@ -60,13 +72,11 @@
                     {{ matchedInContentText }}
                   </v-chip>
                   
-                  <!-- Content snippet with highlighting -->
                   <div 
                     class="content-snippet grey--text text--darken-1"
                     v-html="highlightMatches(item.contentSnippet)">
                   </div>
 
-                  <!-- Headers where matches were found -->
                   <div v-if="item.matchedHeaders && item.matchedHeaders.length" class="matched-headers mt-1">
                     <v-chip
                       x-small
@@ -82,11 +92,15 @@
               </template>
             </div>
           </template>
+
+          <!-- Score column -->
+          <template #[`item.score`]="{ item }">
+            {{ item.score }}
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
 
-    <!-- No results message -->
     <template v-if="searchResults.length === 0 && !loading">
       <div class="text-center my-4">
         <v-icon large color="grey lighten-1">mdi-magnify-close</v-icon>
@@ -149,7 +163,8 @@
           {
             text: 'Релевантность',
             value: 'score',
-            width: '150px'
+            width: '150px',
+            sortable: true
           }
         ],
         entityLabels: {
@@ -178,38 +193,36 @@
     },
     methods: {
       async performSearch(searchQuery) {
-        console.log('Performing search for:', searchQuery);
+        if (!searchQuery?.trim()) return;
+        
         this.loading = true;
         this.searchResults = [];
         
         try {
           const results = await query.searchWithContent(searchQuery);
-          console.log('Raw search results:', results);
-          
-          if (results) {
-            const resultsArray = Array.isArray(results) ? results : [results];
-            console.log('Results array:', resultsArray);
-            
-            this.searchResults = resultsArray
-              .filter(item => item && item.id)
-              .map(item => ({
-                entity: String(item.entity || ''),
-                id: String(item.id || ''),
-                title: String(item.title || ''),
-                link: String(item.link || ''),
-                matchedInContent: Boolean(item.matchedInContent),
-                contentSnippet: item.contentSnippet,
-                matchedHeaders: item.matchedHeaders || [],
-                score: Number(item.score || 0)
-              }));
-            console.log('Processed search results:', this.searchResults);
+          if (this.$route.query.q === searchQuery) {
+            this.searchResults = results.map(result => ({
+              ...result,
+              link: this.getEntityLink(result)
+            }));
           }
         } catch (error) {
           console.error('Search error:', error);
-          console.error('Error details:', error.stack);
           this.searchResults = [];
         } finally {
           this.loading = false;
+        }
+      },
+      getEntityLink(result) {
+        switch(result.entity) {
+          case 'component':
+            return `/entities/components/blank?dh-component-id=${result.id}`;
+          case 'aspect':
+            return `/entities/aspects/blank?dh-aspect-id=${result.id}`;
+          case 'document':
+            return `/docs/${result.id}`;
+          default:
+            return result.link || '';
         }
       },
       getEntityColor(entity) {
@@ -283,5 +296,20 @@
     padding: 8px;
     border-radius: 4px;
     margin-top: 4px;
+  }
+
+  .score-header {
+    display: flex;
+    align-items: center;
+  }
+
+  .info-icon {
+    margin-left: 4px;
+    opacity: 0.7;
+    cursor: help;
+  }
+
+  .info-icon:hover {
+    opacity: 1;
   }
 </style>
