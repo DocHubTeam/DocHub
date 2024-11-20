@@ -14,7 +14,7 @@
           
           <!-- Score header with info icon -->
           <template #[`header.score`]>
-            <div class="score-header">
+            <div class="score-header grey--text text--darken-1">
               Релевантность
               <v-tooltip bottom>
                 <template #activator="tooltip">
@@ -95,7 +95,7 @@
 
           <!-- Score column -->
           <template #[`item.score`]="{ item }">
-            {{ item.score }}
+            <span class="grey--text text--darken-1">{{ item.score }}</span>
           </template>
         </v-data-table>
       </v-col>
@@ -154,17 +154,20 @@
           {
             text: 'Тип',
             value: 'entity',
-            width: '120px'
+            width: '120px',
+            class: 'grey--text text--darken-1'
           },
           {
             text: 'Заголовок',
-            value: 'title'
+            value: 'title',
+            class: 'grey--text text--darken-1'
           },
           {
             text: 'Релевантность',
             value: 'score',
             width: '150px',
-            sortable: true
+            sortable: true,
+            class: 'grey--text text--darken-1'
           }
         ],
         entityLabels: {
@@ -311,5 +314,15 @@
 
   .info-icon:hover {
     opacity: 1;
+  }
+
+  /* Add consistent table styling */
+  .v-data-table ::v-deep th {
+    font-weight: normal !important;
+    color: rgba(0, 0, 0, 0.6) !important;
+  }
+
+  .v-data-table ::v-deep td {
+    color: rgba(0, 0, 0, 0.6) !important;
   }
 </style>

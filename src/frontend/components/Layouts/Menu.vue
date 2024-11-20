@@ -9,8 +9,10 @@
         v-on:keyup.enter="onSearch"
         v-on:click:append="onSearch"
         placeholder="Поиск..."
-        v-on:input="onSearchInput">
-        <v-icon slot="append">
+        v-on:input="onSearchInput"
+        class="grey--text text--darken-1"
+        hide-details>
+        <v-icon slot="append" class="grey--text text--darken-1">
           mdi-magnify
         </v-icon>
       </v-text-field>
@@ -252,5 +254,21 @@
 
 .menu-item-selected * {
   color: #fff !important;
+}
+
+.v-text-field ::v-deep .v-input__slot {
+  background-color: transparent !important;
+}
+
+.v-text-field ::v-deep .v-input__slot:before {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.v-text-field ::v-deep input {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.v-text-field ::v-deep input::placeholder {
+  color: rgba(0, 0, 0, 0.38) !important;
 }
 </style>
