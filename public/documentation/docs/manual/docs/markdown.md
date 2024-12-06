@@ -80,7 +80,7 @@
 VUE_APP_DOCHUB_MARKDOWN_HTML=on
 ```
 
-Подробнее [здесь](https://github.com/RabotaRu/DocHub/blob/master/example.env).
+Подробнее [здесь](https://github.com/DocHubTeam/DocHub/blob/master/example.env).
 
 Для включения поддержки HTML в плагинах, потребуется установить переменную DOCHUB_IDE_MARKDOWN_HTML на рабочей станции.
 

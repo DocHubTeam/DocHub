@@ -138,8 +138,8 @@ DocHub с этой задачей хорошо справляется. Он мо
 
 ## 6. Поставка
 DocHub поставляется в составе двух компонентов в открытых исходных кодах:
-1. WEB портал - [https://github.com/RabotaRu/DocHub](https://github.com/RabotaRu/DocHub)
-2. Плагин для IDE JetBrains - [https://github.com/RabotaRu/DocHubIdeaPlugin](https://github.com/RabotaRu/DocHubIdeaPlugin)
+1. WEB портал - [https://github.com/DocHubTeam/DocHub](https://github.com/DocHubTeam/DocHub)
+2. Плагин для IDE JetBrains - [https://github.com/DocHubTeam/DocHubIdeaPlugin](https://github.com/DocHubTeam/DocHubIdeaPlugin)
 
 Лицензия использования Apache-2.0 License
 

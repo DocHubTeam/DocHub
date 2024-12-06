@@ -47,14 +47,14 @@ DocHub поддерживает следующие режимы разверты
 
 ## Server Less
 
-[Проект](https://github.com/RabotaRu/DocHub) собирается как обычный статический сайт командой:
+[Проект](https://github.com/DocHubTeam/DocHub) собирается как обычный статический сайт командой:
 
 ```
   npm run build
 ```
 
 В папку ./dist генерируется комплект файлов, который является DocHub WEB-приложением. 
-Подробнее о сборке и развертывании смотри [здесь](https://github.com/RabotaRu/DocHub). 
+Подробнее о сборке и развертывании смотри [здесь](https://github.com/DocHubTeam/DocHub). 
 
 Файлы содержащие код архитектуры загружаются по доступным приложению URL при его исполнении в браузере.
 
@@ -129,7 +129,7 @@ imports:
 ```
 
 При ее выполнении будет собран frontend и запущен backend процесс nodejs в соответствии с конфигурацией среды (см.
-[example.env](https://github.com/RabotaRu/DocHub/blob/master/example.env)).
+[example.env](https://github.com/DocHubTeam/DocHub/blob/master/example.env)).
 
 ### Преимущества
 1. Заметно ускоряет работу пользовательского приложения за счет единоразовой подготовки архитектурной 
@@ -334,4 +334,4 @@ VUE_APP_DOCHUB_CLUSTER=on
 ## Переменные среды исполнения и примеры конфигураций
 
 Актуальные параметры конфигурирования смотрите в файле
-[example.env](https://github.com/RabotaRu/DocHub/blob/master/example.env)
+[example.env](https://github.com/DocHubTeam/DocHub/blob/master/example.env)

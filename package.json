@@ -7,12 +7,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RabotaRu/DocHub.git"
+    "url": "git+https://github.com/DocHubTeam/DocHub.git"
   },
   "bugs": {
-    "url": "https://github.com/RabotaRu/DocHub/issues"
+    "url": "https://github.com/DocHubTeam/DocHub/issues"
   },
-  "homepage": "https://github.com/RabotaRu/DocHub#readme",
+  "homepage": "https://github.com/DocHubTeam/DocHub#readme",
   "scripts": {
     "lib": "vue-cli-service build --name test --target lib",
     "plugin": "export VUE_APP_DOCHUB_MODE=plugin && vue-cli-service build",

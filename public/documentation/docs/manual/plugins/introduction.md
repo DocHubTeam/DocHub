@@ -24,7 +24,7 @@
 Клонируйте репозиторий DocHub.
 
 ```bash
-git clone https://github.com/RabotaRu/DocHub.git
+git clone https://github.com/DocHubTeam/DocHub.git
 ```
 
 Установите все зависимости.
@@ -236,7 +236,7 @@ docs:
 
 Работу примера можно посмотреть [здесь](http://localhost:8080/docs/dochub.plugins.example).
 
-Полный исходный код примера можно найти [тут](https://github.com/RabotaRu/DocHub/tree/master/plugins/html).
+Полный исходный код примера можно найти [тут](https://github.com/DocHubTeam/DocHub/tree/master/plugins/html).
 
 ## Встраивание объектов DocHub в представления плагина
 
