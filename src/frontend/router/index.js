@@ -37,6 +37,7 @@ import gateway from '@idea/gateway';
 import env from '@front/helpers/env';
 
 import appRoutes from './routes';
+import SearchResults from '@front/components/Search/SearchResults.vue';
 
 Vue.use(Router);
 
@@ -55,7 +56,7 @@ if (!env.isPlugin()) {
 		{
 			path: '/',
 			redirect() {
-				window.location = new URL('/main', window.origin);
+					window.location = new URL('/main', window.origin);
 			}
 		});
 	rConfig.routes.push(
@@ -93,6 +94,14 @@ if (!env.isPlugin()) {
 		}
 	);
 }
+
+rConfig.routes.push(
+	{
+		path: '/search',
+		name: 'search',
+		component: SearchResults
+	}
+);
 
 const router = new Router(rConfig);
 
