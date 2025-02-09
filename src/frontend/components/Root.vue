@@ -35,6 +35,7 @@
 <script>
   /*
   Copyright (C) 2021 owner Roman Piontik R.Piontik@mail.ru
+  Copyright (C) 2023 Sber
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -60,7 +61,8 @@
 
   Contributors:
       R.Piontik <r.piontik@mail.ru>
-      Rostislav Kabalin <kabalin2009@yandex.ru>
+      Rostislav Kabalin <kabalin2009@yandex.ru> - 2022
+      Navasardyan Suren, Sber - 2023
   */
 
   import PluginInit from '@idea/components/Init.vue';

@@ -55,9 +55,9 @@
 </template>
 
 <script>
-
   /*
   Copyright (C) 2021 owner Roman Piontik R.Piontik@mail.ru
+  Copyright (C) 2022 Sber
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -82,9 +82,15 @@
       R.Piontik <r.piontik@mail.ru>
 
   Contributors:
-      R.Piontik <r.piontik@mail.ru>
-      Rostislav Kabalin <kabalin2009@yandex.ru>
-      clayzenx <clay.zenx@gmail.com>
+      R.Piontik <r.piontik@mail.ru> - 2021
+      R.Piontik <r.piontik@mail.ru> - 2022
+      Rostislav Kabalin <kabalin2009@yandex.ru> - 2022
+      Navasardyan Suren, Sber - 2022
+      Vladislav Markin, Sber - 2022
+      R.Piontik <r.piontik@mail.ru> - 2023
+      Vladislav Nefedov, Sber - 2023
+      R.Piontik <r.piontik@mail.ru> - 2024
+      Vladislav Nefedov, Sber - 2024
   */
 
   import { ErrorBoundary } from '@front/shared/ErrorBoundary/index';
@@ -208,7 +214,7 @@
       },
       doResize() {
         if (!this.svgEl || !this.svgEl.clientWidth || !this.svgEl.clientHeight) return;
-        
+
         const originWidth = this.viewBox.width;
 
         if (this.$el.clientWidth > this.viewBox.width) {

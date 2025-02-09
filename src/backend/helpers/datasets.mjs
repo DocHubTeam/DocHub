@@ -1,5 +1,6 @@
 /*
 Copyright (C) 2021 owner Roman Piontik R.Piontik@mail.ru
+Copyright (C) 2021 Sber
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,10 +22,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 Maintainers:
-    Vladislav Markin <markinvy@yandex.ru>
+    R.Piontik <R.Piontik@mail.ru>
 
 Contributors:
-    Vladislav Markin <markinvy@yandex.ru>
+    R.Piontik <R.Piontik@mail.ru> - 2023
+    Nikolay Temnyakov, Sber - 2024
 */
 
 import request from './request.mjs';
