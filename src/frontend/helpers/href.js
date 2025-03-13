@@ -46,13 +46,20 @@ export default {
 	gotoURL(ref) {
 		try {
 			if (uri.isExternalURI(ref)) {
-				window.open(ref, 'blank_');
+				window.open(ref, '_blank');
 			} else {
 				const url = new URL(ref, window.location);
-				if (isLocalRoute(url))
-					window.Router.push({ path: url.pathname, query: Object.fromEntries(url.searchParams)});
-				else
-					window.open(url, 'blank_');
+				if (isLocalRoute(url)) {
+					const fullPath = url.pathname + (url.search || '') + (url.hash || '');
+					window.localStorage.setItem('last-visited-url', fullPath);
+					window.Router.push({ 
+						path: url.pathname, 
+						query: Object.fromEntries(url.searchParams),
+						hash: url.hash
+					});
+				} else {
+					window.open(url, '_blank');
+				}
 			}
 		} catch (e) {
 			if (env.isPlugin(Plugins.idea)) {

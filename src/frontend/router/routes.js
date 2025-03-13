@@ -48,25 +48,40 @@ import SSOError from '@front/components/sso/SSOError';
 import oidcClient from '@front/auth/oidc-client';
 
 const middleware = (route) => {
+	// Проверяем, настроен ли OAuth и не авторизован ли пользователь
 	if (config.oauth !== false && !window.Vuex.state.isOAuthProcess && !window.Vuex.state.access_token) {
-      cookie.set('return-route', JSON.stringify({
+      // Сохраняем полный URL, включая параметры запроса, хэш и параметры маршрута
+      const fullRoute = {
         path: route.path,
         query: route.query,
-        hash: route.hash
-      }), 1);
-      window.location = new URL(
-			`/oauth/authorize?client_id=${config.oauth.APP_ID}`
-            + '&redirect_uri=' + new URL(consts.pages.OAUTH_CALLBACK_PAGE, window.location)
-            + `&response_type=code&state=none&scope=${config.oauth.REQUESTED_SCOPES}`
-            + '&' + Math.floor(Math.random() * 10000)
-			, config.gitlab_server
-		);
+        hash: route.hash,
+        params: route.params
+      };
+      
+      // Сохраняем в cookie и localStorage для надежности
+      cookie.set('return-route', JSON.stringify(fullRoute), 1);
+      window.localStorage.setItem('original-route', JSON.stringify(fullRoute));
+      
+      // Формируем URL для авторизации с добавлением случайного параметра для предотвращения кэширования
+      const authUrl = new URL(
+        `/oauth/authorize?client_id=${config.oauth.APP_ID}`
+        + '&redirect_uri=' + encodeURIComponent(new URL(consts.pages.OAUTH_CALLBACK_PAGE, window.location).toString())
+        + `&response_type=code&state=none&scope=${config.oauth.REQUESTED_SCOPES}`
+        + '&random=' + Math.floor(Math.random() * 10000)
+        , config.gitlab_server
+      );
+      
+      // Перенаправляем на страницу авторизации
+      window.location = authUrl;
+      return;
 	}
 
+    // Проверяем роли пользователя, если включена ролевая модель
     window.OidcUserManager.getUser().then(user => {
       if (user) {
         // eslint-disable-next-line no-console
-        console.log(user.profile.roles);
+        console.log('User authenticated:', user.profile.name);
+        console.log('User roles:', user.profile.roles);
       }
     });
 

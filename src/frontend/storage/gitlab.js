@@ -141,6 +141,66 @@ export default {
     actions: {
         // Action for init store
         init(context) {
+            // Восстанавливаем токены из localStorage, если они есть
+            const savedAccessToken = localStorage.getItem('access_token');
+            const savedRefreshToken = localStorage.getItem('refresh_token');
+            
+            if (savedAccessToken) {
+                context.commit('setAccessToken', savedAccessToken);
+            }
+            
+            if (savedRefreshToken) {
+                context.commit('setRefreshToken', savedRefreshToken);
+                // Если есть refresh_token, обновляем access_token
+                context.dispatch('refreshAccessToken');
+            }
+            
+            // Проверяем, есть ли сохраненный маршрут
+            const originalRoute = window.localStorage.getItem('original-route');
+            if (originalRoute) {
+                try {
+                    const parsedRoute = JSON.parse(originalRoute);
+                    // Если есть сохраненный маршрут, проверяем аутентификацию
+                    window.OidcUserManager.getUser().then(user => {
+                        if (user) {
+                            // Если пользователь аутентифицирован, восстанавливаем маршрут
+                            window.localStorage.removeItem('original-route');
+                            
+                            // Формируем полный URL с учетом параметров и хэша
+                            let url = parsedRoute.path;
+                            const queryParams = new URLSearchParams();
+                            
+                            // Добавляем параметры запроса
+                            if (parsedRoute.query) {
+                                Object.entries(parsedRoute.query).forEach(([key, value]) => {
+                                    queryParams.append(key, value);
+                                });
+                            }
+                            
+                            // Добавляем параметры запроса к URL, если они есть
+                            const queryString = queryParams.toString();
+                            if (queryString) {
+                                url += '?' + queryString;
+                            }
+                            
+                            // Добавляем хэш, если он есть
+                            if (parsedRoute.hash) {
+                                url += parsedRoute.hash;
+                            }
+                            
+                            // Перенаправляем на восстановленный URL
+                            if (window.location.pathname !== url) {
+                                window.location = window.origin + url;
+                            }
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error processing saved route:', error);
+                    window.localStorage.removeItem('original-route');
+                }
+            }
+            
+            // Продолжаем обычную инициализацию
             context.dispatch('plugins/init');
 
             const errors = {
@@ -387,15 +447,25 @@ export default {
                 url: OAuthURL,
                 params: Object.assign({
                     client_id: config.oauth.APP_ID,
+                    client_secret: config.oauth.CLIENT_SECRET,
                     redirect_uri: (new URL(consts.pages.OAUTH_CALLBACK_PAGE, window.location)).toString()
                 }, params)
             })
                 .then((response) => {
                     context.commit('setAccessToken', response.data.access_token);
                     context.commit('setRefreshToken', response.data.refresh_token);
+                    
+                    // Сохраняем токены в localStorage для сохранения между сессиями
+                    localStorage.setItem('access_token', response.data.access_token);
+                    localStorage.setItem('refresh_token', response.data.refresh_token);
+                    
                     // Если expires_in нет, считаем, что токен вечный
                     response.data.expires_in && setTimeout(() => context.dispatch('refreshAccessToken'), (response.data.expires_in - 10) * 1000);
-                    if (OAuthCode) context.dispatch('reloadAll');
+                    
+                    if (OAuthCode) {
+                        // После успешного получения токена загружаем данные
+                        context.dispatch('reloadAll');
+                    }
                 }).catch((e) => {
                     context.commit('appendProblems', [{
                         problem: validatorErrors.title.net,
@@ -410,6 +480,8 @@ export default {
 
         // Need to call when gitlab takes callback's rout with oauth code
         onReceivedOAuthCode(context, OAuthCode) {
+            // Сохраняем код авторизации и запускаем процесс получения токена
+            console.log('Received OAuth code, requesting access token...');
             context.dispatch('refreshAccessToken', OAuthCode);
         },
 

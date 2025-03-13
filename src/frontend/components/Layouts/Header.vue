@@ -185,12 +185,20 @@
         window.$PAPI.goto(null, entity, id);
       },
       loginout() {
-        this.user ? oidcClient.logout() : oidcClient.login();
-        console.log("login/logout");
-        this.user ? oidcClient.logout() : oidcClient.login().then(() => {
-          window.Vuex.dispatch('setRolesFromToken');
-          console.log("call set roles from token");
-        });
+        if (this.user) {
+          // Выход пользователя
+          oidcClient.logout();
+          // Очищаем токены
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
+          this.user = null;
+          window.Vuex.dispatch('clean');
+        } else {
+          // Вход пользователя
+          oidcClient.login();
+          // После успешного входа роли будут установлены автоматически
+          console.log("Redirecting to login...");
+        }
       }
     }
   };

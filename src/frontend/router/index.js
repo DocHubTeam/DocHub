@@ -66,13 +66,46 @@ if (!env.isPlugin()) {
 					? route.query.code
 					: new URLSearchParams(route.hash.substr(1)).get('code');
 				if (OAuthCode) {
+					// Диспатчим событие получения OAuth-кода
 					window.Vuex.dispatch('onReceivedOAuthCode', OAuthCode);
-					const rRoute = cookie.get('return-route');
-					return rRoute ? JSON.parse(rRoute) : {
-						path: '/main',
-						query: {},
-						hash: ''
-					};
+					
+					// Пытаемся получить сохраненный маршрут из cookie или localStorage
+					let rRoute = cookie.get('return-route');
+					const lsRoute = window.localStorage.getItem('original-route');
+					
+					// Предпочитаем localStorage, если там есть данные
+					if (lsRoute) {
+						rRoute = lsRoute;
+					}
+					
+					if (rRoute) {
+						try {
+							const parsedRoute = JSON.parse(rRoute);
+							
+							// Сохраняем маршрут в localStorage для использования после авторизации
+							// НЕ удаляем маршрут здесь, чтобы он был доступен после перезагрузки страницы
+							window.localStorage.setItem('original-route', rRoute);
+							
+							// Очищаем cookie, так как данные уже в localStorage
+							cookie.delete('return-route');
+							
+							// Возвращаем маршрут для редиректа
+							return parsedRoute;
+						} catch (e) {
+							console.error('Error parsing saved route:', e);
+							return {
+								path: '/main',
+								query: {},
+								hash: ''
+							};
+						}
+					} else {
+						return {
+							path: '/main',
+							query: {},
+							hash: ''
+						};
+					}
 				} else {
 					return {
 						path: '/sso/error',
