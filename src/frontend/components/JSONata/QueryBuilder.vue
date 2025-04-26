@@ -499,30 +499,30 @@
     </v-card>
 
     <!-- Встроенное окно предпросмотра запроса вместо диалога -->
-    <div v-if="showQueryDialog" class="query-preview-overlay">
+    <div v-if="showQueryDialog" class="query-preview-overlay" v-on:click.self="showQueryDialog = false">
       <div class="query-preview-container">
         <v-card>
-          <v-card-title class="grey lighten-4">
-            Сгенерированный запрос
+          <v-card-title class="grey lighten-4 d-flex align-center">
+            <span>Сгенерированный запрос</span>
             <v-spacer />
             <v-btn 
               icon 
               title="Копировать запрос"
-              v-on:click="copyQuery">
+              v-on:click="copyQuery"
+              class="mr-2">
               <v-icon>mdi-content-copy</v-icon>
+            </v-btn>
+            <v-btn 
+              icon 
+              title="Закрыть"
+              v-on:click="showQueryDialog = false"
+              color="grey darken-1">
+              <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-card-title>
           <v-card-text class="pt-4">
             <pre class="generated-query">{{ generatedQuery }}</pre>
           </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn
-              text
-              v-on:click="showQueryDialog = false">
-              Закрыть
-            </v-btn>
-          </v-card-actions>
         </v-card>
       </div>
     </div>
@@ -1839,12 +1839,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 9999; /* Увеличенный z-index, чтобы быть над всеми элементами */
 }
 
 .query-preview-container {
   width: 90%;
   max-width: 600px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25); /* Добавлена тень для лучшего выделения */
+  border-radius: 4px;
+  overflow: hidden; /* Предотвращает выход содержимого за пределы контейнера */
+  isolation: isolate; /* Создает новый stacking context */
 }
 
 .generated-query {
