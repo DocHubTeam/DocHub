@@ -1,6 +1,36 @@
 <template>
   <v-container fluid class="pa-0 fill-height">
-    <v-row no-gutters class="fill-height">
+    <!-- Окно предпросмотра запроса (встроенное вместо диалога) -->
+    <v-row no-gutters v-if="showPreviewDialog" class="preview-overlay">
+      <v-col cols="12" md="6" class="mx-auto my-auto">
+        <v-card>
+          <v-card-title class="grey lighten-4">
+            Сгенерированный запрос
+            <v-spacer />
+            <v-btn 
+              icon 
+              title="Копировать запрос"
+              v-on:click="copyQuery">
+              <v-icon>mdi-content-copy</v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text class="pt-4">
+            <pre class="query-preview">{{ generatedQuery }}</pre>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn
+              text
+              v-on:click="showPreviewDialog = false">
+              Закрыть
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+    
+    <!-- Основной контент - конструктор запросов -->
+    <v-row v-show="!showPreviewDialog" no-gutters class="fill-height">
       <v-col cols="12">
         <v-card class="fill-height">
           <v-card-text class="pa-0">
@@ -11,35 +41,6 @@
         </v-card>
       </v-col>
     </v-row>
-    
-    <!-- Окно предпросмотра запроса -->
-    <v-dialog
-      v-model="showPreviewDialog"
-      max-width="600px">
-      <v-card>
-        <v-card-title class="grey lighten-4">
-          Сгенерированный запрос
-          <v-spacer />
-          <v-btn 
-            icon 
-            title="Копировать запрос"
-            v-on:click="copyQuery">
-            <v-icon>mdi-content-copy</v-icon>
-          </v-btn>
-        </v-card-title>
-        <v-card-text class="pt-4">
-          <pre class="query-preview">{{ generatedQuery }}</pre>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            text
-            v-on:click="showPreviewDialog = false">
-            Закрыть
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
     
     <!-- Снэкбар для уведомлений -->
     <v-snackbar
@@ -120,5 +121,19 @@
   max-height: 300px;
   overflow-y: auto;
   border: 1px solid #eee;
+}
+
+/* Стили для слоя предпросмотра */
+.preview-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style> 

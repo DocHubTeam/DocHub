@@ -1,6 +1,21 @@
 <template>
   <v-container class="desk" grid-list-xl fluid>
-    <split v-bind:direction="'vertical'">
+    <!-- Область конструктора запросов, отображается на весь экран вместо диалога -->
+    <div v-if="showQueryBuilder" class="query-builder-fullscreen">
+      <v-btn
+        icon
+        absolute
+        top
+        right
+        class="close-button"
+        v-on:click="closeQueryBuilder">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+      <query-builder ref="queryBuilder" v-on:execute="handleQueryFromBuilder" v-on:showMessage="message => $emit('showMessage', message)" />
+    </div>
+    
+    <!-- Основной редактор, скрывается при активном конструкторе -->
+    <split v-if="!showQueryBuilder" v-bind:direction="'vertical'">
       <split-area v-bind:size="40" class="area-space">
         <div class="console">
           <v-toolbar dense flat>
@@ -87,25 +102,6 @@
         </div>
       </split-area>
     </split>
-    <!-- Диалоговое окно с конструктором запросов -->
-    <v-dialog
-      v-model="showQueryBuilder"
-      fullscreen
-      hide-overlay
-      content-class="dialog-modal"
-      transition="dialog-bottom-transition">
-      <v-card>
-        <v-toolbar class="grey lighten-4">
-          <v-btn
-            icon
-            v-on:click="closeQueryBuilder">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-          <v-toolbar-title>Конструктор запросов</v-toolbar-title>
-        </v-toolbar>
-        <query-builder ref="queryBuilder" v-on:execute="handleQueryFromBuilder" v-on:showMessage="message => $emit('showMessage', message)" />
-      </v-card>
-    </v-dialog>
   </v-container>
 </template>
 
@@ -344,10 +340,6 @@
         this.onExecute();
       },
       closeQueryBuilder() {
-        // Сбрасываем состояние конструктора перед закрытием
-        if (this.$refs.queryBuilder && typeof this.$refs.queryBuilder.resetState === 'function') {
-          this.$refs.queryBuilder.resetState();
-        }
         this.showQueryBuilder = false;
       }
     }
@@ -482,8 +474,29 @@
   min-width: fit-content;
 }
 
+/* Стили для полноэкранного режима конструктора запросов */
+.query-builder-fullscreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Убираем стили для модального диалога, так как он больше не используется */
 .dialog-modal {
-  z-index: 1000 !important;
+  display: none; /* или полностью удалите этот класс */
+}
+
+/* Стили для кнопки закрытия */
+.close-button {
+  margin: 8px;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  z-index: 20;
 }
 
 </style>

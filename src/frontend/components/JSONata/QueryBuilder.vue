@@ -498,33 +498,34 @@
       </v-card-text>
     </v-card>
 
-    <v-dialog
-      v-model="showQueryDialog"
-      max-width="600px">
-      <v-card>
-        <v-card-title class="grey lighten-4">
-          Сгенерированный запрос
-          <v-spacer />
-          <v-btn 
-            icon 
-            title="Копировать запрос"
-            v-on:click="copyQuery">
-            <v-icon>mdi-content-copy</v-icon>
-          </v-btn>
-        </v-card-title>
-        <v-card-text class="pt-4">
-          <pre class="generated-query">{{ generatedQuery }}</pre>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            text
-            v-on:click="showQueryDialog = false">
-            Закрыть
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <!-- Встроенное окно предпросмотра запроса вместо диалога -->
+    <div v-if="showQueryDialog" class="query-preview-overlay">
+      <div class="query-preview-container">
+        <v-card>
+          <v-card-title class="grey lighten-4">
+            Сгенерированный запрос
+            <v-spacer />
+            <v-btn 
+              icon 
+              title="Копировать запрос"
+              v-on:click="copyQuery">
+              <v-icon>mdi-content-copy</v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text class="pt-4">
+            <pre class="generated-query">{{ generatedQuery }}</pre>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn
+              text
+              v-on:click="showQueryDialog = false">
+              Закрыть
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </div>
+    </div>
     
     <!-- Снэкбар для уведомлений -->
     <v-snackbar
@@ -1825,5 +1826,36 @@
   background-color: rgba(0, 0, 0, 0.03);
   border-radius: 4px;
   border-left: 3px solid var(--v-primary-base);
+}
+
+/* Стили для наложения предпросмотра запроса */
+.query-preview-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.query-preview-container {
+  width: 90%;
+  max-width: 600px;
+}
+
+.generated-query {
+  background-color: #fafafa;
+  padding: 16px;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  font-family: monospace;
+  color: #333;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #eee;
 }
 </style> 
