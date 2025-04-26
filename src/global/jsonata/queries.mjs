@@ -101,6 +101,13 @@ const queries = {
                 "icon": 'chrome_reader_mode',
                 "location": "devtool",
                 "order": $defOrder
+            },
+            {
+                "title": 'Конструктор JSONata',
+                "route": '/query-builder',
+                "icon": 'mdi-tools',
+                "location": "query-builder",
+                "order": $defOrder
             }
         ])
     )

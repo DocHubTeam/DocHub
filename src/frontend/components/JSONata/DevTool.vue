@@ -46,6 +46,12 @@
                     v-model="autoExec" />
                   <v-list-item-title>Автовыполнение</v-list-item-title>
                 </v-list-item>
+                <v-list-item v-on:click="showQueryBuilder = true">
+                  <v-list-item-icon>
+                    <v-icon>mdi-tools</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-title>Конструктор запросов</v-list-item-title>
+                </v-list-item>
               </v-list>
             </v-menu>
           </v-toolbar>
@@ -81,6 +87,25 @@
         </div>
       </split-area>
     </split>
+    <!-- Диалоговое окно с конструктором запросов -->
+    <v-dialog
+      v-model="showQueryBuilder"
+      fullscreen
+      hide-overlay
+      content-class="dialog-modal"
+      transition="dialog-bottom-transition">
+      <v-card>
+        <v-toolbar class="grey lighten-4">
+          <v-btn
+            icon
+            v-on:click="closeQueryBuilder">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>Конструктор запросов</v-toolbar-title>
+        </v-toolbar>
+        <query-builder ref="queryBuilder" v-on:execute="handleQueryFromBuilder" v-on:showMessage="message => $emit('showMessage', message)" />
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -125,6 +150,7 @@
 
   import editor from './JSONataEditor.vue';
   import result from './JSONResult.vue';
+  import queryBuilder from './QueryBuilder.vue';
   import {Base64URLToUTF8} from '@front/helpers/strings';
 
   const COOKIE_NAME_QUERY = 'json-dev-tool-query';
@@ -134,7 +160,8 @@
     name: 'JSONataDevTool',
     components: {
       editor,
-      result
+      result,
+      queryBuilder
     },
     props: {
       jsonataSource: {
@@ -155,6 +182,7 @@
         origin: null,   // Выбранный базовый источник
         origins: [],    // Список доступных источников данных
         isOriginAvailable: !env.isBackendMode(), // Определяет доступен ли выбор origin
+        showQueryBuilder: false, // Показывать ли конструктор запросов
         logHeaders: [
           {
             text: 'Таймлайн',
@@ -205,6 +233,12 @@
       },
       jsonataSource(value) {
         this.loadJsonataQuery(value);
+      },
+      showQueryBuilder(newVal) {
+        // Если компонент QueryBuilder существует, вызываем resetState при открытии
+        if (newVal && this.$refs.queryBuilder && typeof this.$refs.queryBuilder.resetState === 'function') {
+          this.$refs.queryBuilder.resetState();
+        }
       }
     },
     mounted() {
@@ -297,6 +331,24 @@
             } else this.doExecute();
           }, force ? 10 : 500);
         }
+      },
+      // Обработчик запроса из конструктора запросов
+      handleQueryFromBuilder(generatedQuery) {
+        this.query = generatedQuery;
+        this.$refs.editor.model.setValue(generatedQuery);
+        // Сбрасываем состояние конструктора после успешной генерации запроса
+        if (this.$refs.queryBuilder && typeof this.$refs.queryBuilder.resetState === 'function') {
+          this.$refs.queryBuilder.resetState();
+        }
+        this.showQueryBuilder = false;
+        this.onExecute();
+      },
+      closeQueryBuilder() {
+        // Сбрасываем состояние конструктора перед закрытием
+        if (this.$refs.queryBuilder && typeof this.$refs.queryBuilder.resetState === 'function') {
+          this.$refs.queryBuilder.resetState();
+        }
+        this.showQueryBuilder = false;
       }
     }
   };
@@ -428,6 +480,10 @@
 
 .console .v-select__selections .v-chip {
   min-width: fit-content;
+}
+
+.dialog-modal {
+  z-index: 1000 !important;
 }
 
 </style>
