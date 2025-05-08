@@ -1,0 +1,12 @@
+# This file was created automatically in DocHub (dochub.info).
+# Этот файл был создан автоматически в DocHub (dochub.info)
+$package:
+  github-dochubteam-dochub:
+    name: github-dochubteam-dochub
+    version: 1.0.0
+imports:
+  # The default metamodel CEAF is included here. You can completely replace it with your own.
+  # Здесь подключается метамодель CEAF по умолчанию. Вы можете полностью заменить ее своей.
+  - http://dev.dochub.info:8080/archcode/_metamodel_/ceaf-app/dochub.yaml
+  # Базовая документация по DocHubIDE
+  - https://alpha.dochub.info/archcode/dochub.yaml
