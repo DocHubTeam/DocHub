@@ -156,6 +156,16 @@ docker-compose up --build
 ```
 DocHub станет доступен по адресу [http://localhost:8080/main](http://localhost:8080/main)
 
+### Локальное развертывание в режиме client-server
+
+Выполните команды:
+```
+cp docker-compose.override.backend.yaml docker-compose.override.yaml
+cp example.env.backend .env
+docker-compose up --build
+```
+DocHub станет доступен по адресу [http://localhost:8080/main](http://localhost:8080/main), api сервера [http://localhost:3030/](http://localhost:3030/)
+
 ### Сборка из исходников для продакшен
 
 Проект является VueJS SPA приложением. В качестве backend пользуется GitLab.
