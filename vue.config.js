@@ -78,6 +78,7 @@ let config = {
 			'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
 			'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
 		},
+		allowedHosts: 'all',
 		/*
 		allowedHosts: [
 			'localhost'
@@ -88,7 +89,7 @@ let config = {
 	},
 	transpileDependencies: ['vueitfy'],
 	chainWebpack: (config) => {
-		config.module.rules.delete("svg");
+		config.module.rules.delete('svg');
 	},
 	configureWebpack: {
 		cache: (process.env.VUE_APP_DOCHUB_BUILDING_CACHE || 'memory').toLowerCase() === 'filesystem'

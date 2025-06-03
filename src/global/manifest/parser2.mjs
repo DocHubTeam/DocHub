@@ -459,7 +459,7 @@ parser.pushRequest = function(uri, owner) {
         request.then((response) => {
             // Удаляем из загрузок ресурс
             delete parser.sourceLoading[uri];
-            if (response.headers?.['content-type'].match(/^.*\/markdown($|;.*$)/)) {
+            if (response.headers?.['content-type'].match(/^.*\/markdown($|;.*$)/) || uri.endsWith('.md')) {
                 const parts = response.data.split('---');
                 if (parts.length === 1) success({});
                 else if (parts.length !== 3) reject(new Error('Incorrect metadata of markdown file'));
