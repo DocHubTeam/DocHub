@@ -1,5 +1,6 @@
   /*
   Copyright (C) 2021 owner Roman Piontik R.Piontik@mail.ru
+  Copyright (C) 2022 Sber
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -25,8 +26,9 @@
 
   Contributors:
       R.Piontik <r.piontik@mail.ru>
-      rskabali <rskabali@mts.ru>
-      Vladislav Markin <markinvy@yandex.ru>
+      rskabali <rskabali@mts.ru> - 2022
+      Vladislav Markin, Sber - 2022
+      Vladislav Markin, Sber - 2023
   */
 
 import cookie from 'vue-cookie';

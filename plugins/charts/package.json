@@ -7,6 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "V.Markin",
+  "contributors": [
+    {
+      "name": "Vladislav Markin",
+      "company": "Sber"
+    }],
   "license": "Apache-2.0",
   "dependencies": {
     "vue-chartjs": "4.1.2",

@@ -1,5 +1,6 @@
   /*
   Copyright (C) 2021 owner Roman Piontik R.Piontik@mail.ru
+  Copyright (C) 2022 Sber
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -24,7 +25,15 @@
       R.Piontik <r.piontik@mail.ru>
 
   Contributors:
-      R.Piontik <r.piontik@mail.ru>
+      R.Piontik <r.piontik@mail.ru> - 2021
+      Vladislav Markin, Sber - 2022
+      R.Piontik <r.piontik@mail.ru> - 2022
+      R.Piontik <r.piontik@mail.ru> - 2023
+      Vladislav Nefedov, Sber - 2023
+      Vladislav Markin, Sber - 2023
+      Vladislav Markin, Sber - 2023
+      R.Piontik <r.piontik@mail.ru> - 2024
+
   */
 
 import axios from 'axios';

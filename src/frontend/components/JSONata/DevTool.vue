@@ -87,6 +87,7 @@
 <script>
   /*
   Copyright (C) 2021 owner Roman Piontik R.Piontik@mail.ru
+  Copyright (C) 2023 Sber
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -111,10 +112,12 @@
       R.Piontik <r.piontik@mail.ru>
 
   Contributors:
-      R.Piontik <r.piontik@mail.ru>
-      clayzenx <clay.zenx@gmail.com>
-      Vladislav Markin <markinvy@yandex.ru>
-      cu3blukekc <cu3blukekc@gmail.com>
+      R.Piontik <r.piontik@mail.ru> - 2022
+      rskabali <rskabali@mts.ru> - 2022
+      cu3blukekc <cu3blukekc@gmail.com> - 2023
+      Vladislav Markin, Sber - 2023
+      R.Piontik <r.piontik@mail.ru> - 2023
+      Vladislav Nefedov, Sber - 2024
   */
 
   import cookie from 'vue-cookie';
