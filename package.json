@@ -20,12 +20,13 @@
     "backend-up": "node src/backend/main.mjs",
     "backend": "export VUE_APP_DOCHUB_MODE=backend && npm run build && node src/backend/main.mjs",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "npm run build:index && vue-cli-service build",
     "build:package": "node vue.lib.js",
     "lint": "vue-cli-service lint",
     "test": "jest --watch",
     "meta-import": "node src/tools/meta/import.js",
-    "postinstall": "find plugins -maxdepth 1 -type d -exec sh -c \"cd '{}' && if [ -f package.json ]; then npm install; fi\" \\;"
+    "postinstall": "mkdir -p plugins || true && find plugins -maxdepth 1 -type d -exec sh -c \"cd '{}' && if [ -f package.json ]; then npm install; fi\" \\; || true",
+    "build:index": "node src/build/index-documents.js"
   },
   "dependencies": {
     "@asyncapi/react-component": "2.3.4",
@@ -107,7 +108,9 @@
     "vue-template-compiler": "2.7.14",
     "webpack-bundle-analyzer": "4.8.0",
     "webpack-pwa-manifest": "4.3.0",
-    "yo": "4.3.0"
+    "yo": "4.3.0",
+    "marked": "^11.1.0",
+    "keyword-extractor": "^0.0.28"
   },
   "overrides": {
     "es5-ext": "0.10.53"
