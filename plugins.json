@@ -6,6 +6,7 @@
         "plugins/devtool",
         "plugins/svg",
         "plugins/bpmnjs",
-        "plugins/drawio"
+        "plugins/drawio",
+        "plugins/onepage"
     ]
 }

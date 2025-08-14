@@ -125,7 +125,17 @@ docs:
       - dochub.front.spa.blank
       - dochub.front.spa.blank.doc
     source: bpmn.md
-
+  dochub.onepage:
+    location: DocHub/Руководство/Документы/Onepage
+    description: Onepage диаграммы
+    autor: R.Piontik
+    type: onepage
+    subjects:
+      - dochub.front
+      - dochub.front.spa
+      - dochub.front.spa.blank
+      - dochub.front.spa.blank.doc
+    source: bpmn.md
   # *****************************************  
   #            Примеры документов
   # *****************************************  

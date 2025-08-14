@@ -100,10 +100,10 @@
   limitations under the License.
 
   Maintainers:
-      Rostislav Kabalin <kabalin2009@yandex.ru>
+      Roman Piontik R.Piontik@mail.ru
 
   Contributors:
-      Rostislav Kabalin <kabalin2009@yandex.ru>
+      Roman Piontik R.Piontik@mail.ru
   */
 
   export default {};

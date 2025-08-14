@@ -41,7 +41,7 @@
     },
     "sourceMap": true,
     "importHelpers": true,
-    "jsx": "preserve"
+    "jsx": "react-jsx"
   },
   "include": ["src", "config.d.ts"],
   "exclude": ["node_modules", "src/backend"]
