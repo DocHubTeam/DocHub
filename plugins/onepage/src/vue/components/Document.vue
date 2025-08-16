@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <react
+  <div class="desk">
+    <react 
+      v-if="passedProps.data"
       ref="onepage"
+      class="diagram"
       v-bind:component="reactComponent"
       v-bind:passed-props="passedProps" />
   </div>
@@ -53,7 +55,8 @@
       return {
         passedProps: {
           title: 'title',
-          content: 'The content'
+          content: 'The content',
+          data: null
         },
         reactComponent: Onepage
       };
@@ -72,6 +75,8 @@
     methods: {
       // Функция обновления контента документа с учетом параметров содержащихся в "this.profile"
       doRefresh() {
+        // Получаем данные из source
+        this.pullData().then((result) => this.passedProps.data = result);
       },
 
       // Обработчик события обновления
@@ -86,5 +91,14 @@
 </script>
 
 <style scoped>
+.desk {
+  height: 100%;
+  width: 100%;
+}
+
+.desk .diagram {
+  margin-top: 32px;
+  height: calc(100% - 32px);
+}
 
 </style>

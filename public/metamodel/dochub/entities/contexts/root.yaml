@@ -2,4 +2,5 @@ imports:
   - base.yaml
   - plantuml.yaml
   - smartants.yaml
+  - onepage.yaml
   - tree.yaml
