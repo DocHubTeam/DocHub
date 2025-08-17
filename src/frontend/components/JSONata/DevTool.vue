@@ -1,6 +1,21 @@
 <template>
   <v-container class="desk" grid-list-xl fluid>
-    <split v-bind:direction="'vertical'">
+    <!-- Область конструктора запросов, отображается на весь экран вместо диалога -->
+    <div v-if="showQueryBuilder" class="query-builder-fullscreen">
+      <v-btn
+        icon
+        absolute
+        top
+        right
+        class="close-button"
+        v-on:click="closeQueryBuilder">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+      <query-builder ref="queryBuilder" v-on:execute="handleQueryFromBuilder" v-on:showMessage="message => $emit('showMessage', message)" />
+    </div>
+    
+    <!-- Основной редактор, скрывается при активном конструкторе -->
+    <split v-if="!showQueryBuilder" v-bind:direction="'vertical'">
       <split-area v-bind:size="40" class="area-space">
         <div class="console">
           <v-toolbar dense flat>
@@ -45,6 +60,12 @@
                   <v-checkbox
                     v-model="autoExec" />
                   <v-list-item-title>Автовыполнение</v-list-item-title>
+                </v-list-item>
+                <v-list-item v-on:click="showQueryBuilder = true">
+                  <v-list-item-icon>
+                    <v-icon>mdi-tools</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-title>Конструктор запросов</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -125,6 +146,7 @@
 
   import editor from './JSONataEditor.vue';
   import result from './JSONResult.vue';
+  import queryBuilder from './QueryBuilder.vue';
   import {Base64URLToUTF8} from '@front/helpers/strings';
 
   const COOKIE_NAME_QUERY = 'json-dev-tool-query';
@@ -134,7 +156,8 @@
     name: 'JSONataDevTool',
     components: {
       editor,
-      result
+      result,
+      queryBuilder
     },
     props: {
       jsonataSource: {
@@ -155,6 +178,7 @@
         origin: null,   // Выбранный базовый источник
         origins: [],    // Список доступных источников данных
         isOriginAvailable: !env.isBackendMode(), // Определяет доступен ли выбор origin
+        showQueryBuilder: false, // Показывать ли конструктор запросов
         logHeaders: [
           {
             text: 'Таймлайн',
@@ -205,6 +229,12 @@
       },
       jsonataSource(value) {
         this.loadJsonataQuery(value);
+      },
+      showQueryBuilder(newVal) {
+        // Если компонент QueryBuilder существует, вызываем resetState при открытии
+        if (newVal && this.$refs.queryBuilder && typeof this.$refs.queryBuilder.resetState === 'function') {
+          this.$refs.queryBuilder.resetState();
+        }
       }
     },
     mounted() {
@@ -297,6 +327,20 @@
             } else this.doExecute();
           }, force ? 10 : 500);
         }
+      },
+      // Обработчик запроса из конструктора запросов
+      handleQueryFromBuilder(generatedQuery) {
+        this.query = generatedQuery;
+        this.$refs.editor.model.setValue(generatedQuery);
+        // Сбрасываем состояние конструктора после успешной генерации запроса
+        if (this.$refs.queryBuilder && typeof this.$refs.queryBuilder.resetState === 'function') {
+          this.$refs.queryBuilder.resetState();
+        }
+        this.showQueryBuilder = false;
+        this.onExecute();
+      },
+      closeQueryBuilder() {
+        this.showQueryBuilder = false;
       }
     }
   };
@@ -428,6 +472,31 @@
 
 .console .v-select__selections .v-chip {
   min-width: fit-content;
+}
+
+/* Стили для полноэкранного режима конструктора запросов */
+.query-builder-fullscreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Убираем стили для модального диалога, так как он больше не используется */
+.dialog-modal {
+  display: none; /* или полностью удалите этот класс */
+}
+
+/* Стили для кнопки закрытия */
+.close-button {
+  margin: 8px;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  z-index: 20;
 }
 
 </style>

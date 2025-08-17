@@ -43,6 +43,7 @@ import Technology from '@front/components/Techradar/Technology';
 import Problems from '@front/components/Problems/Problems';
 import Empty from '@front/components/Controls/Empty';
 import DevTool from '@front/components/JSONata/DevTool';
+import QueryBuilderPage from '@front/components/JSONata/QueryBuilderPage';
 import Entity from '@front/components/Entities/Entity';
 import SSOError from '@front/components/sso/SSOError';
 import oidcClient from '@front/auth/oidc-client';
@@ -182,6 +183,14 @@ const routes = [
     name: 'ssoerror',
     path: '/sso/error',
     component: SSOError
+  },
+  {
+    name: 'QueryBuilder',
+    path: '/query-builder',
+    component: QueryBuilderPage,
+    meta: {
+      standalone: true
+    }
   },
   {
     name: 'Empty',
