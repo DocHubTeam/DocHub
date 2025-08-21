@@ -48,7 +48,7 @@ entities:                     # Раздел описания сущностей
       schema: ...             # Декларативное описание схемы метамодели объектов сущности.
 ``` 
 
-Подробный пример описания можно найти [тут](/docs/dochub.entities.examples). Также можно изучить пример реализации нотации 
+Подробный пример описания можно найти [тут](/docs/blank?dh-doc-id=dochub.flex_metamodel.entities). Также можно изучить пример реализации нотации 
 [C4 Model](https://github.com/rpiontik/DocHubExamples/tree/main/src/C4Model) и пример расширения презентаций уже существующих
 сущностей путем встраивания [виджетов](https://github.com/rpiontik/DocHubExamples/tree/main/src/widgets).
 
