@@ -43,32 +43,57 @@ function isLocalRoute(url) {
 // Работа с ссылками
 export default {
 	// Переход по URL
-	gotoURL(ref) {
-		try {
-			if (uri.isExternalURI(ref)) {
-				window.open(ref, 'blank_');
-			} else {
-				const url = new URL(ref, window.location);
-				if (isLocalRoute(url))
-					window.Router.push({ path: url.pathname, query: Object.fromEntries(url.searchParams)});
-				else
-					window.open(url, 'blank_');
-			}
-		} catch (e) {
-			if (env.isPlugin(Plugins.idea)) {
-				window.Router.push({ path: ref.split('#')[1]});
-			}
-		}
-	},
-	// Обрабатывает клик по ссылке
-	onClickRef(event) {
-		event.preventDefault();
-		if (event.shiftKey) return false;
-		const ref = event.currentTarget.href.baseVal || event.currentTarget.href;
-		if (!ref.length) return false;
-		this.gotoURL(ref);
-		return false;
-	},
+  gotoURL(ref) {
+    try {
+      // Нормализуем ссылку относительно текущего URL
+      const normalizedRef = this.normalizeRef(ref, window.location.href);
+
+      if (uri.isExternalURI(normalizedRef)) {
+        window.open(normalizedRef, 'blank_');
+      } else {
+        const url = new URL(normalizedRef, window.location);
+        if (isLocalRoute(url)) {
+          window.Router.push({
+            path: url.pathname,
+            query: Object.fromEntries(url.searchParams),
+            hash: url.hash || '' // Сохраняем hash
+          });
+        } else
+          window.open(url, 'blank_');
+      }
+    } catch (e) {
+      if (env.isPlugin(Plugins.idea)) {
+        // Для IDEA плагина тоже сохраняем якорь
+        const [path, hash] = ref.split('#');
+        window.Router.push({
+          path: path,
+          hash: hash ? `#${hash}` : ''
+        });
+      }
+    }
+  },
+// Обрабатывает клик по ссылке
+  onClickRef(event) {
+    event.preventDefault();
+    if (event.shiftKey) return false;
+
+    // Получаем href из разных возможных источников
+    const ref = event.currentTarget.href.baseVal ||
+      event.currentTarget.href ||
+      event.currentTarget.getAttribute('href');
+
+    if (!ref || !ref.length) return false;
+
+    // Сохраняем информацию о том, как был открыт якорь
+    if (event.ctrlKey || event.metaKey) {
+      // Для Ctrl+клик открываем в новой вкладке с сохранением якоря
+      const url = new URL(ref, window.location);
+      window.open(url.href, '_blank');
+    } else {
+      this.gotoURL(ref);
+    }
+    return false;
+  },
 
 	// Обрабатывает элемент для сормирование корректных ссылок в нем
 	elProcessing(el) {
@@ -76,5 +101,15 @@ export default {
 		for (let i = 0; i < refs.length; i++) {
 			refs[i].onclick = (event) => this.onClickRef(event);
 		}
-	}
+	},
+  // Вспомогательный метод для обработки относительных ссылок
+  normalizeRef(ref, base) {
+    try {
+      // Пробуем распарсить как полный URL
+      return new URL(ref, base).href;
+    } catch {
+      // Если не получилось, возвращаем как есть
+      return ref;
+    }
+  }
 };
