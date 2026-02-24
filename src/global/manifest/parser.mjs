@@ -57,6 +57,23 @@ const sectionDeepLog = {
 	'$default$': 2
 };
 
+// Получает глубину секции из конфигурации или использует значение по умолчанию
+function getSectionDeepLog(section, manifest) {
+	// Сначала проверяем статические значения из sectionDeepLog
+	if (sectionDeepLog[section] !== undefined) {
+		return sectionDeepLog[section];
+	}
+	
+	// Проверяем, есть ли конфигурация merge_depth в метамодели сущности
+	// Это позволяет задавать глубину для пользовательских сущностей через config.merge_depth
+	if (manifest?.entities?.[section]?.config?.merge_depth !== undefined) {
+		return manifest.entities[section].config.merge_depth;
+	}
+	
+	// Возвращаем значение по умолчанию
+	return sectionDeepLog['$default$'];
+}
+
 const parser = {
 	// Манифест перезагружен
 	onReloaded: null,
@@ -131,7 +148,11 @@ const parser = {
 	// Сохраняет в карте склеивания данные
 	pushToMergeMap(path, source, location) {
 		const structPath = (path || '/').split('/');
-		const storePath = structPath.slice(0, sectionDeepLog[structPath[1] || '$default$'] + 1).join('/');
+		const section = structPath[1] || '$default$';
+		// Используем функцию getSectionDeepLog для получения глубины секции
+		// Это позволяет учитывать как статические настройки, так и динамические из config.merge_depth
+		const depth = getSectionDeepLog(section, this.manifest);
+		const storePath = structPath.slice(0, depth + 1).join('/');
 
 		let locations = this.mergeMap[storePath];
 

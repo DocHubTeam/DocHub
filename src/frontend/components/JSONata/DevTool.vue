@@ -221,10 +221,10 @@
         this.doAutoExecute();
       },
       refreshOrigins() {
-        const pipe = query.expression(`[(datasets.$spread().{
+        const pipe = query.expression(`([datasets.$spread().{
           "id": $keys()[0],
           "title": *.title
-        })]`, null, null, true, { log: this.log});
+        }])`, null, null, true, { log: this.log});
         pipe.evaluate().then((data) => this.origins = data);
       },
       doAutoExecute() {

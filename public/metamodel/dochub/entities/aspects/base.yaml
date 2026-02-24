@@ -56,7 +56,7 @@ entities:
             };
             $domains := $split($id, ".");
             $config.root_menu & "/" & $join($map($domains, function($domain, $index) {(
-                $lookup($aspects, $join($arrleft($domains, $index), ".")).title
+                $lookup($aspects, $join($arrleft($domains, $index), ".")).location
             )}), "/");
         )};
         [$append([{
