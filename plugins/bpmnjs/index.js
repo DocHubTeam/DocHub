@@ -5,3 +5,4 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import bpmnjs from './components/bpmnjs/index.vue';
 
 DocHub.documents.register('bpmnjs', bpmnjs);
+

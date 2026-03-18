@@ -1,6 +1,7 @@
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackInlineSourcePlugin = require('@effortlessmotion/html-webpack-inline-source-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const pluginsConf = require('./plugins.json');
 const PluginMaker = require('./src/building/plugin-maker');
@@ -86,9 +87,22 @@ let config = {
 		client: { overlay: false },
 		hot: process.env.VUE_APP_DOCHUB_HOTRELOAD === 'off' ? false : true
 	},
-	transpileDependencies: ['vueitfy'],
+	transpileDependencies: [
+		'vuetify',
+		/[\\/]plugins[\\/].*\.js$/ 
+	],
 	chainWebpack: (config) => {
-		config.module.rules.delete("svg");
+		config.module.rules.delete('svg');
+
+		// ВОТ ЭТОТ БЛОК НУЖЕН:
+        config.optimization.minimizer('terser').tap((args) => {
+            args[0].exclude = /[\\/]plugins[\\/]/; // Исключаем папку с плагинами
+            args[0].terserOptions = {
+                ...args[0].terserOptions,
+                module: true // Разрешаем ESM
+            };
+            return args;
+        });		
 	},
 	configureWebpack: {
 		cache: (process.env.VUE_APP_DOCHUB_BUILDING_CACHE || 'memory').toLowerCase() === 'filesystem'
@@ -111,6 +125,18 @@ let config = {
 		plugins,
 		module: {
 			rules: [
+				{
+					test: /\.js$/,
+					include: [path.resolve(__dirname, 'plugins')],
+					use: {
+						loader: 'babel-loader',
+						options: {
+							presets: [
+								['@babel/preset-env', { modules: false }] // Правильный синтаксис здесь
+							]
+						}
+					}
+				},
 				{
 					test: /\.svg$/,
 					loader: 'vue-svg-loader'

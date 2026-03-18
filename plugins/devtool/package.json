@@ -10,8 +10,8 @@
   "license": "MIT",
   "dependencies": {
     "codemirror": "5",
-    "core-js": "^3.8.3",
+    "core-js": "3.8.3",
     "vue-codemirror": "4",
-    "vue-json-viewer": "^2.2.22"
+    "vue-json-viewer": "2.2.22"
   }
 }

@@ -12,6 +12,6 @@
   "author": "R.Piontik",
   "license": "Apache-2.0",
   "dependencies": {
-    "bpmn-js": "^17.6.4"
+    "bpmn-js": "17.6.4"
   }
 }
