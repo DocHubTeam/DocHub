@@ -40,8 +40,65 @@ import appRoutes from './routes';
 
 Vue.use(Router);
 
+let anchorRun = 0;
+
+const scrollToAnchor = (hash, deadline) => new Promise((resolve) => {
+	const id = hash.slice(1);
+	const run = ++anchorRun;
+	const pollIntervalMs = 200;
+	let lastTop = null;
+
+	// The page content loads after the route is resolved, so the element may not
+	// exist yet. Poll until it appears. Content above it can still grow after
+	// that, so scroll again until its position stops changing.
+	// Polling is used instead of MutationObserver: with many DOM updates the
+	// observer froze the page.
+	const tick = () => {
+		// A newer navigation to an anchor has started. Stop this one.
+		if (run !== anchorRun) {
+			resolve();
+			return;
+		}
+
+		const el = document.getElementById(id);
+
+		if (!el) {
+			if (Date.now() < deadline) {
+				setTimeout(tick, pollIntervalMs);
+			} else {
+				window.scrollTo(0, 0);
+				resolve();
+			}
+			return;
+		}
+
+		const top = el.getBoundingClientRect().top + window.scrollY;
+
+		if (top !== lastTop) {
+			el.scrollIntoView();
+			lastTop = top;
+
+			if (Date.now() < deadline) {
+				setTimeout(tick, pollIntervalMs);
+				return;
+			}
+		}
+
+		resolve();
+	};
+
+	tick();
+});
+
 const rConfig = {
-	scrollBehavior() {
+	scrollBehavior(to) {
+		if (to.hash) {
+			// Do not resolve with false: vue-router would then scroll back to the
+			// position saved before the navigation. Keep the current position.
+			return scrollToAnchor(to.hash, Date.now() + 30000)
+				.then(() => ({ x: window.scrollX, y: window.scrollY }));
+		}
+
 		window.scrollTo(0, 0);
 	},
 	routes: [
