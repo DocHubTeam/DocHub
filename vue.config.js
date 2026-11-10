@@ -101,7 +101,7 @@ let config = {
 				type: 'memory'
 			},
 		experiments: {
-			outputModule: true
+			outputModule: false
 		},
 		optimization: {
 			splitChunks: false,
@@ -136,7 +136,8 @@ let config = {
 			]
 		},
 		output: {
-			filename: '[name].js'
+			filename: '[name].js',
+			module: false
 		},
 		resolve: {
 			alias: {
